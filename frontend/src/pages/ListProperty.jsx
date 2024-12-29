@@ -33,9 +33,9 @@ const ListProperty = () => {
     }
 
     return (
-        <section className='bg-indigo-50'>
-        <div className='container m-auto max-w-2xl py-8'>
-        <div className='bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0'>
+        <section className='bg-white'>
+        <div className='container m-auto max-w-2xl '>
+        <div className='bg-white px-6 py-8 shadow-md rounded-md border md:m-0'>
           <form onSubmit={submitForm}>
             <h2 className='text-3xl text-center font-semibold mb-6'>List Your Property</h2>
             <h3 className='flex justify-center text-lg mb-8'>Fill out the form below to start listing your property.</h3>
@@ -75,7 +75,7 @@ const ListProperty = () => {
                 type='text'
                 id='name'
                 name='name'
-                className='border rounded w-full py-2 px-3'
+                className='border rounded w-full py-2 px-3 focus:outline-slate-500'
                 placeholder='Full Name'
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -94,7 +94,7 @@ const ListProperty = () => {
                 type='email'
                 id='contact_email'
                 name='contact_email'
-                className='border rounded w-full py-2 px-3'
+                className='border rounded w-full py-2 px-3 focus:outline-slate-500'
                 placeholder='Email Address'
                 required
                 value={contactEmail}
@@ -113,7 +113,7 @@ const ListProperty = () => {
                 type='tel'
                 id='contact_phone'
                 name='contact_phone'
-                className='border rounded w-full py-2 px-3'
+                className='border rounded w-full py-2 px-3 focus:outline-slate-500'
                 placeholder='Phone Number'
                 value={contactPhone}
                 onChange={(e) => setContactPhone(e.target.value)}
@@ -222,7 +222,7 @@ const ListProperty = () => {
                 type='text'
                 id='price'
                 name='price'
-                className='border rounded w-full py-2 px-3'
+                className='border rounded w-full py-2 px-3 focus:outline-slate-500'
                 placeholder='Price'
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
@@ -232,7 +232,7 @@ const ListProperty = () => {
 
             <div>
               <button
-                className='bg-blue-500 hover:text-teal-200 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline'
+                className='bg-slate-700 hover:bg-slate-500 text-white font-bold py-2 px-4 rounded-xl w-full focus:outline-none focus:shadow-outline'
                 type='submit'
               >
                 Send Request

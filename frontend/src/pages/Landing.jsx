@@ -3,8 +3,9 @@ import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css"
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
+import { FaSearch } from "react-icons/fa";
 
-const Landing = () => {
+const Landing = ({closeMenu}) => {
 
     const [destination, setDestination] = useState("");
     const [startDate, setStartDate] = useState("");
@@ -25,32 +26,38 @@ const Landing = () => {
     return (
         <div>
             {/*Laptop View*/}
-            <div className="hidden md:block">
-            <h1 className="flex items-center justify-center mt-24 ml-10 mr-10 text-7xl">Furnished Rentals.</h1>
-            <div className="flex items-center justify-center mt-24">
-                <div className="bg-gray-100 py-2 shadow-md rounded-md border m-4 md:m-0">
-                <form onSubmit={submitForm} className="w-full max-w-4xl">
-                    <div className="flex flex-wrap ml-10 mr-5">
-                        <div className="w-full sm:w-1/5 md:w-1/5 px-3 mt-3">
+            <div className='bg-custom-image-2 bg-cover bg-center h-screen'>
+            <div className="hidden md:block ">
+            <div className="flex justify-center">
+                <div className="bg-white shadow-md rounded-full border sm:m-28">
+                <form onSubmit={submitForm} className="p-3">
+                    <div className="flex mx-auto">
+                        <div className="w-full sm:w-1/3 mt-3">
+                            <label className='ml-10'>Where</label>
                             <input 
-                                className="appearance-none block w-full bg-white text-gray-700 border border-teal-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none" 
+                                className="appearance-none block bg-white text-gray-700 leading-tight focus:outline-none ml-10" 
                                 type="text" 
-                                placeholder="Destination"
+                                placeholder="Search Destination"
                                 onChange={(e) => setDestination(e.target.value)}
                             >
                             </input>
                         </div>
-                        <div className="w-full sm:w-1/5 md:w-1/5 px-3 mt-3">
+                            <div className="border-l-2 border-gray-400 h-16 mx-4 "></div>
+                        <div className='flex w-full sm:w-1/3 '>
+                        <div className="flex flex-col mt-3">
+                            <label>Check In</label>
                             <DatePicker
                                 selectsStart
                                 selected={startDate}
                                 onChange={(date) => setStartDate(date)}
                                 startDate={startDate}
-                                placeholderText="Check in"
-                                className="appearance-none block w-full bg-white text-gray-700 border border-teal-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none"
+                                placeholderText="Insert Date"
+                                className="appearance-none block w-full text-gray-700 leading-tight focus:outline-none"
                             />
+                         
                         </div>
-                        <div className="w-full sm:w-1/5 md:w-1/5 px-3 mt-3">
+                        <div className="flex flex-col mt-3">
+                        <label>Check Out</label>
                             <DatePicker
                                 selectsEnd
                                 selected={endDate}
@@ -58,35 +65,40 @@ const Landing = () => {
                                 endDate={endDate}
                                 startDate={startDate}
                                 minDate={startDate}
-                                placeholderText="Check out"
-                                className="appearance-none block w-full bg-white text-gray-700 border border-teal-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none"
+                                placeholderText="Insert Date"
+                                className="appearance-none block w-full bg-white text-gray-700 leading-tight focus:outline-none"
                             />
                         </div>
-                        <div className="w-full sm:w-1/5 md:w-1/5 px-3 mt-3">
+                            <div className="border-l-2 border-gray-400 h-16 mr-1"></div>
+                        </div>
+                        <div className='flex w-full sm:w-1/3 px-3'>
+                        <div className="flex flex-col mt-3">
+                            <label>Occupancy</label>
                             <input 
-                                className="appearance-none block w-full bg-white text-gray-700 border border-teal-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none" 
+                                className="appearance-none block w-full bg-white text-gray-700 leading-tight focus:outline-none" 
                                 type="text" 
-                                placeholder="Guests"
+                                placeholder="Number of Rooms"
                                 onChange={(e) => setGuests(e.target.value)}
                             >
                             </input>
                         </div>
-                        <div className="w-full sm:w-auto md:w-1/5 px-3 mt-3">
+                        <div>
                             <button 
-                                className="bg-blue-500 hover:text-teal-400 text-white font-bold py-2.5 px-4 border border-teal-600 rounded w-full sm:w-auto"
+                                className="bg-slate-800 hover:bg-slate-700 text-white py-4 px-4 border rounded-full sm:w-auto mt-2"
                                 type="submit"
                                 >
-                                <NavLink to="rentals">Search</NavLink>
+                                <NavLink to="rentals" onClick={closeMenu}><FaSearch /></NavLink>
                             </button> 
+                        </div>
                         </div>
                     </div>
                 </form>
                 </div>
             </div>
             </div>
+            </div>
             {/*Mobile View*/}
             <div className="block md:hidden">
-            <h1 className="flex items-center justify-center mt-12 ml-5 mr-5 text-4xl">Furnished Rentals.</h1>
             <div className="flex items-center justify-center mt-12">
                 <div className="bg-gray-100 py-2 shadow-md rounded-md border m-2 md:m-0">
                 <form onSubmit={submitForm} className="w-full max-w-xl">
@@ -131,12 +143,12 @@ const Landing = () => {
                                 className="appearance-none block w-full bg-white text-gray-700 border border-teal-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none"
                             />
                         </div>
-                        <div className="flex items-center w-1/3 px-3 mt-3">
+                        <div className="flex items-center w-1/3 px-3 mt-2">
                             <button 
                                 className="bg-blue-500 hover:text-teal-400 text-white font-bold py-2.5 px-4 border border-teal-600 rounded w-full sm:w-auto"
                                 type="submit"
                                 >
-                                <NavLink to="rentals">Search</NavLink>
+                                <NavLink to="rentals" onClick={closeMenu}>Search</NavLink>
                             </button> 
                         </div>
                     </div>

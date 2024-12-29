@@ -42,9 +42,9 @@ const HousingRequest = () => {
     }
 
     return (
-        <section className='bg-indigo-50'>
+        <section className='bg-white'>
         <div className='container m-auto max-w-2xl py-8'>
-        <div className='bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0'>
+        <div className='bg-slate-100 px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0'>
           <form onSubmit={submitForm}>
             <h2 className='text-3xl text-center font-semibold mb-6'>Housing Request</h2>
             <h3 className='flex justify-center text-lg mb-8'>Fill out the form below and we'll have homeowners reach out to you!</h3>
