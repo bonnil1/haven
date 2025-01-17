@@ -39,25 +39,29 @@ const Landing = ({closeMenu}) => {
                                 type="text" 
                                 placeholder="Search Destination"
                                 onChange={(e) => setDestination(e.target.value)}
+                                pattern="^[A-Za-z ]+$"
+                                required
                             >
                             </input>
                         </div>
                             <div className="border-l-2 border-gray-400 h-16 mx-4 "></div>
                         <div className='flex w-full sm:w-1/3 '>
                         <div className="flex flex-col mt-3">
-                            <label>Check In</label>
+                            <label>Move In</label>
                             <DatePicker
                                 selectsStart
                                 selected={startDate}
                                 onChange={(date) => setStartDate(date)}
                                 startDate={startDate}
+                                minDate={new Date()}
                                 placeholderText="Insert Date"
                                 className="appearance-none block w-full text-gray-700 leading-tight focus:outline-none"
+                                required
                             />
                          
                         </div>
                         <div className="flex flex-col mt-3">
-                        <label>Check Out</label>
+                        <label>Move Out</label>
                             <DatePicker
                                 selectsEnd
                                 selected={endDate}
@@ -67,6 +71,7 @@ const Landing = ({closeMenu}) => {
                                 minDate={startDate}
                                 placeholderText="Insert Date"
                                 className="appearance-none block w-full bg-white text-gray-700 leading-tight focus:outline-none"
+                                required
                             />
                         </div>
                             <div className="border-l-2 border-gray-400 h-16 mr-1"></div>
@@ -79,6 +84,8 @@ const Landing = ({closeMenu}) => {
                                 type="text" 
                                 placeholder="Number of Rooms"
                                 onChange={(e) => setGuests(e.target.value)}
+                                pattern="^[0-9]+$"
+                                required
                             >
                             </input>
                         </div>
@@ -87,7 +94,7 @@ const Landing = ({closeMenu}) => {
                                 className="bg-slate-800 hover:bg-slate-700 text-white py-4 px-4 border rounded-full sm:w-auto mt-2"
                                 type="submit"
                                 >
-                                <NavLink to="rentals" onClick={closeMenu}><FaSearch /></NavLink>
+                                <NavLink to="/home/rentals" onClick={closeMenu}><FaSearch /></NavLink>
                             </button> 
                         </div>
                         </div>
@@ -148,7 +155,7 @@ const Landing = ({closeMenu}) => {
                                 className="bg-blue-500 hover:text-teal-400 text-white font-bold py-2.5 px-4 border border-teal-600 rounded w-full sm:w-auto"
                                 type="submit"
                                 >
-                                <NavLink to="rentals" onClick={closeMenu}>Search</NavLink>
+                                <NavLink to="/home/rentals" onClick={closeMenu}>Search</NavLink>
                             </button> 
                         </div>
                     </div>

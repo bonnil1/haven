@@ -51,9 +51,9 @@ const ListProperty = () => {
                     id='property'
                     name='property'
                     className='border rounded w-full py-2 px-3'
-                    required
                     value={property}
                     onChange={(e) => setProperty(e.target.value)}
+                    required
                 >
                     <option value='' disabled selected>Select Property Type</option>
                     <option value='Apartment'>Apartment</option>
@@ -79,6 +79,8 @@ const ListProperty = () => {
                 placeholder='Full Name'
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                pattern='^[A-Za-z ]+$'
+                required
               />
             </div>
 
@@ -96,9 +98,11 @@ const ListProperty = () => {
                 name='contact_email'
                 className='border rounded w-full py-2 px-3 focus:outline-slate-500'
                 placeholder='Email Address'
-                required
+                title='Example@email.com'
+                pattern='^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z]{2,}$'
                 value={contactEmail}
                 onChange={(e) => setContactEmail(e.target.value)}
+                required
               />
 
               </div>
@@ -117,6 +121,7 @@ const ListProperty = () => {
                 placeholder='Phone Number'
                 value={contactPhone}
                 onChange={(e) => setContactPhone(e.target.value)}
+                required
               />
               </div>
             </div>  
@@ -133,9 +138,9 @@ const ListProperty = () => {
                 id='state'
                 name='state'
                 className='border rounded w-full py-2 px-3'
-                required
                 value={state}
                 onChange={(e) => setState(e.target.value)}
+                required
               >
                 <option value='' disabled selected>Select One</option>
                 <option value='California'>California</option>
@@ -154,9 +159,9 @@ const ListProperty = () => {
                 id='city'
                 name='city'
                 className='border rounded w-full py-2 px-3'
-                required
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
+                required
               >
                 <option value='' disabled>Select One</option>
                 {/*populate city with api based on state selected */}
@@ -176,9 +181,9 @@ const ListProperty = () => {
                     id='bedrooms'
                     name='bedrooms'
                     className='border rounded w-full py-2 px-3'
-                    required
                     value={bedrooms}
                     onChange={(e) => setBedrooms(e.target.value)}
+                    required
                 >
                     <option value='1'>1</option>
                     <option value='2'>2</option>
@@ -197,9 +202,9 @@ const ListProperty = () => {
                     id='bathrooms'
                     name='bathrooms'
                     className='border rounded w-full py-2 px-3'
-                    required
                     value={bathrooms}
                     onChange={(e) => setBathrooms(e.target.value)}
+                    required
                 >
                     <option value='1'>1</option>
                     <option value='2'>2</option>

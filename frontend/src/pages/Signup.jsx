@@ -1,18 +1,92 @@
 import React from 'react'
+import { useState } from 'react'
+import { NavLink, useNavigate } from 'react-router-dom'
 
 const Signup = () => {
+
+    const [formData, setFormData] = useState({
+        FirstName: '',
+        LastName: '',
+        Email: ''
+    })
+    const [message, setMessage] = useState('')
+
+    const navigate = useNavigate();
+
+    const handleChange = (event) => {
+        setFormData(prevState => {
+            const updatedFormData = {...prevState,[event.target.name]: event.target.value};
+
+            return updatedFormData;
+        })
+
+        console.log(formData)
+    }
+
+    const handleSubmit = async (event) => {
+        console.log("hitting handle submit");
+        event.preventDefault();
+
+        try {
+            const response = await fetch("http://localhost:4000/new-user", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to create user");
+            }
+
+            const data = await response.json();
+
+            if (data.message === "User created successfully!") {
+                //handleContinue();
+                setMessage(data.message);
+            } else {
+                setMessage(data.message);
+            }
+        } catch (error) {
+            console.error(error);
+            setMessage("An error occurred while creating the user.");
+        }
+    };
+
+    const handleContinue = () => {
+        //navigate('/signup/pw');
+    };
+
+
   return (
     <div className='flex justify-center items-center mt-20'>
         <form className='flex flex-col border border-slate-400 rounded-3xl w-5/6 sm:w-1/3 p-8 sm:p-16'>
             <h3 className='text-2xl text-slate-700 font-semibold mb-5'>Join Haven</h3>
             <div>
                 <div className='flex flex-col mb-5'>
-                    <label>Name</label>
+                    <label>First Name</label>
                     <input
                         className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2" 
                         type="text" 
-                        placeholder="Your Name"
-                        
+                        name="FirstName"
+                        placeholder="First Name"
+                        onChange={handleChange} 
+                        pattern="^[A-Za-z ]+$"
+                        required
+                    >
+                    </input>
+                </div>
+                <div className='flex flex-col mb-5'>
+                    <label>Last Name</label>
+                    <input
+                        className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2" 
+                        type="text" 
+                        name="LastName"
+                        placeholder="Last Name"
+                        onChange={handleChange} 
+                        pattern="^[A-Za-z ]+$"
+                        required
                     >
                     </input>
                 </div>
@@ -20,23 +94,33 @@ const Signup = () => {
                     <label>Email</label>
                     <input
                         className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2"
-                        type="text" 
+                        type="email" 
+                        name="Email"
                         placeholder="Example@email.com"
+                        onChange={handleChange} 
+                        title='Example@email.com'
                         pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z]{2,}$"
+                        required
                     >
                     </input>
+                    {message === "Email already exists." && (
+                        <h1 className='text-xs text-red-500'>An account with this email already exists. Please log in.</h1>
+                    )}
                 </div>
                 <button
                     className="bg-slate-700 hover:bg-slate-500 text-white py-2 border rounded-xl w-full mt-5"
                     type="submit"
+                    onClick={handleSubmit}
                 >
                     Continue
                 </button>
+                {message === "User created successfully!" && (
+                    <h4 className='flex justify-center text-xs text-lime-600'>Please verify your email address.</h4>
+                )}
             </div>    
             <h6 className='flex justify-center text-xs mt-2'>Already have an account? Log in.</h6>
         </form>
     </div>
-  )
-}
+)}
 
 export default Signup

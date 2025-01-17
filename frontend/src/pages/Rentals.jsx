@@ -51,7 +51,7 @@ const Rentals = () => {
             <div className="block md:hidden">
             <div className="grid grid-cols-1 gap-4 ml-2 mr-2 mb-2">
                 {rentals.map((rental, i) => (
-                    <NavLink to="show">
+                    <NavLink to="/home/show">
                     <div key={i} className="flex flex-col items-center p-4 border rounded-lg shadow-md">
                         <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-3.jpg" alt=""></img>
                         <h1 className="lg:text-xl md:text-sm font-bold mt-3">{rental.caption}</h1>

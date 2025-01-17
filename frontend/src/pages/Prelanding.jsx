@@ -14,10 +14,10 @@ const Prelanding = ({closeMenu}) => {
                 
                 <div className='flex flex-row mt-10'>
                 <button className='text-lg text-white hover:bg-white hover:text-black border border-white px-6 py-2 rounded-full mr-10'>
-                    <NavLink to="home" onClick={closeMenu} className="flex flex-row">Find your home <FaArrowRight className='mt-1 ml-5 '/></NavLink>
+                  <NavLink to="home" onClick={closeMenu} className="flex flex-row">Find your home <FaArrowRight className='mt-1 ml-5 '/></NavLink>
                 </button>
                 <button className='text-lg text-white hover:bg-white hover:text-black border border-white px-6 py-2 rounded-full mr-10'>
-                <NavLink to="list-your-property" onClick={closeMenu} className="flex flex-row">List your home <FaArrowRight className='mt-1 ml-5 '/></NavLink>
+                  <NavLink to="list-your-property" onClick={closeMenu} className="flex flex-row">List your home <FaArrowRight className='mt-1 ml-5 '/></NavLink>
                 </button>
             </div>
             </div>

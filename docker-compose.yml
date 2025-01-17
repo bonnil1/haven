@@ -1,0 +1,41 @@
+services:
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports: 
+      - "3000:3000"
+    networks:
+      - haven-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    networks:
+      - haven-network
+    volumes:
+      - ./backend/uploads:/app/uploads
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: liupassword
+      MYSQL_DB: userdb
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: liupassword
+      MYSQL_DATABASE: userdb
+    ports:
+      - "3308:3306" #host machine:docker
+    networks:
+      - haven-network
+
+networks:
+  haven-network:
+    driver: bridge
