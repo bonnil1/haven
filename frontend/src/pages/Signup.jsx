@@ -45,7 +45,7 @@ const Signup = () => {
             if (data.message === "User created successfully!") {
                 //handleContinue();
                 setMessage(data.message);
-            } else {
+            } else if (data.message === "Email already exists."){
                 setMessage(data.message);
             }
         } catch (error) {
@@ -61,7 +61,7 @@ const Signup = () => {
 
   return (
     <div className='flex justify-center items-center mt-20'>
-        <form className='flex flex-col border border-slate-400 rounded-3xl w-5/6 sm:w-1/3 p-8 sm:p-16'>
+        <form onSubmit={handleSubmit} className='flex flex-col border border-slate-400 rounded-3xl w-5/6 sm:w-1/3 p-8 sm:p-16'>
             <h3 className='text-2xl text-slate-700 font-semibold mb-5'>Join Haven</h3>
             <div>
                 <div className='flex flex-col mb-5'>
@@ -110,12 +110,14 @@ const Signup = () => {
                 <button
                     className="bg-slate-700 hover:bg-slate-500 text-white py-2 border rounded-xl w-full mt-5"
                     type="submit"
-                    onClick={handleSubmit}
                 >
                     Continue
                 </button>
                 {message === "User created successfully!" && (
-                    <h4 className='flex justify-center text-xs text-lime-600'>Please verify your email address.</h4>
+                    <h4 className='flex justify-center text-xs text-emerald-600'>Please verify your email address.</h4>
+                )}
+                {message === "Email already exists." && (
+                    <h4 className='flex justify-center text-xs text-slate-600'>An account with this email already exists. Please log in</h4>
                 )}
             </div>    
             <h6 className='flex justify-center text-xs mt-2'>Already have an account? Log in.</h6>

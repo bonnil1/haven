@@ -18,19 +18,6 @@ const Navigation = ({toggleMobileMenu, isMobileMenuOpen, closeMenu}) => {
                     <NavLink to="/" onClick={closeMenu} className="flex font-semibold text-gray-600 hover:underline">
                         <img className="size-12" src="/src/assets/images/haven_logo.png" alt="haven logo" />
                     </NavLink>
-                    {/* 
-                    <div className='mt-2'>
-                        <NavLink to="housing-request" className="lg:inline-block lg:mt-0 text-gray-700 hover:underline mr-5">
-                        Housing Request
-                        </NavLink>
-                        <NavLink to="list-your-property" className="lg:inline-block lg:mt-0 text-gray-700 hover:underline mr-5">
-                            List Your Property
-                        </NavLink>
-                        <NavLink to="resources" className="lg:inline-block lg:mt-0 text-gray-700 hover:underline">
-                            Resources
-                        </NavLink>
-                    </div>
-                    */}
                 </div>
                 <div className="md:ml-auto">
                     <div className="flex mt-1">
@@ -70,26 +57,25 @@ const Navigation = ({toggleMobileMenu, isMobileMenuOpen, closeMenu}) => {
 
             {/*Mobile View*/}
             <div className="block md:hidden">
-            <nav className="bg-gray-200 p-4">
+            <nav className="bg-white p-4">
             <div className="mx-auto, max-w-3xl px-2">
                 <div className="flex h-10 items-center justify-between">
                     <div className="text-white">
-                        <NavLink to="/" className="flex font-semibold text-gray-600 hover:underline">
-                            <PiWarehouseFill className='size-8 mr-3'/> 
-                            <h5 className='text-2xl'>Haven</h5>
+                        <NavLink to="/" onClick={closeMenu} className="flex font-semibold text-gray-600 hover:underline">
+                            <img className="size-12" src="/src/assets/images/haven_logo.png" alt="haven logo" />
                         </NavLink>
                     </div>
                     {/* Hamburger Icon for Mobile */}
                     <div className="mt-2">
-                        <button onClick={closeMenu} className="text-gray-600 focus:outline-none hover:bg-gray-300">
+                        <button onClick={toggleMobileMenu} className="text-emerald-600 focus:outline-none hover:bg-gray-300">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-8 h-8">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
                         </button>
                     </div>
                 </div>
-                    <div id="mobile-menu">
-                        <div className="absolute right-0 w-44 sm:w-56 p-2 mt-7 mr-3 bg-white shadow-md rounded-md">
+                    <div className={`${isMobileMenuOpen ? 'block' : 'hidden'}`} id="mobile-menu">
+                        <div className="absolute right-0 w-44 sm:w-56 p-2 mt-3 mr-3 bg-white shadow-md rounded-md">
                         <NavLink to="/signup" onClick={closeMenu} className="block text-black font-bold hover:bg-gray-200 px-3 py-2">
                             Sign up
                         </NavLink>
@@ -113,9 +99,3 @@ const Navigation = ({toggleMobileMenu, isMobileMenuOpen, closeMenu}) => {
 }
 
 export default Navigation
-
-{/*
-<NavLink to="login" className="text-md text-gray-600 hover:underline lg:mt-0">
-    <BiSolidUserRectangle className='size-9'/>
-</NavLink>
-*/}

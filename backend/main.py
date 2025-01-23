@@ -1,66 +1,13 @@
-from fastapi import FastAPI, Form, Depends, HTTPException, Request, status
+from fastapi import FastAPI, Depends, HTTPException, Request, status
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import create_engine, Column, String, Boolean, Integer, Date, Enum, TIMESTAMP, func
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-from dotenv import load_dotenv
 import uvicorn
-import smtplib
-import os
-
-load_dotenv()
-
-DATABASE_URL = "mysql://root:liupassword@mysql:3306/userdb"
-
-# SQLAlchemy engine that connects to MySQL db
-engine = create_engine(DATABASE_URL)
-
-# Create a session to handle db sessions
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-# Create base class for models
-Base = declarative_base()
-
-# Create tables in the database
-Base.metadata.create_all(bind=engine) 
-
-# SQLAlchemy Model
-class User(Base):
-    __tablename__ = "users"
-    id = Column(Integer, primary_key=True, autoincrement=True) 
-    FirstName = Column(String(100), nullable=False)
-    LastName = Column(String(100), nullable=False)
-    Email = Column(String(255), unique=True, nullable=False, index=True)
-    EmailVerified = Column(Boolean, default=False)
-    CreatedAt = Column(TIMESTAMP, default=func.now())
-    UpdatedAt = Column(TIMESTAMP, default=func.now(), onupdate=func.now())
-
-    def __repr__(self):
-        return f"<User(id={self.id}, first_name={self.FirstName}, last_name={self.LastName}, Email={self.Email})>"
-"""
-# SQLAlchemy Model
-class User(Base):
-    __tablename__ = "users"
-    id = Column(String(22), primary_key=True) 
-    FirstName = Column(String(100), nullable=False)
-    LastName = Column(String(100), nullable=False)
-    Email = Column(String(255), unique=True, nullable=False, index=True)
-    EmailVerified = Column(Boolean, default=False)
-    Password = Column(String(255), nullable=False) 
-    PhoneNumber = Column(String(10), nullable=False)
-    Gender = Column(String(100), nullable=False)
-    DateOfBirth = Column(Date, nullable=False) #YYYY-MM-DD
-    Occupation = Column(String(100), nullable=False)
-    Role = Column(Enum("admin", "renter", "owner"), nullable=False)
-    created_at = Column(TIMESTAMP, default="CURRENT_TIMESTAMP")
-    updated_at = Column(
-        TIMESTAMP, default="CURRENT_TIMESTAMP", onupdate="CURRENT_TIMESTAMP"
-    )
-"""
+from database import get_db
+from models import User
+from email_func import send_verification_email
+from password import hash_password, verify_password
 
 app = FastAPI()
 
@@ -72,53 +19,6 @@ app.add_middleware(
     allow_methods=["*"], 
     allow_headers=["*"], 
 )
-
-# Dependency that yields a session for each request
-def get_db():
-    try:
-        db = SessionLocal()
-        yield db
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Database connection error: {str(e)}"
-        )
-    finally:
-        db.close()
-
-# Email verification 
-def send_verification_email(user_email, name):
-    sender_email = os.getenv("GMAIL_UN")
-    sender_password = os.getenv("GMAIL_PW")
-
-    print(f"Email: {sender_email}, Password: {sender_password}")
-
-    msg = MIMEMultipart()
-    msg['From'] = sender_email
-    msg['To'] = user_email
-    msg['Subject'] = "Verify Your Email - Haven App"
-
-    verification_url = f"http://localhost:3000/signup/pw?email={user_email}"
-
-    body = f"""
-    Hello {name},
-
-    Welcome to Haven!
-    Please verify your email by clicking the link: {verification_url}.
-
-    Haven Team.
-    """
-    msg.attach(MIMEText(body, 'plain'))
-
-    try:
-        with smtplib.SMTP("smtp.gmail.com", 587) as server:
-            server.starttls()  # Connect
-            server.login(sender_email, sender_password)  # Log in
-            server.sendmail(sender_email, user_email, msg.as_string())  # Send email
-            print("Verification email sent!")
-    except smtplib.SMTPException as e:
-        print(f"Failed to send email: {e}")
-
 
 # New user sign up step 1
 @app.post("/new-user")
@@ -172,13 +72,13 @@ async def verify_email(email: str, db: Session = Depends(get_db)):
         # Query the user by email
         user = db.query(User).filter(User.Email == email).first()
 
-        # If user doesn't exist, raise an exception
         if not user:
-            raise HTTPException(status_code=404, detail="User not found")
+            raise HTTPException(status_code=404, detail="User not found.")
         
         if user.EmailVerified:
-            raise HTTPException(status_code=400, detail="Email is already verified")
-        
+        #   raise HTTPException(status_code=400, detail="User email is already verified.") # might need to create a frontend message to capture this.
+            return JSONResponse(status_code=200, content={"message": "User email is already verified."})
+
         user.EmailVerified = True
 
         db.commit()
@@ -189,31 +89,72 @@ async def verify_email(email: str, db: Session = Depends(get_db)):
         return JSONResponse(status_code=200, content={"message": "Email successfully verified!"})
 
     except SQLAlchemyError as e:
-        db.rollback()  # Rollback in case of error
-        raise HTTPException(status_code=500, detail="Error updating user")
+        db.rollback() 
+        raise HTTPException(status_code=500, detail="Error updating user as verified.")
 
 @app.post("/signup/pw")
 async def set_password(request: Request, db: Session = Depends(get_db)):
 
+    # Retrieve data from frontend
+    data = await request.json()
+    Email = data["Email"]
+    Password = data["Password"]
+
     try:
+        hashedPassword = hash_password(Password)
+        print(hashedPassword)
+
         # Query the user by email
-        user = db.query(User).filter(User.Email == request.email).first()
+        user = db.query(User).filter(User.Email == Email).first()
 
         if not user:
             raise HTTPException(status_code=404, detail="User not found.")
 
-        if user.Password:
-            raise HTTPException(status_code=400, detail="Password already set.")
+        user.Password = hashedPassword
 
-        user.Password = request.password
         db.commit()
+
         db.refresh(user)
 
-        return JSONResponse(status_code=200, content={"message": "Password set successfully!"})
+        return JSONResponse(status_code=200, content={"message": "Password set successfully."})
 
     except SQLAlchemyError as e:
         db.rollback()
         raise HTTPException(status_code=500, detail="Error setting password.")
+    
+@app.post("/login")
+async def log_in(request: Request, db: Session = Depends(get_db)):
+
+    data = await request.json()
+    Email = data["Email"]
+    Password = data["Password"]
+
+    try:
+        # Query the user by email
+        user = db.query(User).filter(User.Email == Email).first()
+
+        if not user:
+            raise JSONResponse(status_code=404, content={"message": "User not found."})
+            
+        if user:
+            userpw = user.Password
+            userverified = user.EmailVerified
+
+            if not userverified: 
+                return JSONResponse(status_code=401, content={"message": "Please verify your email address to activate account."})
+            
+        # Compare passwords
+        if not verify_password(Password, userpw):
+            return(JSONResponse(status_code=500, content={"message": "Invalid credentials."}))
+        
+        #token function here
+
+
+        return JSONResponse(status_code=200, content={"message": "Log in successful."})
+
+    except SQLAlchemyError as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail="Error logging in.")
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=4000)

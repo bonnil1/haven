@@ -1,22 +1,23 @@
-from sqlalchemy import create_engine, Column, String, Boolean, Date, Enum, TIMESTAMP
-from sqlalchemy.orm import relationship
-from main import Base
+from sqlalchemy import Column, Integer, String, Boolean, TIMESTAMP, func
+from sqlalchemy.ext.declarative import declarative_base
+
+Base = declarative_base()
 
 # SQLAlchemy Model
 class User(Base):
     __tablename__ = "users"
-    id = Column(String(22), primary_key=True) 
+    id = Column(Integer, primary_key=True, autoincrement=True) #discuss with Ripken about String vs Integer - 22 characters?
     FirstName = Column(String(100), nullable=False)
     LastName = Column(String(100), nullable=False)
     Email = Column(String(255), unique=True, nullable=False, index=True)
     EmailVerified = Column(Boolean, default=False)
-    CreatedAt = Column(TIMESTAMP, default="CURRENT_TIMESTAMP")
-    UpdatedAt = Column(
-        TIMESTAMP, default="CURRENT_TIMESTAMP", onupdate="CURRENT_TIMESTAMP"
-    )
+    Password = Column(String(255), nullable=False)
+    CreatedAt = Column(TIMESTAMP, default=func.now())
+    UpdatedAt = Column(TIMESTAMP, default=func.now(), onupdate=func.now())
 
     def __repr__(self):
         return f"<User(id={self.id}, first_name={self.FirstName}, last_name={self.LastName}, Email={self.Email})>"
+    
 """
 # SQLAlchemy Model
 class User(Base):
@@ -26,12 +27,13 @@ class User(Base):
     LastName = Column(String(100), nullable=False)
     Email = Column(String(255), unique=True, nullable=False, index=True)
     EmailVerified = Column(Boolean, default=False)
-    Password = Column(String(255), nullable=False) 
-    PhoneNumber = Column(String(10), nullable=False)
-    Gender = Column(String(100), nullable=False)
-    DateOfBirth = Column(Date, nullable=False) #YYYY-MM-DD
-    Occupation = Column(String(100), nullable=False)
-    Role = Column(Enum("admin", "renter", "owner"), nullable=False)
+    Password = Column(String(20), nullable=False)
+    LicenseNumber = Column(String(13), nullable=False) 
+    IssuingState = Column(String(2), nullable=False)
+    ExpirationDate = Column(Date, nullable=False) #YYYY-MM-DD
+    DateOfIssue = Column(Date, nullable=False) #YYYY-MM-DD
+    LicenseImage = Column(String(2053), nullable=False)
+    IDVerified = Column(Boolean, default=False)
     created_at = Column(TIMESTAMP, default="CURRENT_TIMESTAMP")
     updated_at = Column(
         TIMESTAMP, default="CURRENT_TIMESTAMP", onupdate="CURRENT_TIMESTAMP"
