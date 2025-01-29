@@ -1,12 +1,15 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, Session
-from fastapi import Depends, HTTPException
+from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
 
-DATABASE_URL = "mysql://root:liupassword@mysql:3306/userdb"
+#Docker route
+#DATABASE_URL = "mysql://root:liupassword@mysql:3306/userdb"
+
+#EC2 route
+DATABASE_URL = "mysql+pymysql://root@localhost:3306/User"
 
 # SQLAlchemy engine that connects to MySQL db
 engine = create_engine(DATABASE_URL)
