@@ -14,10 +14,10 @@ app = FastAPI()
 # CORS set up
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  
-    allow_credentials=True,  
-    allow_methods=["*"], 
-    allow_headers=["*"], 
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # New user sign up step 1
@@ -26,12 +26,14 @@ async def create_user(request: Request, db: Session = Depends(get_db)):
 
     # Retrieve data from frontend
     data = await request.json()
+    print(data)
     FirstName = data["FirstName"]
     LastName = data["LastName"]
     Email = data["Email"]
 
     # Check if user with this email already exists
     existing_user = db.query(User).filter(User.Email == Email).first()
+
     if existing_user:
         return JSONResponse(status_code=400, content={"message": "Email already exists."})
 

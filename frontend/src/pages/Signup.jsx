@@ -19,7 +19,6 @@ const Signup = () => {
 
             return updatedFormData;
         })
-
         console.log(formData)
     }
 
@@ -55,7 +54,7 @@ const Signup = () => {
     };
 
     const handleContinue = () => {
-        //navigate('/signup/pw');
+        navigate('/signup/pw');
     };
 
 

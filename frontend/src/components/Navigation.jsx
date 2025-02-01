@@ -16,7 +16,7 @@ const Navigation = ({toggleMobileMenu, isMobileMenuOpen, closeMenu}) => {
                 <div className="flex h-15 items-center justify-between">
                 <div className="flex space-x-5 text-white">
                     <NavLink to="/" onClick={closeMenu} className="flex font-semibold text-gray-600 hover:underline">
-                        <img className="size-12" src="/src/assets/images/haven_logo.png" alt="haven logo" />
+                        <img className="size-12" src="https://i.imgur.com/w1ogrfV.jpeg" alt="haven_logo" />
                     </NavLink>
                 </div>
                 <div className="md:ml-auto">
@@ -62,7 +62,7 @@ const Navigation = ({toggleMobileMenu, isMobileMenuOpen, closeMenu}) => {
                 <div className="flex h-10 items-center justify-between">
                     <div className="text-white">
                         <NavLink to="/" onClick={closeMenu} className="flex font-semibold text-gray-600 hover:underline">
-                            <img className="size-12" src="/src/assets/images/haven_logo.png" alt="haven logo" />
+                            <img className="size-12" src="https://i.imgur.com/w1ogrfV.jpeg" alt="haven_logo" />
                         </NavLink>
                     </div>
                     {/* Hamburger Icon for Mobile */}

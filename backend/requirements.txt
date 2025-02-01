@@ -3,6 +3,7 @@ anyio==4.8.0
 bcrypt==4.2.1
 click==8.1.8
 ecdsa==0.19.0
+exceptiongroup==1.2.2
 fastapi==0.115.6
 h11==0.14.0
 idna==3.10
@@ -10,6 +11,7 @@ mysqlclient==2.2.7
 pyasn1==0.6.1
 pydantic==2.10.5
 pydantic_core==2.27.2
+PyMySQL==1.1.1
 python-dotenv==1.0.1
 python-jose==3.3.0
 python-multipart==0.0.20
