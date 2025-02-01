@@ -108,7 +108,8 @@ async def set_password(request: Request, db: Session = Depends(get_db)):
 
         # Query the user by email
         user = db.query(User).filter(User.Email == Email).first()
-
+        print(user)
+        
         if not user:
             raise HTTPException(status_code=404, detail="User not found.")
 
