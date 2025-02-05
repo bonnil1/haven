@@ -6,7 +6,7 @@ import os
 
 load_dotenv()
 
-def send_verification_email(Email: str, FirstName: str):
+def send_verification_email(Email: str, FirstName: str, token: str):
     sender_email = os.getenv("GMAIL_UN")
     sender_password = os.getenv("GMAIL_PW")
 
@@ -15,7 +15,7 @@ def send_verification_email(Email: str, FirstName: str):
     msg['To'] = Email
     msg['Subject'] = "Verify Your Email - Haven App"
 
-    verification_url = f"http://localhost:3000/signup/pw?email={Email}"
+    verification_url = f"http://localhost:3000/signup/pw?token={token}"
 
     body = f"""
     Hello {FirstName},

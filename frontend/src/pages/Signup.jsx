@@ -35,14 +35,9 @@ const Signup = () => {
                 body: JSON.stringify(formData)
             });
 
-            if (!response.ok) {
-                throw new Error("Failed to create user");
-            }
-
             const data = await response.json();
 
             if (data.message === "User created successfully!") {
-                //handleContinue();
                 setMessage(data.message);
             } else if (data.message === "Email already exists."){
                 setMessage(data.message);
@@ -52,11 +47,6 @@ const Signup = () => {
             setMessage("An error occurred while creating the user.");
         }
     };
-
-    const handleContinue = () => {
-        navigate('/signup/pw');
-    };
-
 
   return (
     <div className='flex justify-center items-center mt-20'>
@@ -102,9 +92,6 @@ const Signup = () => {
                         required
                     >
                     </input>
-                    {message === "Email already exists." && (
-                        <h1 className='text-xs text-red-500'>An account with this email already exists. Please log in.</h1>
-                    )}
                 </div>
                 <button
                     className="bg-slate-700 hover:bg-slate-500 text-white py-2 border rounded-xl w-full mt-5"
@@ -113,10 +100,10 @@ const Signup = () => {
                     Continue
                 </button>
                 {message === "User created successfully!" && (
-                    <h4 className='flex justify-center text-xs text-emerald-600'>Please verify your email address.</h4>
+                    <h4 className='flex justify-center text-xs text-emerald-600 mt-2'>Please verify your email address.</h4>
                 )}
                 {message === "Email already exists." && (
-                    <h4 className='flex justify-center text-xs text-slate-600'>An account with this email already exists. Please log in</h4>
+                    <h4 className='flex justify-center text-xs text-emerald-600 mt-2'>An account with this email already exists. Please log in</h4>
                 )}
             </div>    
             <h6 className='flex justify-center text-xs mt-2'>Already have an account? Log in.</h6>

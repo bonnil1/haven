@@ -36,16 +36,19 @@ const Login = () => {
                 body: JSON.stringify({Email: email, Password: password})
             })
 
-            if (!response.ok) {
-                throw new Error("Error logging in.");
-            }
-
             const data = await response.json();
             console.log(data)
 
-            setMessage(data.message)
+            if (data.message === "Log in successful.") {
+                navigate('/');
+            } else if (data.message === "Please verify your email address to activate account.") {
+                setMessage(data.message)
+            } else if (data.message === "Invalid credentials.") {
+                setMessage(data.message)
+            } else if (data.message === "No account associated with the email address.") {
+                setMessage(data.message)
+            }
             
-            navigate('/');
         } catch (error) {
             console.error(error)
         }
@@ -74,8 +77,6 @@ const Login = () => {
                         <input
                             className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2" 
                             type={viewpw ? "text" : "password"}
-                            pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*[;:",`]).{8,}'
-                            title='The password must contain an upper and lower case letter, a number, and be 8 characters long.'
                             placeholder='Enter password.'
                             onChange={handlePassword}
                         >
@@ -87,9 +88,6 @@ const Login = () => {
                     <div>
                         <h3 className='flex justify-end text-xs mt-2'>Forgot password?</h3>
                     </div>
-                    {message && (
-                        <h1 className='text-xs text-slate-700'>{message}</h1>
-                    )}
                     <div>
                     <button
                         className="bg-slate-700 hover:bg-slate-500 text-white py-2 border rounded-xl w-full mt-5"
@@ -98,12 +96,15 @@ const Login = () => {
                         Log In
                     </button>
                     </div>
+                    {message && (
+                        <h1 className='flex justify-center text-xs text-emerald-700 mt-2'>{message}</h1>
+                    )}
                 </div>    
                 <h6 className='flex justify-center text-xs mt-2'>Don't have an account? Sign up</h6>
-                <div class="flex items-center justify-center space-x-4 w-full mt-7">
-                    <div class="flex-grow border-t border-gray-300"></div>
-                    <span class="text-gray-500">or sign in with</span>
-                    <div class="flex-grow border-t border-gray-300"></div>
+                <div className="flex items-center justify-center space-x-4 w-full mt-7">
+                    <div className="flex-grow border-t border-gray-300"></div>
+                    <span className="text-gray-500">or sign in with</span>
+                    <div className="flex-grow border-t border-gray-300"></div>
                 </div>
             </form>
         </div>

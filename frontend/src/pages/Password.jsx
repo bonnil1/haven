@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import { NavLink, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const Password = () => {
 
@@ -26,16 +26,11 @@ const Password = () => {
     const numberRegex = /[0-9]/;
     const charactersRegex = /^.{8,}$/;
 
-    // Extract email from URL query params
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
-        const emailFromUrl = params.get('email');
-        
-        if (emailFromUrl) {
-            setEmail(emailFromUrl);
-        }
+        const tokenFromUrl = params.get('token');
 
-        fetch(`http://localhost:4000/signup/pw?email=${emailFromUrl}`)
+        fetch(`http://localhost:4000/signup/pw?token=${tokenFromUrl}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error("Failed to verify email.");
@@ -44,11 +39,11 @@ const Password = () => {
                 })
                 .then(data => {
                     console.log(data);
-                    // Handle success
+                    setMessage(data.message)
+                    setEmail(data.email)
                 })
                 .catch(error => {
                     console.error("Error verifying email:", error);
-                    // Handle error
                 });
     }, []);
 
@@ -102,17 +97,19 @@ const Password = () => {
     }, [password, confirmPassword, pwchange])
 
     const handleSubmit = async (event) => {
-        console.log("hitting handle submit");
         event.preventDefault();
+        console.log(password)
+        const params = new URLSearchParams(window.location.search);
+        const tokenFromUrl = params.get('token');
 
         if (password === confirmPassword && password !== "") {
             try {
-                const response = await fetch("http://localhost:4000/signup/pw", {
+                const response = await fetch(`http://localhost:4000/signup/pw?token=${tokenFromUrl}`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({Email: email, Password: password})
+                    body: JSON.stringify({Password: password})
                 });
 
                 if (!response.ok) {
@@ -239,10 +236,3 @@ const Password = () => {
 }
 
 export default Password
-{/* 
-{message === "Passwords do not match." ? (
-    <h1 className='text-xs text-slate-700'>Passwords do not match.</h1>
-) : message === "Passwords match." ? (
-    <h1 className='text-xs text-teal-600'>Passwords match.</h1>
-) : null}
- */}

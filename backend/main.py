@@ -6,6 +6,7 @@ from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 import uvicorn
 from database import get_db
 from models import User
+from tokens import create_email_token, verify_token
 from email_func import send_verification_email
 from password import hash_password, verify_password
 
@@ -20,7 +21,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# New user sign up step 1
+# New user sign up
 @app.post("/new-user")
 async def create_user(request: Request, db: Session = Depends(get_db)):
 
@@ -31,76 +32,75 @@ async def create_user(request: Request, db: Session = Depends(get_db)):
     LastName = data["LastName"]
     Email = data["Email"]
 
-    # Check if user with this email already exists
-    existing_user = db.query(User).filter(User.Email == Email).first()
-
-    if existing_user:
-        return JSONResponse(status_code=400, content={"message": "Email already exists."})
-
-    # Create the new user
-    new_user = User(FirstName=FirstName, LastName=LastName, Email=Email)
-
     try:
+        # Check if user with this email already exists
+        existing_user = db.query(User).filter(User.Email == Email).first()
+        print(existing_user)
+
+        if existing_user:
+            return JSONResponse(status_code=400, content={"message": "Email already exists."})
+
+        # Create the new user
+        new_user = User(FirstName=FirstName, LastName=LastName, Email=Email)
+
         db.add(new_user)
         db.commit()
         db.refresh(new_user)
-
-    except IntegrityError as e:
-        db.rollback() 
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Database error: Unable to create user due to a constraint violation."
-        )
     
-    except Exception as e:
+    except SQLAlchemyError as e:
         db.rollback()
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="An unexpected error occurred while creating the user."
-        )
+        print(f"A SQLAlchemy error occurred: {e}")
 
     print(new_user)
     
-    # verification email code here
-    send_verification_email(Email, FirstName)
+    token = create_email_token(Email)
+    print(token)
+
+    send_verification_email(Email, FirstName, token)
     
     return JSONResponse(status_code=200, content={"message": "User created successfully!"})
 
 # Verification Email
 @app.get("/signup/pw")
-async def verify_email(email: str, db: Session = Depends(get_db)):
+async def verify_email(token: str, db: Session = Depends(get_db)):
 
     try:
-        # Query the user by email
-        user = db.query(User).filter(User.Email == email).first()
+        payload = verify_token(token)
 
-        if not user:
-            raise HTTPException(status_code=404, detail="User not found.")
+        if payload["type"] != "email_verification":
+            raise HTTPException(status_code=400, detail="Invalid token type for email verification.")
         
-        if user.EmailVerified:
-        #   raise HTTPException(status_code=400, detail="User email is already verified.") # might need to create a frontend message to capture this.
-            return JSONResponse(status_code=200, content={"message": "User email is already verified."})
+        if payload:
+            Email = payload["subject"] 
+            user = db.query(User).filter(User.Email == Email).first()
 
-        user.EmailVerified = True
+            if not user:
+                raise HTTPException(status_code=404, detail="User not found.")
 
-        db.commit()
+            if user.EmailVerified:
+                return JSONResponse(status_code=200, content={"message": "User email is already verified."})
 
-        # Return the updated user (optional)
-        db.refresh(user)
+            user.EmailVerified = True
+            db.commit()
 
-        return JSONResponse(status_code=200, content={"message": "Email successfully verified!"})
+        return {
+            "message": "Email successfully verified!",
+            "email": Email
+        }
 
     except SQLAlchemyError as e:
-        db.rollback() 
-        raise HTTPException(status_code=500, detail="Error updating user as verified.")
+        db.rollback()
+        print(f"A SQLAlchemy error occurred: {e}")
 
 @app.post("/signup/pw")
-async def set_password(request: Request, db: Session = Depends(get_db)):
+async def set_password(request: Request, token: str, db: Session = Depends(get_db)):
 
     # Retrieve data from frontend
     data = await request.json()
-    Email = data["Email"]
     Password = data["Password"]
+
+    payload = verify_token(token)
+    Email = payload["subject"] 
 
     try:
         hashedPassword = hash_password(Password)
@@ -109,7 +109,7 @@ async def set_password(request: Request, db: Session = Depends(get_db)):
         # Query the user by email
         user = db.query(User).filter(User.Email == Email).first()
         print(user)
-        
+
         if not user:
             raise HTTPException(status_code=404, detail="User not found.")
 
@@ -123,41 +123,40 @@ async def set_password(request: Request, db: Session = Depends(get_db)):
 
     except SQLAlchemyError as e:
         db.rollback()
-        raise HTTPException(status_code=500, detail="Error setting password.")
+        print(f"A SQLAlchemy error occurred: {e}")
     
 @app.post("/login")
 async def log_in(request: Request, db: Session = Depends(get_db)):
 
     data = await request.json()
+    print(data)
     Email = data["Email"]
     Password = data["Password"]
 
     try:
-        # Query the user by email
         user = db.query(User).filter(User.Email == Email).first()
 
         if not user:
-            raise JSONResponse(status_code=404, content={"message": "User not found."})
+            return JSONResponse(status_code=404, content={"message": "No account associated with the email address."})
             
         if user:
-            userpw = user.Password
+            storedpw = user.Password
             userverified = user.EmailVerified
 
             if not userverified: 
                 return JSONResponse(status_code=401, content={"message": "Please verify your email address to activate account."})
             
-        # Compare passwords
-        if not verify_password(Password, userpw):
-            return(JSONResponse(status_code=500, content={"message": "Invalid credentials."}))
+            # Compare passwords
+            if not verify_password(Password, storedpw):
+                return(JSONResponse(status_code=401, content={"message": "Invalid credentials."}))
+            else:
+                return JSONResponse(status_code=200, content={"message": "Log in successful."})
         
-        #token function here
-
-
-        return JSONResponse(status_code=200, content={"message": "Log in successful."})
+                # jwt token function here
 
     except SQLAlchemyError as e:
         db.rollback()
-        raise HTTPException(status_code=500, detail="Error logging in.")
+        print(f"A SQLAlchemy error occurred: {e}")
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=4000)

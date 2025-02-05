@@ -7,5 +7,5 @@ def hash_password(password: str) -> str:
     return hashed.decode("utf-8")
 
 # Password verification
-def verify_password(password: str, storedpw: str) -> bool:
-    return bcrypt.checkpw(password.encode("utf-8"), storedpw.encode("utf-8"))
+def verify_password(Password: str, storedpw: str) -> bool:
+    return bcrypt.checkpw(Password.encode("utf-8"), storedpw.encode("utf-8"))

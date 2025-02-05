@@ -19,13 +19,14 @@ def create_access_token(data: dict, expires_delta: timedelta = timedelta(minutes
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-def create_email_token(email: str, expires_delta: timedelta = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)):
-    data = {"subject": email, "type": "email_verification"}  # Added a custom 'type' to distinguish from auth token
+def create_email_token(Email: str, expires_delta: timedelta = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)):
+    data = {"subject": Email, "type": "email_verification"}  # Added a custom 'type' to distinguish from auth token
     return create_access_token(data, expires_delta)
 
 def verify_token(token: str):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        print(payload)
 
         if "exp" in payload and datetime.utcfromtimestamp(payload["exp"]) < datetime.utcnow():
             return JSONResponse(status_code=400, content={"message": "Token has expired."})
