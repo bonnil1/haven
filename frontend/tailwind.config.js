@@ -7,7 +7,9 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Helvetica', 'Arial']
+        sans: ['Helvetica', 'Arial'],
+        nunito: ['Nunito', 'sans-serif'],
+        roboto: ['Roboto', 'sans-serif'],
       },
       screens: {
         'xs': '0px', 

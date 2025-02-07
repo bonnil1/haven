@@ -11,6 +11,7 @@ import Rentals from './pages/Rentals';
 import Show from './pages/Show';
 import HousingRequest from './pages/HousingRequest';
 import ListProperty from './pages/ListProperty';
+import UserProfile from './pages/UserProfile';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const App = () => {
@@ -40,6 +41,7 @@ return (
         <Route path='/home/rentals/show' element={<Show />}/>
         <Route path='/housing-request' element={<HousingRequest />}/>
         <Route path='/list-your-property' element={<ListProperty />}/>
+        <Route path='/profile' element={<UserProfile />}/>
       </Routes>
     </div>
   </Router>

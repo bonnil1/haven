@@ -72,7 +72,7 @@ const Login = () => {
                         >
                         </input>
                     </div>
-                    <div className='flex flex-col'>
+                    <div className='relative flex flex-col'>
                         <label>Password</label>
                         <input
                             className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2" 
@@ -81,7 +81,7 @@ const Login = () => {
                             onChange={handlePassword}
                         >
                         </input>
-                        <button type="button" onClick={togglePassword} className='absolute ml-80 mt-10'>
+                        <button type="button" onClick={togglePassword} className='absolute mt-4 right-2 top-1/2 transform -translate-y-1/2'>
                             {viewpw ? (<FiEyeOff className="h-5 w-5" />) : (<FiEye className="h-5 w-5" />)}
                         </button>
                     </div>
@@ -104,6 +104,9 @@ const Login = () => {
                 <div className="flex items-center justify-center space-x-4 w-full mt-7">
                     <div className="flex-grow border-t border-gray-300"></div>
                     <span className="text-gray-500">or sign in with</span>
+                    <div className='flex justify-center'>
+                        <div className="g-signin2" data-onsuccess="onSignIn"></div>
+                    </div>
                     <div className="flex-grow border-t border-gray-300"></div>
                 </div>
             </form>

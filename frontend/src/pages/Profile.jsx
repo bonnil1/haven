@@ -55,7 +55,7 @@ const Profile = () => {
                     >
                     </input>
                 </div>
-                <div className='flex flex-col mb-5'>
+                <div className='flex flex-col mb-3'>
                     <label>Last Name</label>
                         <input
                         className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2" 
@@ -67,6 +67,7 @@ const Profile = () => {
                         required
                     >
                     </input>
+                    <h4 className='text-xs text-slate-500 italic mt-1'>Please make sure to use your legal first and last name that matches your ID.</h4>
                 </div>
                 <div className='flex flex-col mb-5'>
                     <label>Phone Number</label>

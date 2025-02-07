@@ -148,7 +148,7 @@ const Password = () => {
                     >
                     </input>
                 </div>
-                <div className='flex flex-col'>
+                <div className='relative flex flex-col'>
                     <label>Password</label>
                     <input
                         className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2" 
@@ -161,11 +161,11 @@ const Password = () => {
                         required
                     >
                     </input>
-                    <button type="button" onClick={togglePassword} className='absolute ml-80 mt-10'>
+                    <button type="button" onClick={togglePassword} className='absolute mt-4 right-2 top-1/2 transform -translate-y-1/2'>
                         {viewpw ? (<FiEyeOff className="h-5 w-5" />) : (<FiEye className="h-5 w-5" />)}
                     </button>
                 </div>
-                <div className='flex flex-col mt-5'>
+                <div className='relative flex flex-col mt-5'>
                     <label>Confirm Password</label>
                     <input
                         className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2" 
@@ -178,7 +178,7 @@ const Password = () => {
                         required
                     >
                     </input>
-                    <button type="button" onClick={togglePassword2} className='absolute ml-80 mt-10'>
+                    <button type="button" onClick={togglePassword2} className='absolute mt-4 right-2 top-1/2 transform -translate-y-1/2'>
                         {viewpw2 ? (<FiEyeOff className="h-5 w-5" />) : (<FiEye className="h-5 w-5" />)}
                     </button>
                 </div>
