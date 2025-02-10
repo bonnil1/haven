@@ -11,7 +11,7 @@ const Navigation = ({toggleMobileMenu, isMobileMenuOpen, closeMenu}) => {
         <div>
             {/*Laptop View*/}
             <div className="hidden md:block">
-            <nav className="bg-white p-2 border-b border-gray-300">
+            <nav className="bg-white p-2 border-b border-gray-400">
             <div className="mx-auto, max-w-8xl px-5">
                 <div className="flex h-15 items-center justify-between">
                 <div className="flex space-x-5 text-white">
@@ -57,14 +57,16 @@ const Navigation = ({toggleMobileMenu, isMobileMenuOpen, closeMenu}) => {
 
             {/*Mobile View*/}
             <div className="block md:hidden">
-            <nav className="bg-white p-4">
+            <nav className="bg-white p-4 border-b border-gray-400">
             <div className="mx-auto, max-w-3xl px-2">
                 <div className="flex h-10 items-center justify-between">
-                    <div className="text-white">
-                        <NavLink to="/" onClick={closeMenu} className="flex font-semibold text-gray-600 hover:underline">
-                            <img className="size-12" src="https://i.imgur.com/w1ogrfV.jpeg" alt="haven_logo" />
-                        </NavLink>
-                    </div>
+                <div className="text-white">
+                    <NavLink to="/" onClick={closeMenu} className="flex font-semibold text-gray-600 hover:underline">
+                        <img className="size-12" src="https://i.imgur.com/w1ogrfV.jpeg" alt="haven_logo" />
+                    </NavLink>
+                </div>
+                <div className="md:ml-auto">
+                    <div className="flex mt-1">
                     {/* Hamburger Icon for Mobile */}
                     <div className="mt-2">
                         <button onClick={toggleMobileMenu} className="text-emerald-600 focus:outline-none hover:bg-gray-300">
@@ -73,7 +75,6 @@ const Navigation = ({toggleMobileMenu, isMobileMenuOpen, closeMenu}) => {
                             </svg>
                         </button>
                     </div>
-                </div>
                     <div className={`${isMobileMenuOpen ? 'block' : 'hidden'}`} id="mobile-menu">
                         <div className="absolute right-0 w-44 sm:w-56 p-2 mt-3 mr-3 bg-white shadow-md rounded-md">
                         <NavLink to="/signup" onClick={closeMenu} className="block text-black font-bold hover:bg-gray-200 px-3 py-2">
@@ -90,6 +91,9 @@ const Navigation = ({toggleMobileMenu, isMobileMenuOpen, closeMenu}) => {
                             Find your home
                         </NavLink>
                         </div>
+                    </div>
+                    </div>
+                </div>
                 </div>
             </div>
             </nav>    
