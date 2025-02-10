@@ -38,10 +38,14 @@ const UserProfile = () => {
             const formattedBirthday = `${monthIndex.toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}-${year}`;
             setBirthday(formattedBirthday); //change format to YYYY-MM-DD
         }
-        }, [month, date, year]);
+    }, [month, date, year]);
+
+    const handleSubmit = async (event) => {
+        //code for handle submit
+    }
 
     return (
-        <div className='grid grid-cols-5 h-screen w-2/3 mx-auto mt-20'>
+        <div className='grid grid-cols-5 h-screen w-full sm:w-2/3 mx-auto mt-20'>
         <div className='col-span-2 flex flex-col font-nunito'>
             <div className='rounded-xl bg-[rgb(248,251,248)] shadow-md px-6 py-12'>
                 <div className='flex flex-col'>
@@ -76,7 +80,7 @@ const UserProfile = () => {
         </div>
         <div className='col-span-3 flex flex-col font-roboto'>
             <div className=''>
-                <form className='border border-slate-400 rounded-xl p-6 sm:p-8'>
+                <form onSubmit={handleSubmit} className='border border-green-700 border-opacity-20 rounded-xl p-6 sm:p-8'>
                     <div>
                         <div className='flex flex-col mb-3'>
                             <label>First Name</label>
@@ -85,7 +89,6 @@ const UserProfile = () => {
                                 type="text" 
                                 name="FirstName"
                                 //value={}
-                                placeholder="First Name"
                                 pattern="^[A-Za-z ]+$"
                                 required
                             >
@@ -98,7 +101,6 @@ const UserProfile = () => {
                                 type="text" 
                                 name="LastName"
                                 //value={}
-                                placeholder="Last Name"
                                 pattern="^[A-Za-z ]+$"
                                 required
                             >
@@ -111,7 +113,7 @@ const UserProfile = () => {
                                 className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2" 
                                 type="text" 
                                 name="PhoneNumber"
-                                placeholder="201-555-0123"
+                                //value={}
                                 pattern="^\d{3}-\d{3}-\d{4}$"
                                 required
                             >
