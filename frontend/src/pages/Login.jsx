@@ -10,7 +10,7 @@ import { FaApple } from "react-icons/fa";
 import { FaLinkedin } from "react-icons/fa";
 
 
-const Login = () => {
+const Login = ({setIsLoggedIn}) => {
 
     const navigate = useNavigate();
     const [viewpw, setViewpw] = useState(false)
@@ -46,7 +46,8 @@ const Login = () => {
             console.log(data)
 
             if (data.message === "Log in successful.") {
-                navigate('/');
+                setIsLoggedIn(true)
+                navigate('/')
             } else if (data.message === "Please verify your email address to activate account.") {
                 setMessage(data.message)
             } else if (data.message === "Invalid credentials.") {
@@ -61,7 +62,11 @@ const Login = () => {
     }
 
     const googlelogin = useGoogleLogin({
-        onSuccess: tokenResponse => console.log(tokenResponse),
+        onSuccess: tokenResponse => { 
+            console.log(tokenResponse); 
+            setIsLoggedIn(true); 
+            navigate('/'); 
+        }
     });
 
     return (

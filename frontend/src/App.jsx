@@ -17,25 +17,27 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const App = () => {
   
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
-      setIsMobileMenuOpen(!isMobileMenuOpen);
+    setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
   const closeMenu = () => {
-      setIsMobileMenuOpen(false);
+    setIsMobileMenuOpen(false);
   };
+
 
 return (
   <Router>
     <div>
-      <Navigation isMobileMenuOpen={isMobileMenuOpen} toggleMobileMenu={toggleMobileMenu} closeMenu={closeMenu} />
+      <Navigation isMobileMenuOpen={isMobileMenuOpen} toggleMobileMenu={toggleMobileMenu} closeMenu={closeMenu} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
       <Routes>
         <Route path='/signup' element={<Signup />}/>
         <Route path='/signup/pw' element={<Password />}/>
         <Route path='/signup/pw/profile' element={<Profile />}/>
-        <Route path='/login' element={<Login />}/>
+        <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} />}/>
         <Route path='/' element={<Prelanding closeMenu={closeMenu}/>}/>
         <Route path='/home' element={<Landing closeMenu={closeMenu}/>} />
         <Route path='/home/rentals' element={<Rentals />}/>

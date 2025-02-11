@@ -4,7 +4,7 @@ import { useState, useEffect, useRef  } from 'react';
 import { PiWarehouseFill } from "react-icons/pi";
 import { BiSolidUserRectangle } from "react-icons/bi";
 
-const Navigation = ({toggleMobileMenu, isMobileMenuOpen, closeMenu}) => {
+const Navigation = ({toggleMobileMenu, isMobileMenuOpen, closeMenu, isLoggedIn, setIsLoggedIn}) => {
 
 
     return (
@@ -33,19 +33,38 @@ const Navigation = ({toggleMobileMenu, isMobileMenuOpen, closeMenu}) => {
                     </div>
                     <div className={`${isMobileMenuOpen ? 'block' : 'hidden'}`} id="mobile-menu">
                         <div className="absolute right-0 w-20 sm:w-56 p-2 mt-16 mr-3 bg-white shadow-md rounded-xl">
-                        <NavLink to="signup" onClick={closeMenu} className="block text-black font-bold hover:bg-gray-200 px-3 py-2">
-                            Sign up
-                        </NavLink>
-                        <NavLink to="login" onClick={closeMenu} className="block text-black hover:bg-gray-200 px-3 py-2">
-                            Log in
-                        </NavLink>
-                        <hr className='my-2'/>
-                        <NavLink to="list-your-property" onClick={closeMenu} className="block text-black hover:bg-gray-200 px-3 py-2">
-                            List your home
-                        </NavLink>
-                        <NavLink to="home" onClick={closeMenu} className="block text-black hover:bg-gray-200 px-3 py-2">
-                            Find your home
-                        </NavLink>
+                        {isLoggedIn === true ? (
+                            <>
+                                <NavLink to="profile" onClick={closeMenu} className="block text-black font-semibold hover:bg-gray-200 px-3 py-2">
+                                    Profile
+                                </NavLink>
+                                <NavLink to="list-your-property" onClick={closeMenu} className="block text-black hover:bg-gray-200 px-3 py-2">
+                                    List your home
+                                </NavLink>
+                                <NavLink to="home" onClick={closeMenu} className="block text-black hover:bg-gray-200 px-3 py-2">
+                                    Find your home
+                                </NavLink>
+                                <NavLink to="/" onClick={() => {closeMenu(); setIsLoggedIn(false); }}  className="block text-black hover:bg-gray-200 px-3 py-2">
+                                    Log Out
+                                </NavLink>
+                            </>
+                        ) : (
+                            <>
+                                <NavLink to="signup" onClick={closeMenu} className="block text-black font-bold hover:bg-gray-200 px-3 py-2">
+                                    Sign up
+                                </NavLink>
+                                <NavLink to="login" onClick={closeMenu} className="block text-black hover:bg-gray-200 px-3 py-2">
+                                    Log in
+                                </NavLink>
+                                <hr className="my-2 border-green-700 border-opacity-30"/>
+                                <NavLink to="list-your-property" onClick={closeMenu} className="block text-black hover:bg-gray-200 px-3 py-2">
+                                    List your home
+                                </NavLink>
+                                <NavLink to="home" onClick={closeMenu} className="block text-black hover:bg-gray-200 px-3 py-2">
+                                    Find your home
+                                </NavLink>
+                            </>
+                        )}
                         </div>
                     </div>
                     </div>
