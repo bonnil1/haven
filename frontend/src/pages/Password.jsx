@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useNavigate } from 'react-router-dom'
 
-const Password = () => {
+const Password = ({setIsLoggedIn}) => {
 
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
@@ -118,7 +118,7 @@ const Password = () => {
 
                 const data = await response.json();
                 console.log(data)
-                
+                setIsLoggedIn(true)
                 navigate('/signup/pw/profile');
 
             } catch (error) {

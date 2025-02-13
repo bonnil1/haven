@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
+import { NavLink } from 'react-router-dom';
 import { FiEye } from "react-icons/fi";
 import { FiEyeOff } from "react-icons/fi";
 import { useNavigate } from 'react-router-dom'
@@ -66,7 +67,9 @@ const Login = ({setIsLoggedIn}) => {
             console.log(tokenResponse); 
             setIsLoggedIn(true); 
             navigate('/'); 
-        }
+        },
+        onError: (error) => console.log('Login Failed:', error)
+        //code for log in error message for user 
     });
 
     return (
@@ -115,7 +118,7 @@ const Login = ({setIsLoggedIn}) => {
                         <h1 className='flex justify-center text-xs text-emerald-700 mt-2'>{message}</h1>
                     )}
                 </div>    
-                <h6 className='flex justify-center text-xs mt-2'>Don't have an account? Sign up</h6>
+                <h6 className='flex justify-center text-xs mt-2'>Don't have an account? <NavLink to="/signup" className="hover:text-teal-700 ml-1">Sign up.</NavLink></h6>
                 <div className="flex items-center justify-center space-x-4 w-full mt-5">
                     <div className="flex-grow border-t border-gray-300"></div>
                     <span className="text-gray-500">or sign in with</span>

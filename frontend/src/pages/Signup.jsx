@@ -106,7 +106,7 @@ const Signup = () => {
                     <h4 className='flex justify-center text-xs text-emerald-600 mt-2'>An account with this email already exists. Please log in</h4>
                 )}
             </div>    
-            <h6 className='flex justify-center text-xs mt-2'>Already have an account? Log in.</h6>
+            <h6 className='flex justify-center text-xs mt-2'>Already have an account? <NavLink to="/login" className="hover:text-teal-700 ml-1">Log In.</NavLink></h6>
         </form>
     </div>
 )}
