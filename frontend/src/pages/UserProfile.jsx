@@ -17,10 +17,10 @@ const UserProfile = () => {
     const [date, setDate] = useState('');
     const [year, setYear] = useState('');
     const [birthday, setBirthday] = useState('');
-    const [selectedGender, setSelectedGender] = useState('');
+    const [gender, setGender] = useState('');
 
     const handleGenderChange = (event) => {
-        setSelectedGender(event.target.value);
+        setGender(event.target.value);
     };
 
     const months = [
@@ -79,7 +79,7 @@ const UserProfile = () => {
             </div>
         </div>
         <div className='col-span-3 flex flex-col font-roboto'>
-            <div className=''>
+            <div className='shadow-lg rounded-xl'>
                 <form onSubmit={handleSubmit} className='border border-green-700 border-opacity-20 rounded-xl p-6 sm:p-8'>
                     <div>
                         <div className='flex flex-col mb-3'>
@@ -126,7 +126,7 @@ const UserProfile = () => {
                                     <input
                                         type="radio"
                                         value="Female"
-                                        checked={selectedGender === "Female"}
+                                        checked={gender === "Female"}
                                         onChange={handleGenderChange}
                                         className="w-4 h-4 mr-1 mt-0.5 text-blue-600 border-gray-300 focus:ring-slate-500"
                                     />
@@ -136,7 +136,7 @@ const UserProfile = () => {
                                     <input
                                         type="radio"
                                         value="Male"
-                                        checked={selectedGender === "Male"}
+                                        checked={gender === "Male"}
                                         onChange={handleGenderChange}
                                         className="w-4 h-4 mr-1 mt-0.5 text-blue-600 border-gray-300 focus:ring-slate-500"
                                     />
@@ -146,7 +146,7 @@ const UserProfile = () => {
                                     <input
                                         type="radio"
                                         value="Non-Binary"
-                                        checked={selectedGender === "Non-Binary"}
+                                        checked={gender === "Non-Binary"}
                                         onChange={handleGenderChange}
                                         className="w-4 h-4 mr-1 mt-0.5 text-blue-600 border-gray-300 focus:ring-slate-500"
                                     />
@@ -156,7 +156,7 @@ const UserProfile = () => {
                                     <input
                                         type="radio"
                                         value="Prefer Not To Respond"
-                                        checked={selectedGender === "Prefer Not To Respond"}
+                                        checked={gender === "Prefer Not To Respond"}
                                         onChange={handleGenderChange}
                                         className="w-4 h-4 mr-1 mt-0.5 text-blue-600 border-gray-300 focus:ring-slate-500"
                                     />
@@ -219,11 +219,11 @@ const UserProfile = () => {
                             <select
                                 className='border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2'
                                 name='Occupation'
-                                //value={occupation}
-                                //onChange={(e) => setProperty(e.target.value)}
+                                //onChange={handleOccupationChange}
                                 required
                             >
                                 <option value='' disabled selected>Select Occupation</option>
+                                <option value='Not'>Prefer not to say</option>
                                 <option value='Nurse'>Nurse</option>
                                 <option value='Student'>Student</option>
                             </select>

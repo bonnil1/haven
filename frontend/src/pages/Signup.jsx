@@ -17,6 +17,11 @@ const Signup = () => {
         setFormData(prevState => {
             const updatedFormData = {...prevState,[event.target.name]: event.target.value};
 
+            //figure out how to set First and Last Name without local storage later
+            localStorage.setItem("firstname", updatedFormData.FirstName)
+            localStorage.setItem("lastname", updatedFormData.LastName)
+            localStorage.setItem("email", updatedFormData.Email)
+
             return updatedFormData;
         })
         console.log(formData)

@@ -1,19 +1,52 @@
 import React from 'react'
 import { PiUserCircleFill } from "react-icons/pi";
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react';
 
 const Profile = () => {
 
+    // think of a better approach than localstorage
+    const firstname = localStorage.getItem("firstname")
+    const lastname = localStorage.getItem("lastname")
+    const email = localStorage.getItem("email")
+
+    const [userid, setuserid] = useState('') 
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
+    // const [photo, setPhoto] = useState('')
+    const [phone, setPhone] = useState('');
+    const [gender, setGender] = useState('');
     const currentYear = new Date().getFullYear();
     const [month, setMonth] = useState('');
     const [date, setDate] = useState('');
     const [year, setYear] = useState('');
     const [birthday, setBirthday] = useState('');
-    const [selectedGender, setSelectedGender] = useState('');
+    const [occupation, setOccupation] = useState('');
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        fetch(`http://localhost:4000/id?email=${encodeURIComponent(email)}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Failed to fetch id.");
+                }
+                return response.json();
+            })
+            .then(data => {
+                //console.log(data);
+                setuserid(data.user_id)
+            })
+            .catch(error => {
+                console.error("Error fetching id:", error);
+            });
+    }, []);
+
+    const handlePhoneChange = (event) => {
+        setPhone(event.target.value)
+    }
 
     const handleGenderChange = (event) => {
-        setSelectedGender(event.target.value);
+        setGender(event.target.value);
     };
 
     const months = [
@@ -28,10 +61,38 @@ const Profile = () => {
     useEffect(() => {
         if (month && date && year) {
           const monthIndex = months.indexOf(month) + 1; // +1 to get month in MM format (1-based index)
-          const formattedBirthday = `${monthIndex.toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}-${year}`;
-          setBirthday(formattedBirthday); //change format to YYYY-MM-DD
+          const formattedBirthday = `${year}-${monthIndex.toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}`;
+          setBirthday(formattedBirthday); // format is YYYY-MM-DD
         }
-      }, [month, date, year]);
+    }, [month, date, year]);
+
+    const handleOccupationChange = (event) => {
+        setOccupation(event.target.value)
+    }
+
+    const handleSubmit = async (event) => {
+   
+        event.preventDefault();
+
+        try {
+            const response = await fetch("http://localhost:4000/new-profile", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({user_id: userid, PhoneNumber: phone, Gender: gender, DateOfBirth: birthday, Occupation: occupation})
+            });
+
+            const data = await response.json();
+            console.log(data);
+
+            if (data.message === "New user profile created.") {
+                navigate('/')
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
   return (
     <div className='flex flex-col justify-center items-center mt-10'>
@@ -40,7 +101,7 @@ const Profile = () => {
         <h4 className='text-sm text-slate-500'>We're thrilled to have you on board.</h4>
         <h4 className='text-sm text-slate-500'>Complete your profile to unlock the full potential of Haven.</h4>
         <PiUserCircleFill className='size-24 text-slate-700 mt-3'/>
-        <form className='flex flex-col border border-slate-400 rounded-3xl w-5/6 sm:w-2/5 p-8 sm:p-10 mt-3'>
+        <form onSubmit={handleSubmit} className='flex flex-col border border-slate-400 rounded-3xl w-5/6 sm:w-2/5 p-8 sm:p-10 mt-3'>
             <div>
                 <div className='flex flex-col mb-5'>
                     <label>First Name</label>
@@ -48,10 +109,10 @@ const Profile = () => {
                         className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2" 
                         type="text" 
                         name="FirstName"
-                        //value={}
+                        value={firstname}
                         placeholder="First Name"
                         pattern="^[A-Za-z ]+$"
-                        required
+                        readOnly
                     >
                     </input>
                 </div>
@@ -61,13 +122,13 @@ const Profile = () => {
                         className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2" 
                         type="text" 
                         name="LastName"
-                        //value={}
+                        value={lastname}
                         placeholder="Last Name"
                         pattern="^[A-Za-z ]+$"
-                        required
+                        readOnly
                     >
                     </input>
-                    <h4 className='text-xs text-slate-500 italic mt-1'>Please make sure to use your legal first and last name that matches your ID.</h4>
+                    <h4 className='text-xs text-slate-500 italic mt-1'>Please make sure to use your legal first name and last name that matches your ID.</h4>
                 </div>
                 <div className='flex flex-col mb-5'>
                     <label>Phone Number</label>
@@ -77,6 +138,7 @@ const Profile = () => {
                         name="PhoneNumber"
                         placeholder="201-555-0123"
                         pattern="^\d{3}-\d{3}-\d{4}$"
+                        onChange={handlePhoneChange}
                         required
                     >
                     </input>
@@ -88,7 +150,7 @@ const Profile = () => {
                             <input
                                 type="radio"
                                 value="Female"
-                                checked={selectedGender === "Female"}
+                                checked={gender === "Female"}
                                 onChange={handleGenderChange}
                                 className="w-4 h-4 mr-1 mt-0.5 text-blue-600 border-gray-300 focus:ring-slate-500"
                             />
@@ -98,7 +160,7 @@ const Profile = () => {
                             <input
                                 type="radio"
                                 value="Male"
-                                checked={selectedGender === "Male"}
+                                checked={gender === "Male"}
                                 onChange={handleGenderChange}
                                 className="w-4 h-4 mr-1 mt-0.5 text-blue-600 border-gray-300 focus:ring-slate-500"
                             />
@@ -108,7 +170,7 @@ const Profile = () => {
                             <input
                                 type="radio"
                                 value="Non-Binary"
-                                checked={selectedGender === "Non-Binary"}
+                                checked={gender === "Non-Binary"}
                                 onChange={handleGenderChange}
                                 className="w-4 h-4 mr-1 mt-0.5 text-blue-600 border-gray-300 focus:ring-slate-500"
                             />
@@ -118,7 +180,7 @@ const Profile = () => {
                             <input
                                 type="radio"
                                 value="Prefer Not To Respond"
-                                checked={selectedGender === "Prefer Not To Respond"}
+                                checked={gender === "Prefer Not To Respond"}
                                 onChange={handleGenderChange}
                                 className="w-4 h-4 mr-1 mt-0.5 text-blue-600 border-gray-300 focus:ring-slate-500"
                             />
@@ -181,11 +243,10 @@ const Profile = () => {
                     <select
                         className='border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2'
                         name='Occupation'
-                        //value={occupation}
-                        //onChange={(e) => setProperty(e.target.value)}
-                        required
+                        onChange={handleOccupationChange}
                     >
                         <option value='' disabled selected>Select Occupation</option>
+                        <option value='Prefer Not To Say'>Prefer not to say</option>
                         <option value='Nurse'>Nurse</option>
                         <option value='Student'>Student</option>
                     </select>

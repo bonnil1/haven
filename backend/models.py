@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, String, Boolean, Date, TIMESTAMP, func
+from sqlalchemy import Column, Integer, String, Boolean, Date, TIMESTAMP, func, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
 
 Base = declarative_base()
 
@@ -23,4 +24,16 @@ class User(Base):
 
     def __repr__(self):
         return f"<User(id={self.user_id}, first_name={self.FirstName}, last_name={self.LastName}, Email={self.Email})>"
-    
+
+class Profile(Base):
+    __tablename__ = "userAdditional"
+    user_id = Column(Integer, ForeignKey('userImportant.user_id'), primary_key=True)
+    PhoneNumber = Column(String(100), nullable=True)
+    Gender = Column(String(100), nullable=True)
+    DateOfBirth = Column(Date, nullable=True)
+    Occupation = Column(String(100), nullable=True)
+
+    user = relationship('User', backref='profile', uselist=False)
+
+    def __repr__(self):
+        return f"<Profile(user_id={self.user_id}, PhoneNumber={self.PhoneNumber})>"

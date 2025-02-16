@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 import uvicorn
 from database import get_db
-from models import User
+from models import User, Profile
 from tokens import create_email_token, verify_token
 from email_func import send_verification_email
 from password import hash_password, verify_password
@@ -157,6 +157,61 @@ async def log_in(request: Request, db: Session = Depends(get_db)):
     except SQLAlchemyError as e:
         db.rollback()
         print(f"A SQLAlchemy error occurred: {e}")
+
+@app.get('/id')
+async def get_id(email: str, db: Session = Depends(get_db)):
+
+    try:
+        user = db.query(User).filter(User.Email == email).first()
+        print(user)
+        if not user:
+            return JSONResponse(status_code=404, content={"message": "No account associated with the email address."})
+            
+        if user:
+            id = user.user_id
+            print(id)
+            return {
+                "user_id": id
+            }
+
+    except SQLAlchemyError as e:
+        db.rollback()
+        print(f"A SQLAlchemy error occurred: {e}")
+
+@app.post("/new-profile")
+async def new_profile(request: Request, db: Session = Depends(get_db)):
+    print("in new user profile")
+
+    data = await request.json()
+    print(data)
+    user_id = data["user_id"]
+    PhoneNumber = data["PhoneNumber"]
+    Gender = data["Gender"]
+    DateOfBirth = data["DateOfBirth"]
+    Occupation = data["Occupation"]
+
+    try:
+        # Check if user id exists
+        existing_userid = db.query(Profile).filter(Profile.user_id == user_id).first()
+
+        if existing_userid:
+            return JSONResponse(status_code=400, content={"message": "User id already exists."})
+
+        # Create the new user profile
+        new_user_profile = Profile(user_id=user_id, PhoneNumber=PhoneNumber, Gender=Gender, DateOfBirth=DateOfBirth, Occupation=Occupation)
+
+        db.add(new_user_profile)
+        db.commit()
+        db.refresh(new_user_profile)
+
+    except SQLAlchemyError as e:
+        db.rollback()
+        print(f"A SQLAlchemy error occurred: {e}")
+
+
+    print(new_user_profile)
+    
+    return JSONResponse(status_code=200, content={"message": "New user profile created."})
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=4000)

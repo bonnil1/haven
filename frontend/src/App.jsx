@@ -32,7 +32,7 @@ const App = () => {
 
   useEffect(() => {
       const handleClickOutside = (event) => {
-        console.log(isMenuOpen)
+        //console.log(isMenuOpen)
           if (isMenuOpen && !menuRef.current?.contains(event.target)) {
             setIsMenuOpen(false);
           }
