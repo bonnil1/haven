@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 
 const Profile = () => {
 
-    // think of a better approach than localstorage
+    // think of a better approach than localstorage > jwt
     const firstname = localStorage.getItem("firstname")
     const lastname = localStorage.getItem("lastname")
     const email = localStorage.getItem("email")

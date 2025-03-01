@@ -10,7 +10,6 @@ import { FaFacebook } from "react-icons/fa";
 import { FaApple } from "react-icons/fa";
 import { FaLinkedin } from "react-icons/fa";
 
-
 const Login = ({setIsLoggedIn}) => {
 
     const navigate = useNavigate();
@@ -35,7 +34,9 @@ const Login = ({setIsLoggedIn}) => {
         event.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:4000/login", {
+            const response = await fetch("/api/login", {
+                //"http://127.0.0.1:31560/login"
+                //"http://localhost:4000/login"
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -48,6 +49,7 @@ const Login = ({setIsLoggedIn}) => {
 
             if (data.message === "Log in successful.") {
                 setIsLoggedIn(true)
+                localStorage.setItem("email", data.email)
                 navigate('/')
             } else if (data.message === "Please verify your email address to activate account.") {
                 setMessage(data.message)
@@ -63,24 +65,64 @@ const Login = ({setIsLoggedIn}) => {
     }
 
     const googlelogin = useGoogleLogin({
-        onSuccess: tokenResponse => { 
+        onSuccess: async (tokenResponse) => { 
             console.log(tokenResponse); 
-            setIsLoggedIn(true); 
-            navigate('/'); 
+            try {
+                const userInfo = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${tokenResponse.access_token}`,
+                    },
+                });
+                
+                const userData = await userInfo.json();
+                console.log(userData); 
+
+                const { given_name, family_name, email } = userData;
+                console.log(`Name: ${given_name} ${family_name}`);
+                console.log(`Email: ${email}`);
+                setFirstName(given_name)
+                setLastName(family_name)
+                setEmail(email)
+
+                const checkForUser = await fetch('http://localhost:4000/googleuser', {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({FirstName: given_name, LastName: family_name, Email: email})
+                })
+
+                console.log(data)
+                if (data.message === "Google user already exists.") {
+                    setIsLoggedIn(true);
+                    navigate('/')
+                } else if (data.message === "New google user created."){
+                    setIsLoggedIn(true);
+                    navigate('/')
+                } else {
+                    console.log("error checking if google user is in db.")
+                }
+
+            } catch (error) {
+                console.log('Error fetching user info:', error);
+            }
         },
-        onError: (error) => console.log('Login Failed:', error)
-        //code for log in error message for user 
+        onError: (error) => {
+            console.log('Login Failed:', error);
+        },
+        scope: 'profile email',
     });
 
     return (
         <div className='flex justify-center items-center mt-20'>
-            <form onSubmit={handleSubmit} className='flex flex-col border border-slate-400 rounded-3xl w-5/6 sm:w-1/3 p-5 sm:p-16 sm:pb-10'>
-                <h3 className='text-2xl text-slate-700 font-semibold mb-5'>Welcome Back  👋🏼</h3>
+            <form onSubmit={handleSubmit} className='flex flex-col rounded-3xl shadow-xl font-roboto bg-[rgb(248,251,248)] w-5/6 sm:w-1/2 p-8 sm:p-16 sm:px-20'>
+                <h3 className='text-3xl text-[rgb(48,92,112)] mb-5'>Welcome Back  👋🏼</h3>
                 <div>
                     <div className='flex flex-col mb-5'>
-                        <label>Email</label>
+                        <label className='text-[rgb(48,92,112)] font-bold text-sm'>Email</label>
                         <input
-                            className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2"
+                            className="border border-[rgb(120,161,169)] focus:outline-teal-700 text-sm placeholder-[rgb(136,173,179)] rounded-xl p-2 mt-1"
                             type="email" 
                             placeholder="Example@email.com"
                             onChange={handleEmail}
@@ -91,44 +133,44 @@ const Login = ({setIsLoggedIn}) => {
                         </input>
                     </div>
                     <div className='relative flex flex-col'>
-                        <label>Password</label>
+                        <label className='text-[rgb(48,92,112)] font-bold text-sm'>Password</label>
                         <input
-                            className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2" 
+                            className="border border-[rgb(120,161,169)] focus:outline-teal-700 text-sm placeholder-[rgb(136,173,179)] rounded-xl p-2 mt-1" 
                             type={viewpw ? "text" : "password"}
                             placeholder='Enter password.'
                             onChange={handlePassword}
                         >
                         </input>
-                        <button type="button" onClick={togglePassword} className='absolute mt-4 right-2 top-1/2 transform -translate-y-1/2'>
-                            {viewpw ? (<FiEyeOff className="h-5 w-5" />) : (<FiEye className="h-5 w-5" />)}
+                        <button type="button" onClick={togglePassword} className='absolute mt-3 right-4 top-1/2 transform -translate-y-1/2'>
+                            {viewpw ? (<FiEyeOff className="h-5 w-5 text-[rgb(136,173,179)]" />) : (<FiEye className="h-5 w-5 text-[rgb(136,173,179)]" />)}
                         </button>
                     </div>
                     <div>
-                        <h3 className='flex justify-end text-xs mt-2'>Forgot password?</h3>
+                        <h3 className='flex justify-end text-xs text-[rgb(136,173,179)] mt-2'>Forgot password?</h3>
                     </div>
                     <div>
                         <button
-                            className="bg-slate-700 hover:bg-slate-500 text-white py-2 border rounded-xl w-full mt-5"
+                            className="bg-[rgb(42,98,112)] hover:bg-teal-900 text-white py-2 border rounded-xl w-full mt-5"
                             type="submit"
                         >
-                            Log In
+                            Continue
                         </button>
                     </div>
                     {message && (
                         <h1 className='flex justify-center text-xs text-emerald-700 mt-2'>{message}</h1>
                     )}
                 </div>    
-                <h6 className='flex justify-center text-xs mt-2'>Don't have an account? <NavLink to="/signup" className="hover:text-teal-700 ml-1">Sign up.</NavLink></h6>
+                <h6 className='flex justify-center text-xs mt-2'>Don't have an account? <NavLink to="/signup" className="text-[rgb(42,98,112)] font-bold hover:text-teal-700 ml-1">Sign up.</NavLink></h6>
                 <div className="flex items-center justify-center space-x-4 w-full mt-5">
-                    <div className="flex-grow border-t border-gray-300"></div>
-                    <span className="text-gray-500">or sign in with</span>
-                    <div className="flex-grow border-t border-gray-300"></div>
+                    <div className="flex-grow border-t border-[rgb(42,98,112)]"></div>
+                    <span className="text-slate-700 text-lg font-medium">or sign in with</span>
+                    <div className="flex-grow border-t border-[rgb(42,98,112)]"></div>
                 </div>
-                <div className='flex justify-center mt-7'>
-                    <button onClick={() => googlelogin()}><FcGoogle className='size-10 mr-8'/></button>
-                    <FaFacebook className='size-10 text-blue-600 mr-8'/>
-                    <FaApple className='size-10 mr-8'/>
-                    <FaLinkedin className='size-10 text-sky-700'/>
+                <div className='flex justify-between mt-7'>
+                    <button onClick={() => googlelogin()} className='border border-[rgb(209,224,205)] rounded-md p-5 sm:px-10'><FcGoogle className='size-10'/></button>
+                    <button className='border border-[rgb(209,224,205)] rounded-md p-5 sm:px-10'><FaFacebook className='size-10 text-blue-600'/></button>
+                    <button className='border border-[rgb(209,224,205)] rounded-md p-5 sm:px-10'><FaApple className='size-10'/></button>
+                    <button className='border border-[rgb(209,224,205)] rounded-md p-5 sm:px-10'><FaLinkedin className='size-10 text-sky-700'/></button>
                 </div>
             </form>
         </div>

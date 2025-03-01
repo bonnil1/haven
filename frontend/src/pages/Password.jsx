@@ -2,6 +2,8 @@ import React from 'react'
 import { useState, useEffect } from 'react';
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useNavigate } from 'react-router-dom'
+import { FaCheckCircle } from "react-icons/fa";
+import { BsXCircleFill } from "react-icons/bs";
 
 const Password = ({setIsLoggedIn}) => {
 
@@ -133,13 +135,13 @@ const Password = ({setIsLoggedIn}) => {
   return (
     <div>
         <div className='flex justify-center items-center mt-16'>
-        <form onSubmit={handleSubmit} className='flex flex-col border border-slate-400 rounded-3xl w-5/6 sm:w-1/3 p-8 sm:p-16'>
-            <h3 className='text-2xl text-slate-700 font-semibold mb-5'>Create Password</h3>
+        <form onSubmit={handleSubmit} className='flex flex-col rounded-3xl shadow-xl font-roboto bg-[rgb(248,251,248)] w-5/6 sm:w-1/2 p-8 sm:p-16 sm:px-20'>
+            <h3 className='text-3xl text-[rgb(48,92,112)] mb-5'>Create Password</h3>
             <div>
                 <div className='flex flex-col mb-5'>
-                    <label>Email</label>
+                    <label className='text-[rgb(48,92,112)] font-bold text-sm'>Email</label>
                     <input
-                        className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2"
+                        className="border border-[rgb(120,161,169)] focus:outline-teal-700 text-sm placeholder-[rgb(136,173,179)] rounded-xl p-2 mt-1"
                         type="email" 
                         name="Email"
                         value={email}
@@ -149,9 +151,9 @@ const Password = ({setIsLoggedIn}) => {
                     </input>
                 </div>
                 <div className='relative flex flex-col'>
-                    <label>Password</label>
+                    <label className='text-[rgb(48,92,112)] font-bold text-sm'>Password</label>
                     <input
-                        className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2" 
+                        className="border border-[rgb(120,161,169)] focus:outline-teal-700 text-sm placeholder-[rgb(136,173,179)] rounded-xl p-2 mt-1" 
                         type={viewpw ? 'text' : 'password'}
                         pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*[;:",`]).{8,}'
                         title='The password must contain one upper and one lower case letter, one number, and be 8 characters minimum.'
@@ -161,14 +163,14 @@ const Password = ({setIsLoggedIn}) => {
                         required
                     >
                     </input>
-                    <button type="button" onClick={togglePassword} className='absolute mt-4 right-2 top-1/2 transform -translate-y-1/2'>
-                        {viewpw ? (<FiEyeOff className="h-5 w-5" />) : (<FiEye className="h-5 w-5" />)}
+                    <button type="button" onClick={togglePassword} className='absolute mt-3 right-4 top-1/2 transform -translate-y-1/2'>
+                        {viewpw ? (<FiEyeOff className="h-5 w-5 text-[rgb(136,173,179)]" />) : (<FiEye className="h-5 w-5 text-[rgb(136,173,179)]" />)}
                     </button>
                 </div>
                 <div className='relative flex flex-col mt-5'>
-                    <label>Confirm Password</label>
+                    <label className='text-[rgb(48,92,112)] font-bold text-sm'>Confirm Password</label>
                     <input
-                        className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2" 
+                        className="border border-[rgb(120,161,169)] focus:outline-teal-700 text-sm placeholder-[rgb(136,173,179)] rounded-xl p-2 mt-1" 
                         type={viewpw2 ? 'text' : 'password'}
                         pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*[;:",`]).{8,}'
                         title='The password must contain one upper and one lower case letter, one number, and be 8 characters minimum.'
@@ -178,8 +180,8 @@ const Password = ({setIsLoggedIn}) => {
                         required
                     >
                     </input>
-                    <button type="button" onClick={togglePassword2} className='absolute mt-4 right-2 top-1/2 transform -translate-y-1/2'>
-                        {viewpw2 ? (<FiEyeOff className="h-5 w-5" />) : (<FiEye className="h-5 w-5" />)}
+                    <button type="button" onClick={togglePassword2} className='absolute mt-3 right-4 top-1/2 transform -translate-y-1/2'>
+                        {viewpw2 ? (<FiEyeOff className="h-5 w-5 text-[rgb(136,173,179)]" />) : (<FiEye className="h-5 w-5 text-[rgb(136,173,179)]" />)}
                     </button>
                 </div>
                 <div className='flex flex-col mt-5'>
@@ -188,39 +190,80 @@ const Password = ({setIsLoggedIn}) => {
                             color: pwvalidations.capital ? 'teal' : 'black',
                         }}
                         >
-                        {pwvalidations.capital ? '✔ One upper case letter' : '✘ One upper case letter'}
+                        {pwvalidations.capital ? (
+                            <div className='flex'>
+                            <FaCheckCircle className='mt-0.5 mr-1 text-[rgb(250,112,99)]'/> One upper case letter
+                            </div>
+                        ) : (
+                            <div className='flex'>
+                            <BsXCircleFill className='mt-0.5 mr-1 text-[rgb(250,112,99)]'/> One upper case letter
+                            </div>
+                        )}
                     </p>
                     <p  className='text-xs text-slate-700'
                         style={{
                             color: pwvalidations.lower ? 'teal' : 'black',
                         }}
                         >
-                        {pwvalidations.lower ? '✔ One lower case letter' : '✘ One lower case letter'}
+                        {pwvalidations.lower ? (
+                            <div className='flex'>
+                            <FaCheckCircle className='mt-0.5 mr-1 text-[rgb(250,112,99)]'/> One lower case letter
+                            </div>
+                        ) : (
+                            <div className='flex'>
+                            <BsXCircleFill className='mt-0.5 mr-1 text-[rgb(250,112,99)]'/> One lower case letter
+                            </div>
+                        )
+                        }
                     </p>
                     <p  className='text-xs text-slate-700'
                         style={{
                             color: pwvalidations.number ? 'teal' : 'black',
                         }}
                         >
-                        {pwvalidations.number ? '✔ One number' : '✘ One number'}
+                        {pwvalidations.number ? (
+                            <div className='flex'>
+                            <FaCheckCircle className='mt-0.5 mr-1 text-[rgb(250,112,99)]'/> One number
+                            </div>
+                        ) : (
+                            <div className='flex'>
+                            <BsXCircleFill className='mt-0.5 mr-1 text-[rgb(250,112,99)]'/> One number
+                            </div>
+                        )}
                     </p>
                     <p  className='text-xs text-slate-700'
                         style={{
                             color: pwvalidations.characters ? 'teal' : 'black',
                         }}
                         >
-                        {pwvalidations.characters ? '✔ 8 characters minimum' : '✘ 8 characters minimum'}
+                        {pwvalidations.characters ? (
+                            <div className='flex'>
+                            <FaCheckCircle className='mt-0.5 mr-1 text-[rgb(250,112,99)]'/> 8 characters minimum
+                            </div>
+                        ) : (
+                            <div className='flex'>
+                            <BsXCircleFill className='mt-0.5 mr-1 text-[rgb(250,112,99)]'/> 8 characters minimum
+                            </div>
+                        )}
                     </p>
                     <p  className='text-xs text-slate-700'
                         style={{
                             color: pwvalidations.match ? 'teal' : 'black',
                         }}
                         >
-                        {pwvalidations.match ? '✔ Passwords match' : '✘ Passwords match'}
+                        {pwvalidations.match ? (
+                            <div className='flex'>
+                            <FaCheckCircle className='mt-0.5 mr-1 text-[rgb(250,112,99)]'/> Passwords match
+                            </div>
+                        ) : (
+                            <div className='flex'>
+                            <BsXCircleFill className='mt-0.5 mr-1 text-[rgb(250,112,99)]'/> Passwords match
+                            </div>
+                        )}
                     </p>
                 </div>
                 <button
-                    className="bg-slate-700 hover:bg-slate-500 text-white py-2 border rounded-xl w-full mt-5"
+                    className="bg-[rgb(42,98,112)] hover:bg-teal-900 text-white py-2 border rounded-xl w-full mt-5"
                     type="submit"
                 >
                     Continue

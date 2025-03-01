@@ -12,16 +12,53 @@ import { useState, useEffect } from 'react';
 
 const UserProfile = () => {
 
+    const email = localStorage.getItem("email")
+
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
+    // const [photo, setPhoto] = useState('')
+    const [phone, setPhone] = useState('');
+    const [gender, setGender] = useState('');
+    const [birthday, setBirthday] = useState('');
+    const [occupation, setOccupation] = useState('');
+
     const currentYear = new Date().getFullYear();
     const [month, setMonth] = useState('');
     const [date, setDate] = useState('');
     const [year, setYear] = useState('');
-    const [birthday, setBirthday] = useState('');
-    const [gender, setGender] = useState('');
 
-    const handleGenderChange = (event) => {
-        setGender(event.target.value);
-    };
+    useEffect(() => {
+        fetch(`http://localhost:4000/profile?email=${encodeURIComponent(email)}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Failed to fetch user profile.");
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+                setFirstName(data.FirstName)
+                setLastName(data.LastName)
+                setPhone(data.PhoneNumber)
+                setGender(data.Gender)
+                setBirthday(data.DateOfBirth)
+                setOccupation(data.Occupation)
+            })
+            .catch(error => {
+                console.error("Error fetching id:", error);
+            });
+    }, []);
+
+    useEffect(() => {
+        if (birthday) {
+            //console.log(birthday)
+            const [year, month, date] = birthday.split('-');
+            
+            setYear(year);
+            setMonth(months[parseInt(month, 10) - 1]);
+            setDate(parseInt(date, 10));
+        }
+    }, [birthday]);
 
     const months = [
         'January', 'February', 'March', 'April', 'May', 'June',
@@ -32,6 +69,8 @@ const UserProfile = () => {
 
     const years = Array.from({ length: currentYear - 1900 + 1 }, (_, i) => currentYear - i);
 
+    {/* 
+    //conflicting with other birthday code
     useEffect(() => {
         if (month && date && year) {
             const monthIndex = months.indexOf(month) + 1; // +1 to get month in MM format (1-based index)
@@ -39,7 +78,8 @@ const UserProfile = () => {
             setBirthday(formattedBirthday); //change format to YYYY-MM-DD
         }
     }, [month, date, year]);
-
+    */}
+    
     const handleSubmit = async (event) => {
         //code for handle submit
     }
@@ -88,7 +128,7 @@ const UserProfile = () => {
                                 className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2" 
                                 type="text" 
                                 name="FirstName"
-                                //value={}
+                                value={firstName}
                                 pattern="^[A-Za-z ]+$"
                                 required
                             >
@@ -100,7 +140,7 @@ const UserProfile = () => {
                                 className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2" 
                                 type="text" 
                                 name="LastName"
-                                //value={}
+                                value={lastName}
                                 pattern="^[A-Za-z ]+$"
                                 required
                             >
@@ -113,7 +153,7 @@ const UserProfile = () => {
                                 className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2" 
                                 type="text" 
                                 name="PhoneNumber"
-                                //value={}
+                                value={phone}
                                 pattern="^\d{3}-\d{3}-\d{4}$"
                                 required
                             >
@@ -127,7 +167,7 @@ const UserProfile = () => {
                                         type="radio"
                                         value="Female"
                                         checked={gender === "Female"}
-                                        onChange={handleGenderChange}
+                                        //onChange={handleGenderChange}
                                         className="w-4 h-4 mr-1 mt-0.5 text-blue-600 border-gray-300 focus:ring-slate-500"
                                     />
                                     <span>Female</span>
@@ -137,7 +177,7 @@ const UserProfile = () => {
                                         type="radio"
                                         value="Male"
                                         checked={gender === "Male"}
-                                        onChange={handleGenderChange}
+                                        //onChange={handleGenderChange}
                                         className="w-4 h-4 mr-1 mt-0.5 text-blue-600 border-gray-300 focus:ring-slate-500"
                                     />
                                     <span>Male</span>
@@ -147,7 +187,7 @@ const UserProfile = () => {
                                         type="radio"
                                         value="Non-Binary"
                                         checked={gender === "Non-Binary"}
-                                        onChange={handleGenderChange}
+                                        //onChange={handleGenderChange}
                                         className="w-4 h-4 mr-1 mt-0.5 text-blue-600 border-gray-300 focus:ring-slate-500"
                                     />
                                     <span>Non-binary</span>
@@ -157,7 +197,7 @@ const UserProfile = () => {
                                         type="radio"
                                         value="Prefer Not To Respond"
                                         checked={gender === "Prefer Not To Respond"}
-                                        onChange={handleGenderChange}
+                                        //onChange={handleGenderChange}
                                         className="w-4 h-4 mr-1 mt-0.5 text-blue-600 border-gray-300 focus:ring-slate-500"
                                     />
                                     <span>Prefer Not To Respond</span>
@@ -219,6 +259,7 @@ const UserProfile = () => {
                             <select
                                 className='border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2'
                                 name='Occupation'
+                                value={occupation}
                                 //onChange={handleOccupationChange}
                                 required
                             >
@@ -229,7 +270,7 @@ const UserProfile = () => {
                             </select>
                         </div>
                         <button
-                            className="bg-slate-700 hover:bg-slate-500 text-white py-2 border rounded-xl w-full mt-1"
+                            className="bg-[rgb(209,224,205)] hover:bg-slate-500 text-white py-2 border rounded-xl w-full mt-1"
                             type="submit"
                         >
                             Save Changes

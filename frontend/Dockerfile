@@ -1,31 +1,35 @@
-# Build React app
-FROM node:23-alpine 
-# as build
+# 1: Build the app
+FROM node:23-alpine AS builder
 
+# Set working directory
 WORKDIR /app
 
+# Copy package.json and package-lock.json
 COPY package*.json ./
 
+# Install dependencies
 RUN npm install
 
+# Copy the rest of the project files
 COPY . .
 
-EXPOSE 3000
+# Build the Vite React app (production build)
+RUN npm run build
 
-CMD [ "npm", "run", "dev"]
+# 2: Serve the app with Nginx
+FROM nginx:alpine
 
-# RUN npm run build
+# Copy custom Nginx config if needed (optional)
+COPY ./.nginx/nginx.conf /etc/nginx/nginx.conf
 
-# Serve the app with Apache
-# FROM httpd:alpine
+# Remove the default nginx index page
+RUN rm -rf /usr/share/nginx/html/*
 
-# Copy the build files from the first stage into Apache's default directory
-# COPY --from=build /app/dist /usr/local/apache2/htdocs/
+# Copy the built app from the first stage to Nginx's html directory
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Copy .htaccess for Apache routing
-# COPY .htaccess /usr/local/apache2/htdocs/
+# Expose port 80 for the server
+EXPOSE 80
 
-# Expose port 80 for Apache
-# EXPOSE 80
-
-# The default CMD for httpd (Apache) is already set to run Apache in the foreground
+# Start Nginx in the foreground
+CMD ["nginx", "-g", "daemon off;"]

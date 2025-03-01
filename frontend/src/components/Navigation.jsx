@@ -6,6 +6,14 @@ import { BiSolidUserRectangle } from "react-icons/bi";
 
 const Navigation = ({toggleMenu, isMenuOpen, closeMenu, isLoggedIn, setIsLoggedIn, menuRef}) => {
 
+    const logout = () => {
+        closeMenu(); 
+        setIsLoggedIn(false);
+        localStorage.removeItem("firstname")
+        localStorage.removeItem("lastname")
+        localStorage.removeItem("email")
+        // think of a better approach than localstorage > jwt
+    }
 
     return (
         <div>
@@ -16,7 +24,7 @@ const Navigation = ({toggleMenu, isMenuOpen, closeMenu, isLoggedIn, setIsLoggedI
                 <div className="flex h-15 items-center justify-between">
                 <div className="flex space-x-5 text-white">
                     <NavLink to="/" onClick={closeMenu} className="flex font-semibold text-gray-600 hover:underline">
-                        <img className="size-12" src="https://i.imgur.com/w1ogrfV.jpeg" alt="haven_logo" />
+                        <img className="size-12" src="https://i.imgur.com/yepIKjW.png" alt="logo" />
                     </NavLink>
                 </div>
                 <div className="md:ml-auto">
@@ -25,9 +33,11 @@ const Navigation = ({toggleMenu, isMenuOpen, closeMenu, isLoggedIn, setIsLoggedI
                     {/* Hamburger Icon */}
                     <div>
                         <button onClick={toggleMenu} className="flex text-teal-700 focus:outline-none hover:bg-gray-300 rounded-md p-2">
+                            {/* 
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 28 24" stroke="currentColor" className="w-8 h-10">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
+                            */}
                             <BiSolidUserRectangle className='size-10'/>
                         </button>
                     </div>
@@ -47,7 +57,7 @@ const Navigation = ({toggleMenu, isMenuOpen, closeMenu, isLoggedIn, setIsLoggedI
                                 <NavLink to="contact" onClick={closeMenu} className="block text-black hover:bg-gray-200 px-3 py-2">
                                     Contact Us
                                 </NavLink>
-                                <NavLink to="/" onClick={() => {closeMenu(); setIsLoggedIn(false); }}  className="block text-black hover:bg-gray-200 px-3 py-2">
+                                <NavLink to="/" onClick={logout}  className="block text-black hover:bg-gray-200 px-3 py-2">
                                     Log Out
                                 </NavLink>
                             </>
@@ -88,7 +98,7 @@ const Navigation = ({toggleMenu, isMenuOpen, closeMenu, isLoggedIn, setIsLoggedI
                 <div className="flex h-10 items-center justify-between">
                 <div className="text-white">
                     <NavLink to="/" onClick={closeMenu} className="flex font-semibold text-gray-600 hover:underline">
-                        <img className="size-12" src="https://i.imgur.com/w1ogrfV.jpeg" alt="haven_logo" />
+                        <img className="size-12" src="https://i.imgur.com/yepIKjW.png" alt="logo" />
                     </NavLink>
                 </div>
                 <div className="md:ml-auto">
