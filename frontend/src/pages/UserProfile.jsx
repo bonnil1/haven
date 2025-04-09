@@ -14,9 +14,9 @@ const UserProfile = () => {
 
     const email = localStorage.getItem("email")
 
-    const [firstName, setFirstName] = useState('')
-    const [lastName, setLastName] = useState('')
-    // const [photo, setPhoto] = useState('')
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    // const [photo, setPhoto] = useState('');
     const [phone, setPhone] = useState('');
     const [gender, setGender] = useState('');
     const [birthday, setBirthday] = useState('');
@@ -28,7 +28,8 @@ const UserProfile = () => {
     const [year, setYear] = useState('');
 
     useEffect(() => {
-        fetch(`http://192.168.49.2:31560/api/profile?email=${encodeURIComponent(email)}`)
+        fetch(`/api/profile?email=${encodeURIComponent(email)}`)
+        //http://192.168.49.2:31560/api/profile?email=${encodeURIComponent(email)}
         ///api/profile?email=${encodeURIComponent(email)}
         //http://localhost:4000/api/profile?email=${encodeURIComponent(email)}
             .then(response => {
