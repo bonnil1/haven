@@ -15,16 +15,16 @@ app = FastAPI()
 # CORS set up
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # New user sign up
-@app.post("/new-user")
+@app.post("/api/new-user")
 async def create_user(request: Request, db: Session = Depends(get_db)):
-
+    print("in new user sign up in backend")
     # Retrieve data from frontend
     data = await request.json()
     print(data)
@@ -61,7 +61,7 @@ async def create_user(request: Request, db: Session = Depends(get_db)):
     return JSONResponse(status_code=200, content={"message": "User created successfully!"})
 
 # Verification Email
-@app.get("/signup/pw")
+@app.get("/api/signup/pw")
 async def verify_email(token: str, db: Session = Depends(get_db)):
 
     try:
@@ -92,7 +92,7 @@ async def verify_email(token: str, db: Session = Depends(get_db)):
         db.rollback()
         print(f"A SQLAlchemy error occurred: {e}")
 
-@app.post("/signup/pw")
+@app.post("/api/signup/pw")
 async def set_password(request: Request, token: str, db: Session = Depends(get_db)):
 
     # Retrieve data from frontend
@@ -125,7 +125,7 @@ async def set_password(request: Request, token: str, db: Session = Depends(get_d
         db.rollback()
         print(f"A SQLAlchemy error occurred: {e}")
     
-@app.post("/login")
+@app.post("/api/login")
 async def log_in(request: Request, db: Session = Depends(get_db)):
 
     data = await request.json()
@@ -150,7 +150,7 @@ async def log_in(request: Request, db: Session = Depends(get_db)):
             if not verify_password(Password, storedpw):
                 return(JSONResponse(status_code=401, content={"message": "Invalid credentials."}))
             else:
-                return JSONResponse(status_code=200, content={"message": "Log in successful."})
+                return JSONResponse(status_code=200, content={"message": "Log in successful.", "email": Email})
         
                 # jwt token function here
 
@@ -158,7 +158,36 @@ async def log_in(request: Request, db: Session = Depends(get_db)):
         db.rollback()
         print(f"A SQLAlchemy error occurred: {e}")
 
-@app.get('/id')
+@app.post('/api/googleuser')
+async def google_user(request: Request, db: Session = Depends(get_db)):
+    print("in checking google user")
+
+    data = request.json
+    FirstName = data["FirstName"]
+    LastName = data["LastName"]
+    Email= data["Email"]
+
+    try:
+        existing_user = db.query(User).filter(User.Email == Email).first()
+
+        if existing_user:
+            return JSONResponse(status_code=400, content={"message": "Google user already exists."})
+
+        new_google_user = User(FirstName=FirstName, LastName=LastName, Email=Email)
+
+        db.add(new_google_user)
+        db.commit()
+        db.refresh(new_google_user)
+        print(new_google_user)
+
+    except SQLAlchemyError as e:
+        db.rollback()
+        print(f"A SQLAlchemy error occurred: {e}")
+    
+    return JSONResponse(status_code=200, content={"message": "New google user created."})
+
+
+@app.get('/api/id') #grabbing id to create user profile.
 async def get_id(email: str, db: Session = Depends(get_db)):
 
     try:
@@ -178,7 +207,7 @@ async def get_id(email: str, db: Session = Depends(get_db)):
         db.rollback()
         print(f"A SQLAlchemy error occurred: {e}")
 
-@app.post("/new-profile")
+@app.post("/api/new-profile")
 async def new_profile(request: Request, db: Session = Depends(get_db)):
     print("in new user profile")
 
@@ -212,6 +241,43 @@ async def new_profile(request: Request, db: Session = Depends(get_db)):
     print(new_user_profile)
     
     return JSONResponse(status_code=200, content={"message": "New user profile created."})
+
+@app.get("/api/profile")
+async def get_profile(email: str, db: Session = Depends(get_db)):
+    try:
+        user = db.query(User).filter(User.Email == email).first()
+        print(user)
+        if not user:
+            return JSONResponse(status_code=404, content={"message": "No user associated with the email address."})
+            
+        userid = user.user_id
+        FirstName = user.FirstName
+        LastName = user.LastName
+
+        user_profile = db.query(Profile).filter(Profile.user_id == userid).first()
+        print(user_profile)
+        if not user_profile:
+            return JSONResponse(status_code=404, content={"message": "No profile associated with the email address."})
+
+        PhoneNumber = user_profile.PhoneNumber
+        Gender = user_profile.Gender
+        DateOfBirth = user_profile.DateOfBirth
+        Occupation = user_profile.Occupation
+
+        return {
+            "message": "Fetched user info successfully!",
+            "FirstName": FirstName,
+            "LastName": LastName,
+            "PhoneNumber": PhoneNumber,
+            "Gender": Gender,
+            "DateOfBirth": DateOfBirth,
+            "Occupation": Occupation
+        }
+
+    except SQLAlchemyError as e:
+        db.rollback()
+        print(f"A SQLAlchemy error occurred: {e}")
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=4000)

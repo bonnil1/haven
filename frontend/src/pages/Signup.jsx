@@ -37,9 +37,9 @@ const Signup = () => {
         event.preventDefault();
 
         try {
-            const response = await fetch("/api/new-user", {
-                //"http://127.0.0.1:31560/new-user"
-                //"http://localhost:4000/new-user"
+            const response = await fetch("http://192.168.49.2:31560/api/new-user", {
+                //"/api/new-user"
+                //"http://localhost:4000/api/new-user"
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: haven-app
+  labels:
+    app: haven-app
+spec:
+  containers:
+    - name: frontend
+      image: bonnil1/haven-frontend
+      ports:
+        - containerPort: 3000
+      env:
+        - name: BACKEND_URL
+          value: "http://backend:4000"
+
+    - name: backend
+      image: bonnil1/haven-backend
+      ports:
+        - containerPort: 4000
+      env:
+        - name: DATABASE_URL
+          value: "mysql://root:liupassword@mysql:3306/userdb"
+
+    - name: mysql
+      image: mysql:8
+      env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "liupassword"
+        - name: MYSQL_DATABASE
+          value: "userdb"
+      ports:
+        - containerPort: 3306
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: haven-service
+spec:
+  selector:
+    app: haven-app
+  ports:
+    - port: 3000
+      targetPort: 3000
+      nodePort: 31579
+  type: NodePort

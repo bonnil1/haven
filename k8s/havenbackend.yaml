@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: havenb-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: havenb
+  template:
+    metadata:
+      labels:
+        app: havenb
+    spec:
+      containers:
+      - name: havenb
+        image: bonnil1/haven-backend:2.2
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 4000
+        env:
+          - name: MYSQL_HOST
+            value: "mysql"
+          - name: MYSQL_PORT
+            value: "3306"
+          - name: MYSQL_USER
+            value: "root"
+          - name: MYSQL_PASSWORD
+            value: "liupassword"
+          - name: MYSQL_DATABASE
+            value: "userdb"
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  selector:
+    app: havenb
+  ports:
+  - port: 4000
+    targetPort: 4000
+  #type: LoadBalancer
+    nodePort: 31560
+  type: NodePort

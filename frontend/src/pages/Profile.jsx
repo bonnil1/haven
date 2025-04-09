@@ -25,7 +25,9 @@ const Profile = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch(`http://localhost:4000/id?email=${encodeURIComponent(email)}`)
+        fetch(`http://192.168.49.2:31560/api/id?email=${encodeURIComponent(email)}`)
+        ///api/id?email=${encodeURIComponent(email)}
+        //http://localhost:4000/api/id?email=${encodeURIComponent(email)}
             .then(response => {
                 if (!response.ok) {
                     throw new Error("Failed to fetch id.");
@@ -75,7 +77,9 @@ const Profile = () => {
         event.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:4000/new-profile", {
+            const response = await fetch("http://192.168.49.2:31560/api/new-profile", {
+                //"/api/new-profile"
+                //"http://localhost:4000/api/new-profile"
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

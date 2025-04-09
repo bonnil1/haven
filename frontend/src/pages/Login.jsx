@@ -34,9 +34,9 @@ const Login = ({setIsLoggedIn}) => {
         event.preventDefault();
 
         try {
-            const response = await fetch("/api/login", {
-                //"http://127.0.0.1:31560/login"
-                //"http://localhost:4000/login"
+            const response = await fetch("http://192.168.49.2:31560/api/login", {
+                //"/api/login"
+                //"http://localhost:4000/api/login"
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -85,7 +85,9 @@ const Login = ({setIsLoggedIn}) => {
                 setLastName(family_name)
                 setEmail(email)
 
-                const checkForUser = await fetch('http://localhost:4000/googleuser', {
+                const checkForUser = await fetch("http://192.168.49.2:31560/api/googleuser", {
+                    ///api/googleuser
+                    //http://localhost:4000/api/googleuser
                     method: 'POST',
                     headers: {
                         "Content-Type": "application/json"

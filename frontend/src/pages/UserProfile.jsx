@@ -28,7 +28,9 @@ const UserProfile = () => {
     const [year, setYear] = useState('');
 
     useEffect(() => {
-        fetch(`http://localhost:4000/profile?email=${encodeURIComponent(email)}`)
+        fetch(`http://192.168.49.2:31560/api/profile?email=${encodeURIComponent(email)}`)
+        ///api/profile?email=${encodeURIComponent(email)}
+        //http://localhost:4000/api/profile?email=${encodeURIComponent(email)}
             .then(response => {
                 if (!response.ok) {
                     throw new Error("Failed to fetch user profile.");

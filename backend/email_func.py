@@ -15,7 +15,8 @@ def send_verification_email(Email: str, FirstName: str, token: str):
     msg['To'] = Email
     msg['Subject'] = "Verify Your Email - Haven App"
 
-    verification_url = f"http://localhost:3000/signup/pw?token={token}"
+    verification_url = f"http://localhost:3000/api/signup/pw?token={token}"
+    #http://localhost:3000/api/signup/pw?token={token}
 
     body = f"""
     Hello {FirstName},

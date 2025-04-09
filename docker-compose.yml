@@ -4,9 +4,11 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     ports: 
-      - "3000:3000" #3000:80
+      - "3000:80" #3000:80 (prod) or 3000:3000 (dev)
     networks:
       - haven-network
+    depends_on:
+      - backend
 
   backend:
     build:

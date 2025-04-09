@@ -32,7 +32,9 @@ const Password = ({setIsLoggedIn}) => {
         const params = new URLSearchParams(window.location.search);
         const tokenFromUrl = params.get('token');
 
-        fetch(`http://localhost:4000/signup/pw?token=${tokenFromUrl}`)
+        fetch(`http://192.168.49.2:31560/api/signup/pw?token=${tokenFromUrl}`)
+        ///api/signup/pw?token=${tokenFromUrl}
+        //http://localhost:4000/api/signup/pw?token=${tokenFromUrl}
                 .then(response => {
                     if (!response.ok) {
                         throw new Error("Failed to verify email.");
@@ -106,7 +108,9 @@ const Password = ({setIsLoggedIn}) => {
 
         if (password === confirmPassword && password !== "") {
             try {
-                const response = await fetch(`http://localhost:4000/signup/pw?token=${tokenFromUrl}`, {
+                const response = await fetch(`http://192.168.49.2:31560/api/signup/pw?token=${tokenFromUrl}`, {
+                    ///api/signup/pw?token=${tokenFromUrl}
+                    //http://localhost:4000/api/signup/pw?token=${tokenFromUrl}
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
