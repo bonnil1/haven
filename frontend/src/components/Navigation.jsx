@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom'
 import { useState, useEffect, useRef  } from 'react';
 import { PiWarehouseFill } from "react-icons/pi";
 import { BiSolidUserRectangle } from "react-icons/bi";
+import logo from '../assets/images/haven_logo.png';
 
 const Navigation = ({toggleMenu, isMenuOpen, closeMenu, isLoggedIn, setIsLoggedIn, menuRef}) => {
 
@@ -24,7 +25,8 @@ const Navigation = ({toggleMenu, isMenuOpen, closeMenu, isLoggedIn, setIsLoggedI
                 <div className="flex h-15 items-center justify-between">
                 <div className="flex space-x-5 text-white">
                     <NavLink to="/" onClick={closeMenu} className="flex font-semibold text-gray-600 hover:underline">
-                        <img className="size-12" src="https://i.imgur.com/yepIKjW.png" alt="logo" />
+                        {/*<img className="size-12" src="https://i.imgur.com/yepIKjW.png" alt="logo" />*/}
+                        <img className="size-12" src={logo} alt="logo" />
                     </NavLink>
                 </div>
                 <div className="md:ml-auto">
