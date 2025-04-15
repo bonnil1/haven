@@ -2,6 +2,7 @@ import React from 'react'
 import { useState, useRef, useEffect } from 'react';
 import Navigation from './components/Navigation';
 import Signup from './pages/Signup';
+import Email from './pages/Email'
 import Password from './pages/Password';
 import Profile from './pages/Profile';
 import Login from './pages/Login';
@@ -51,6 +52,7 @@ return (
       <Navigation toggleMenu={toggleMenu} isMenuOpen={isMenuOpen} closeMenu={closeMenu} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} menuRef={menuRef}/>
       <Routes>
         <Route path='/signup' element={<Signup />}/>
+        <Route path='/verification' element={<Email />}/>
         <Route path='/signup/pw' element={<Password setIsLoggedIn={setIsLoggedIn} />}/>
         <Route path='/signup/pw/profile' element={<Profile />}/>
         <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} />}/>

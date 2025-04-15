@@ -10,7 +10,7 @@ load_dotenv()
 # JWT Settings
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256" #SHA-256 symmetric key algorithm
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 15
 
 def create_access_token(data: dict, expires_delta: timedelta = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)):
     to_encode = data.copy()

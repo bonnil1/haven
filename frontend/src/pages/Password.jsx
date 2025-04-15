@@ -32,7 +32,7 @@ const Password = ({setIsLoggedIn}) => {
         const params = new URLSearchParams(window.location.search);
         const tokenFromUrl = params.get('token');
 
-        fetch(`/api/signup/pw?token=${tokenFromUrl}`)
+        fetch(`http://localhost:4000/api/signup/pw?token=${tokenFromUrl}`)
         //`http://192.168.49.2:31560/api/signup/pw?token=${tokenFromUrl}`
         ///api/signup/pw?token=${tokenFromUrl}
         //http://localhost:4000/api/signup/pw?token=${tokenFromUrl}
@@ -109,7 +109,7 @@ const Password = ({setIsLoggedIn}) => {
 
         if (password === confirmPassword && password !== "") {
             try {
-                const response = await fetch(`/api/signup/pw?token=${tokenFromUrl}`, {
+                const response = await fetch(`http://localhost:4000/api/signup/pw?token=${tokenFromUrl}`, {
                     //`http://192.168.49.2:31560/api/signup/pw?token=${tokenFromUrl}`
                     ///api/signup/pw?token=${tokenFromUrl}
                     //http://localhost:4000/api/signup/pw?token=${tokenFromUrl}
@@ -191,7 +191,7 @@ const Password = ({setIsLoggedIn}) => {
                     </button>
                 </div>
                 <div className='flex flex-col mt-5'>
-                    <p  className='text-xs text-slate-700'
+                    <div  className='text-xs text-slate-700'
                         style={{
                             color: pwvalidations.capital ? 'teal' : 'black',
                         }}
@@ -205,8 +205,8 @@ const Password = ({setIsLoggedIn}) => {
                             <BsXCircleFill className='mt-0.5 mr-1 text-[rgb(250,112,99)]'/> One upper case letter
                             </div>
                         )}
-                    </p>
-                    <p  className='text-xs text-slate-700'
+                    </div>
+                    <div  className='text-xs text-slate-700'
                         style={{
                             color: pwvalidations.lower ? 'teal' : 'black',
                         }}
@@ -221,8 +221,8 @@ const Password = ({setIsLoggedIn}) => {
                             </div>
                         )
                         }
-                    </p>
-                    <p  className='text-xs text-slate-700'
+                    </div>
+                    <div  className='text-xs text-slate-700'
                         style={{
                             color: pwvalidations.number ? 'teal' : 'black',
                         }}
@@ -236,8 +236,8 @@ const Password = ({setIsLoggedIn}) => {
                             <BsXCircleFill className='mt-0.5 mr-1 text-[rgb(250,112,99)]'/> One number
                             </div>
                         )}
-                    </p>
-                    <p  className='text-xs text-slate-700'
+                    </div>
+                    <div  className='text-xs text-slate-700'
                         style={{
                             color: pwvalidations.characters ? 'teal' : 'black',
                         }}
@@ -251,8 +251,8 @@ const Password = ({setIsLoggedIn}) => {
                             <BsXCircleFill className='mt-0.5 mr-1 text-[rgb(250,112,99)]'/> 8 characters minimum
                             </div>
                         )}
-                    </p>
-                    <p  className='text-xs text-slate-700'
+                    </div>
+                    <div  className='text-xs text-slate-700'
                         style={{
                             color: pwvalidations.match ? 'teal' : 'black',
                         }}
@@ -266,7 +266,7 @@ const Password = ({setIsLoggedIn}) => {
                             <BsXCircleFill className='mt-0.5 mr-1 text-[rgb(250,112,99)]'/> Passwords match
                             </div>
                         )}
-                    </p>
+                    </div>
                 </div>
                 <button
                     className="bg-[rgb(42,98,112)] hover:bg-teal-900 text-white py-2 border rounded-xl w-full mt-5"

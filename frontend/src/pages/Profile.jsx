@@ -22,10 +22,11 @@ const Profile = () => {
     const [year, setYear] = useState('');
     const [birthday, setBirthday] = useState('');
     const [occupation, setOccupation] = useState('');
+    const [agreeToTerms, setAgreeToTerms] = useState(false)
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch(`/api/id?email=${encodeURIComponent(email)}`)
+        fetch(`http://localhost:4000/api/id?email=${encodeURIComponent(email)}`)
         //http://192.168.49.2:31560/api/id?email=${encodeURIComponent(email)}
         ///api/id?email=${encodeURIComponent(email)}
         //http://localhost:4000/api/id?email=${encodeURIComponent(email)}
@@ -45,7 +46,7 @@ const Profile = () => {
     }, []);
 
     const handlePhoneChange = (event) => {
-        setPhone(event.target.value)
+        setPhone(event.target.value);
     }
 
     const handleGenderChange = (event) => {
@@ -70,7 +71,11 @@ const Profile = () => {
     }, [month, date, year]);
 
     const handleOccupationChange = (event) => {
-        setOccupation(event.target.value)
+        setOccupation(event.target.value);
+    }
+
+    const handleTermsChange = (event) => {
+        setAgreeToTerms(event.target.checked);
     }
 
     const handleSubmit = async (event) => {
@@ -78,7 +83,7 @@ const Profile = () => {
         event.preventDefault();
 
         try {
-            const response = await fetch("/api/new-profile", {
+            const response = await fetch("http://localhost:4000/api/new-profile", {
                 //http://192.168.49.2:31560/api/new-profile
                 //"/api/new-profile"
                 //"http://localhost:4000/api/new-profile"
@@ -86,7 +91,7 @@ const Profile = () => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({user_id: userid, PhoneNumber: phone, Gender: gender, DateOfBirth: birthday, Occupation: occupation})
+                body: JSON.stringify({user_id: userid, PhoneNumber: phone, Gender: gender, DateOfBirth: birthday, Occupation: occupation, Terms: agreeToTerms})
             });
 
             const data = await response.json();
@@ -124,7 +129,7 @@ const Profile = () => {
                 </div>
                 <div className='flex flex-col mb-3'>
                     <label>Last Name</label>
-                        <input
+                    <input
                         className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2" 
                         type="text" 
                         name="LastName"
@@ -138,7 +143,7 @@ const Profile = () => {
                 </div>
                 <div className='flex flex-col mb-5'>
                     <label>Phone Number</label>
-                        <input
+                    <input
                         className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2" 
                         type="text" 
                         name="PhoneNumber"
@@ -257,10 +262,20 @@ const Profile = () => {
                         <option value='Student'>Student</option>
                     </select>
                 </div>
-                <h6 className='flex justify-center text-xs mt-2'>By checking this box, you agree to the Terms of Service and Privacy Policy.</h6>
+                <div className='flex flex-row mb-5'>
+                    <input
+                        type="checkbox"
+                        name="agreeToTerms"
+                        checked={agreeToTerms}
+                        onChange={handleTermsChange}
+                    >
+                    </input>
+                    <h6 className='flex justify-center text-xs ml-2'>By checking this box, you agree to the Terms of Service and Privacy Policy.</h6>
+                </div>
                 <button
                     className="bg-slate-700 hover:bg-slate-500 text-white py-2 border rounded-xl w-full mt-5"
                     type="submit"
+                    disabled={!agreeToTerms}
                 >
                     Continue
                 </button>

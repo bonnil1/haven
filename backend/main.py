@@ -60,7 +60,20 @@ async def create_user(request: Request, db: Session = Depends(get_db)):
     
     return JSONResponse(status_code=200, content={"message": "User created successfully!"})
 
-# Verification Email
+# Resend email verification
+@app.post("/api/new-user-resend")
+async def resend_email(request: Request, db: Session = Depends(get_db)):
+    data = await request.json()
+    FirstName = data["FirstName"]
+    Email = data["Email"]
+
+    token = create_email_token(Email)
+
+    send_verification_email(Email, FirstName, token)
+
+    return JSONResponse(status_code=200, content={"message": "Email resent successfully!"})
+
+# Verification Email Clicked
 @app.get("/api/signup/pw")
 async def verify_email(token: str, db: Session = Depends(get_db)):
 
@@ -218,6 +231,8 @@ async def new_profile(request: Request, db: Session = Depends(get_db)):
     Gender = data["Gender"]
     DateOfBirth = data["DateOfBirth"]
     Occupation = data["Occupation"]
+    # need to add agree to terms in db
+    # Terms = data["Terms"]
 
     try:
         # Check if user id exists

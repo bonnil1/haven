@@ -6,6 +6,7 @@ import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
 import { FaApple } from "react-icons/fa";
 import { FaLinkedin } from "react-icons/fa";
+import { RiLoader2Line } from "react-icons/ri";
 
 const Signup = () => {
 
@@ -15,6 +16,8 @@ const Signup = () => {
         Email: ''
     })
     const [message, setMessage] = useState('')
+    //can delete icon related code 
+    const [icon, setIcon] = useState(false)
 
     const navigate = useNavigate();
 
@@ -29,6 +32,7 @@ const Signup = () => {
 
             return updatedFormData;
         })
+
         console.log(formData)
     }
 
@@ -37,7 +41,7 @@ const Signup = () => {
         event.preventDefault();
 
         try {
-            const response = await fetch("/api/new-user", {
+            const response = await fetch("http://localhost:4000/api/new-user", {
                 //"http://192.168.49.2:31560/api/new-user"
                 //"/api/new-user"
                 //"http://localhost:4000/api/new-user"
@@ -51,7 +55,9 @@ const Signup = () => {
             const data = await response.json();
 
             if (data.message === "User created successfully!") {
+                setIcon(true)
                 setMessage(data.message);
+                navigate('/verification')
             } else if (data.message === "Email already exists."){
                 setMessage(data.message);
             }
@@ -117,8 +123,8 @@ const Signup = () => {
                 >
                     Continue
                 </button>
-                {message === "User created successfully!" && (
-                    <h4 className='flex justify-center text-xs text-emerald-600 mt-2'>Please verify your email address.</h4>
+                {icon && (
+                    <h4 className='flex justify-center mt-2'><RiLoader2Line className='size-16 text-slate-600'/></h4>
                 )}
                 {message === "Email already exists." && (
                     <h4 className='flex justify-center text-xs text-emerald-600 mt-2'>An account with this email already exists. Please log in</h4>
