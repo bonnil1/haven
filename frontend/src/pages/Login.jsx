@@ -119,64 +119,69 @@ const Login = ({setIsLoggedIn}) => {
     });
 
     return (
-        <div className='flex justify-center items-center mt-20'>
-            <form onSubmit={handleSubmit} className='flex flex-col rounded-3xl shadow-xl font-roboto bg-[rgb(248,251,248)] w-5/6 sm:w-1/2 p-8 sm:p-16 sm:px-20'>
-                <h3 className='text-3xl text-[rgb(48,92,112)] mb-5'>Welcome Back  👋🏼</h3>
-                <div>
-                    <div className='flex flex-col mb-5'>
-                        <label className='text-[rgb(48,92,112)] font-bold text-sm'>Email</label>
-                        <input
-                            className="border border-[rgb(120,161,169)] focus:outline-teal-700 text-sm placeholder-[rgb(136,173,179)] rounded-xl p-2 mt-1"
-                            type="email" 
-                            placeholder="Example@email.com"
-                            onChange={handleEmail}
-                            title='Example@email.com'
-                            pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z]{2,}$"
-                            required
-                        >
-                        </input>
-                    </div>
-                    <div className='relative flex flex-col'>
-                        <label className='text-[rgb(48,92,112)] font-bold text-sm'>Password</label>
-                        <input
-                            className="border border-[rgb(120,161,169)] focus:outline-teal-700 text-sm placeholder-[rgb(136,173,179)] rounded-xl p-2 mt-1" 
-                            type={viewpw ? "text" : "password"}
-                            placeholder='Enter password.'
-                            onChange={handlePassword}
-                        >
-                        </input>
-                        <button type="button" onClick={togglePassword} className='absolute mt-3 right-4 top-1/2 transform -translate-y-1/2'>
-                            {viewpw ? (<FiEyeOff className="h-5 w-5 text-[rgb(136,173,179)]" />) : (<FiEye className="h-5 w-5 text-[rgb(136,173,179)]" />)}
-                        </button>
-                    </div>
+        <div>
+            <div className='flex justify-center items-center mt-20'>
+                {/* Laptop View */}
+                <form onSubmit={handleSubmit} className='flex flex-col rounded-3xl shadow-xl font-roboto bg-[rgb(248,251,248)]  w-5/6 sm:w-1/2 p-6 sm:p-16 sm:px-20'>
+                    <h3 className='text-3xl text-[rgb(48,92,112)] mb-5'>Welcome Back  👋🏼</h3>
                     <div>
-                        <h3 className='flex justify-end text-xs text-[rgb(136,173,179)] mt-2'>Forgot password?</h3>
+                        <div className='flex flex-col mb-5'>
+                            <label className='text-[rgb(48,92,112)] font-bold text-sm'>Email</label>
+                            <input
+                                className="border border-[rgb(120,161,169)] focus:outline-teal-700 text-sm placeholder-[rgb(136,173,179)] rounded-xl p-2 mt-1"
+                                type="email" 
+                                placeholder="Example@email.com"
+                                onChange={handleEmail}
+                                title='Example@email.com'
+                                pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z]{2,}$"
+                                required
+                            >
+                            </input>
+                        </div>
+                        <div className='relative flex flex-col'>
+                            <label className='text-[rgb(48,92,112)] font-bold text-sm'>Password</label>
+                            <input
+                                className="border border-[rgb(120,161,169)] focus:outline-teal-700 text-sm placeholder-[rgb(136,173,179)] rounded-xl p-2 mt-1" 
+                                type={viewpw ? "text" : "password"}
+                                placeholder='Enter password.'
+                                onChange={handlePassword}
+                            >
+                            </input>
+                            <button type="button" onClick={togglePassword} className='absolute mt-3 right-4 top-1/2 transform -translate-y-1/2'>
+                                {viewpw ? (<FiEyeOff className="h-5 w-5 text-[rgb(136,173,179)]" />) : (<FiEye className="h-5 w-5 text-[rgb(136,173,179)]" />)}
+                            </button>
+                        </div>
+                        <div>
+                            <h3 className='flex justify-end text-xs text-[rgb(136,173,179)] mt-2'>Forgot password?</h3>
+                        </div>
+                        <div>
+                            <button
+                                className="bg-[rgb(42,98,112)] hover:bg-teal-900 text-white py-2 border rounded-xl w-full mt-5"
+                                type="submit"
+                            >
+                                Continue
+                            </button>
+                        </div>
+                        {message && (
+                            <h1 className='flex justify-center text-xs text-emerald-700 mt-2'>{message}</h1>
+                        )}
+                    </div>    
+                    <h6 className='flex justify-center text-xs mt-2'>Don't have an account? <NavLink to="/signup" className="text-[rgb(42,98,112)] font-bold hover:text-teal-700 ml-1">Sign up.</NavLink></h6>
+                    <div className="flex items-center justify-center space-x-4 w-full mt-5">
+                        <div className="flex-grow border-t border-[rgb(42,98,112)]"></div>
+                        <span className="text-slate-700 text-lg font-medium">or sign in with</span>
+                        <div className="flex-grow border-t border-[rgb(42,98,112)]"></div>
                     </div>
-                    <div>
-                        <button
-                            className="bg-[rgb(42,98,112)] hover:bg-teal-900 text-white py-2 border rounded-xl w-full mt-5"
-                            type="submit"
-                        >
-                            Continue
-                        </button>
+                    <div className='flex justify-between mt-7'>
+                        <button onClick={() => googlelogin()} className='border border-[rgb(209,224,205)] rounded-md p-3 sm:px-10'><FcGoogle className='size-10'/></button>
+                        <button className='border border-[rgb(209,224,205)] rounded-md p-3 sm:px-10'><FaFacebook className='size-10 text-blue-600'/></button>
+                        <button className='border border-[rgb(209,224,205)] rounded-md p-3 sm:px-10'><FaApple className='size-10'/></button>
+                        <button className='border border-[rgb(209,224,205)] rounded-md p-3 sm:px-10'><FaLinkedin className='size-10 text-sky-700'/></button>
                     </div>
-                    {message && (
-                        <h1 className='flex justify-center text-xs text-emerald-700 mt-2'>{message}</h1>
-                    )}
-                </div>    
-                <h6 className='flex justify-center text-xs mt-2'>Don't have an account? <NavLink to="/signup" className="text-[rgb(42,98,112)] font-bold hover:text-teal-700 ml-1">Sign up.</NavLink></h6>
-                <div className="flex items-center justify-center space-x-4 w-full mt-5">
-                    <div className="flex-grow border-t border-[rgb(42,98,112)]"></div>
-                    <span className="text-slate-700 text-lg font-medium">or sign in with</span>
-                    <div className="flex-grow border-t border-[rgb(42,98,112)]"></div>
-                </div>
-                <div className='flex justify-between mt-7'>
-                    <button onClick={() => googlelogin()} className='border border-[rgb(209,224,205)] rounded-md p-5 sm:px-10'><FcGoogle className='size-10'/></button>
-                    <button className='border border-[rgb(209,224,205)] rounded-md p-5 sm:px-10'><FaFacebook className='size-10 text-blue-600'/></button>
-                    <button className='border border-[rgb(209,224,205)] rounded-md p-5 sm:px-10'><FaApple className='size-10'/></button>
-                    <button className='border border-[rgb(209,224,205)] rounded-md p-5 sm:px-10'><FaLinkedin className='size-10 text-sky-700'/></button>
-                </div>
-            </form>
+                </form>
+
+
+            </div>
         </div>
   )
 }
