@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { FaSearch } from "react-icons/fa";
 
-const Landing = ({closeMenu}) => {
+const Search = ({closeMenu}) => {
 
     const [destination, setDestination] = useState("");
     const [startDate, setStartDate] = useState("");
@@ -119,7 +119,7 @@ const Landing = ({closeMenu}) => {
     )
 }
 
-export default Landing
+export default Search
 
 {/*
 <form onSubmit={submitForm} className="w-full max-w-xl">

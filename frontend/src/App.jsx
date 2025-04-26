@@ -7,10 +7,11 @@ import Password from './pages/Password';
 import Profile from './pages/Profile';
 import Login from './pages/Login';
 import Prelanding from './pages/Prelanding';
-import Landing from './pages/Landing'
+import Search from './pages/Search'
 import Rentals from './pages/Rentals';
 import Show from './pages/Show';
 import HousingRequest from './pages/HousingRequest';
+import Lease from './pages/Lease';
 import ListProperty from './pages/ListProperty';
 import UserProfile from './pages/UserProfile';
 import Contact from './pages/Contact';
@@ -57,10 +58,11 @@ return (
         <Route path='/signup/pw/profile' element={<Profile />}/>
         <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} />}/>
         <Route path='/' element={<Prelanding closeMenu={closeMenu} />}/>
-        <Route path='/home' element={<Landing closeMenu={closeMenu}/>} />
+        <Route path='/home' element={<Search closeMenu={closeMenu}/>} />
         <Route path='/home/rentals' element={<Rentals />}/>
         <Route path='/home/rentals/show' element={<Show />}/>
         <Route path='/housing-request' element={<HousingRequest />}/>
+        <Route path='/lease' element={<Lease />}/>
         <Route path='/list-your-property' element={<ListProperty />}/>
         <Route path='/profile' element={<UserProfile />}/>
         <Route path='/contact' element={<Contact />}/>

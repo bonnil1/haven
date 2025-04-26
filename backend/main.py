@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException, Request, status
+from fastapi import FastAPI, Depends, HTTPException, Request, status, UploadFile, File, Form
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
@@ -9,6 +9,7 @@ from models import User, Profile
 from tokens import create_email_token, verify_token
 from email_func import send_verification_email
 from password import hash_password, verify_password
+from contact_func import send_contactus_email
 
 app = FastAPI()
 
@@ -292,6 +293,26 @@ async def get_profile(email: str, db: Session = Depends(get_db)):
     except SQLAlchemyError as e:
         db.rollback()
         print(f"A SQLAlchemy error occurred: {e}")
+
+@app.post("/api/contactus")
+async def contactus(
+    FirstName: str = Form(...),
+    LastName: str = Form(...),
+    Email: str = Form(...),
+    Issue: str = Form(...),
+    Description: str = Form(...),
+    Attachment: UploadFile = File(None)
+):
+    print("in contact us in backend")
+
+    file_data = None
+
+    if Attachment: 
+        file_data = await Attachment.read()
+
+    send_contactus_email(Email, FirstName, LastName, Issue, Description, Attachment.filename if Attachment else None, file_data)
+
+    return JSONResponse(status_code=200, content={"message": "Customer support email sent successfully!"})
 
 
 if __name__ == "__main__":

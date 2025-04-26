@@ -35,7 +35,7 @@ const ListProperty = () => {
     return (
         <section className='bg-white'>
         <div className='container m-auto max-w-2xl '>
-        <div className='bg-white px-6 py-8 shadow-md rounded-md border md:m-0'>
+        <div className='bg-[rgb(248,251,248)] px-6 py-8 shadow-md rounded-md border md:m-0'>
           <form onSubmit={submitForm}>
             <h2 className='text-3xl text-center font-semibold mb-6'>List Your Property</h2>
             <h3 className='flex justify-center text-lg mb-8'>Fill out the form below to start listing your property.</h3>

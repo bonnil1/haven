@@ -1,9 +1,67 @@
 import React from 'react'
+import { useState } from 'react'
 
 const Contact = () => {
 
+    const [formData, setFormData] = useState({
+        FirstName: '',
+        LastName: '',
+        Email: '',
+        Issue: '',
+        Description: '',
+        Attachment: null
+    })
+
+    const [message, setMessage] = useState('')
+
+    const handleChange = (event) => {
+        if (event.target.name === 'Attachment') {
+            setFormData({ ...formData,[event.target.name]: event.target.files[0]});
+        } else {
+            setFormData(prevState => {
+                const updatedFormData = {...prevState,[event.target.name]: event.target.value};
+
+                return updatedFormData;
+            })
+        }
+
+        //console.log(formData)
+    }
+      
     const handleSubmit = async (event) => {
-        //code for handle submit
+        event.preventDefault();
+
+        const form = new FormData();
+
+        for (const key in formData) {
+            if (key === 'Attachment') {
+                if (formData[key]) {
+                    form.append('Attachment', formData[key]);
+                }
+            } else {
+                form.append(key, formData[key]);
+            }
+        }
+        
+
+        try {
+            const response = await fetch("http://localhost:4000/api/contactus", {
+                //"http://192.168.49.2:31560/api/contactus"
+                //"/api/contactus"
+                //"http://localhost:4000/api/contactus"
+                method: "POST",
+                body: form
+            });
+
+            const data = await response.json();
+
+            if (data.message === "Customer support email sent successfully!") {
+                setMessage(data.message);
+            } 
+        } catch (error) {
+            console.error(error);
+            setMessage("An error occurred while sending customer support email.");
+        }
     }
 
   return (
@@ -17,8 +75,7 @@ const Contact = () => {
                     className="border border-green-700 border-opacity-30 focus:outline-slate-500 rounded-md p-1 mt-2 bg-[rgb(248,251,248)]" 
                     type="text" 
                     name="FirstName"
-                    //placeholder="First Name"
-                    //onChange={handleChange}
+                    onChange={handleChange}
                     pattern="^[A-Za-z ]+$"
                     required
                 >
@@ -30,8 +87,7 @@ const Contact = () => {
                     className="border border-green-700 border-opacity-30 focus:outline-slate-500 rounded-md p-1 mt-2 bg-[rgb(248,251,248)]" 
                     type="text" 
                     name="LastName"
-                    //placeholder="Last Name"
-                    //onChange={handleChange}
+                    onChange={handleChange}
                     pattern="^[A-Za-z ]+$"
                     required
                 >
@@ -43,8 +99,7 @@ const Contact = () => {
                     className='border border-green-700 border-opacity-30 focus:outline-slate-500 rounded-md p-1 mt-2 bg-[rgb(248,251,248)]'
                     type="text" 
                     name="Email"
-                    //placeholder="Email Address"
-                    //onChange={handleChange}
+                    onChange={handleChange}
                     pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z]{2,}$"
                     required
                 >
@@ -55,7 +110,7 @@ const Contact = () => {
                 <select
                     className='border border-green-700 border-opacity-30 focus:outline-slate-500 rounded-md p-1.5 mt-2 bg-[rgb(248,251,248)]'
                     name='Issue'
-                    //onChange={(e) => setIssue(e.target.value)}
+                    onChange={handleChange}
                     required
                 >
                     <option value='' selected></option>
@@ -71,14 +126,13 @@ const Contact = () => {
                     type="text" 
                     name="Description"
                     rows='5'
-                    //placeholder="Enter description of your issue."
-                    //onChange={handleChange}
+                    onChange={handleChange}
                     pattern="^[A-Za-z ]+$"
                     required
                 >
                 </textarea>
             </div>
-            <div className='flex flex-col mb-14'>
+            <div className='flex flex-col mb-7'>
                 <label className='text-xs text-slate-700 font-bold'>Attachments (optional)</label>
                 <div className='flex flex-col items-center justify-center border border-green-700 border-opacity-30 rounded-md p-6 mt-2 text-center bg-[rgb(248,251,248)]'>
                     <label htmlFor="file-upload" className="cursor-pointer text-sm text-gray-700 font-semibold">
@@ -88,8 +142,9 @@ const Contact = () => {
                         id="file-upload"
                         className="hidden"
                         type="file"
-                        name="attachment"
-                        //onChange={handleUpload}
+                        name="Attachment"
+                        accept=".png,.jpg,.jpeg,.pdf,.docx"
+                        onChange={handleChange}
                     />
                 </div>
             </div>
@@ -101,7 +156,9 @@ const Contact = () => {
                 Send
             </button>
             </div>
-            
+            {message === "Customer support email sent successfully!" && (
+                <h4 className='flex justify-center text-xs text-teal-800 text-bold mt-5'>Support is on the way! Someone will reach out within 24 hours.</h4>
+            )}
         </form>
         </div>
     </div>
