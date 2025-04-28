@@ -26,6 +26,7 @@ export default {
         'custom-image-3': "url('https://www.sunset.com/wp-content/uploads/spanish-style-living-room-mindy-laven-pc-ryan-garvin-1200x600.jpg')",
         'custom-image-4': "url('https://assets.vogue.com/photos/643ec0e67ae6be44942a6aa0/master/w_2240,c_limit/08%20Family%20Estate,%20Sonoma.jpg')",
         'teal-bg': "url('https://img.freepik.com/free-photo/luxury-plain-green-gradient-abstract-studio-background-empty-room-with-space-your-text-picture_1258-102387.jpg')",
+        'lease-bg': "url('https://img.freepik.com/free-vector/soft-blurred-background_1034-273.jpg')",
       },
     },
   },

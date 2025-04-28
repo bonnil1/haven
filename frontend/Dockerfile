@@ -1,36 +1,36 @@
 # for development
-FROM node:23-alpine
+#FROM node:23-alpine
 
-WORKDIR /app
+#WORKDIR /app
 
-COPY package*.json ./
+#COPY package*.json ./
 
-RUN npm install
+#RUN npm install
 
-COPY . .
+#COPY . .
 
-EXPOSE 3000
+#EXPOSE 3000
 
-CMD [ "npm", "run", "dev"]
+#CMD [ "npm", "run", "dev"]
 
 # for production
 # 1: Build the app
-#FROM node:23-alpine AS builder
+FROM node:23-alpine AS builder
 
 # Set working directory
-#WORKDIR /app
+WORKDIR /app
 
 # Copy package.json and package-lock.json
-#COPY package*.json ./
+COPY package*.json ./
 
 # Install dependencies
-#RUN npm install
+RUN npm install
 
 # Copy the rest of the project files
-#COPY . .
+COPY . .
 
 # Build the Vite React app
-#RUN npm run build
+RUN npm run build
 
 # 2: Serve the application using Apache HTTP server
 #FROM httpd:alpine AS production
@@ -43,19 +43,19 @@ CMD [ "npm", "run", "dev"]
 
 # Below for nginx
 # 2: Serve the app with Nginx
-#FROM nginx:alpine
+FROM nginx:alpine
 
 # Copy Nginx config file
-#COPY ./.nginx/nginx.conf /etc/nginx/nginx.conf
+COPY ./.nginx/nginx.conf /etc/nginx/nginx.conf
 
 # Remove the default nginx index page
-#RUN rm -rf /usr/share/nginx/html/*
+RUN rm -rf /usr/share/nginx/html/*
 
 # Copy the built app from the first stage to Nginx's html directory
-#COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/dist /usr/share/nginx/html
 
 # Expose port for the server
-#EXPOSE 3000
+EXPOSE 3000
 
 # Start Nginx in the foreground
-#CMD ["nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]
