@@ -1,0 +1,122 @@
+/* Calendar container */
+.react-datepicker {
+    background-color: white;
+    border-radius: 0.5rem;
+    border: none;
+    box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.1);
+    font-family: 'Nunito', sans-serif;
+    padding: 0.875rem;
+    margin-top: 0.8rem;
+}
+  
+/* Header */
+.react-datepicker__header {
+    background-color: white; 
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    border: none;
+}
+
+/* Month */
+.react-datepicker__current-month {
+    font-weight: 600;
+}
+
+/* Week */
+.react-datepicker__week {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Weekday */
+.react-datepicker__day-names {
+    display: flex;
+}
+  
+.react-datepicker__day-name {
+    width: 2.6rem;
+    height: 2.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 400;
+    font-size: 0.875rem; 
+    margin-bottom: -0.5rem;
+    color: teal;
+}
+
+/* Day cells */
+.react-datepicker__day {
+    width: 2.5rem;
+    height: 2rem;
+    line-height: 2rem;
+    margin: 0.2rem;
+    color: #4b5563;
+}
+
+/* Hovered over date */
+.react-datepicker__day:hover {  
+    cursor: pointer;
+}
+
+/* Selecting */
+.react-datepicker__day--selecting-range-start {
+    background-color: #39616e !important;
+    color: white;
+}
+
+.react-datepicker__day--in-selecting-range {
+    background-color: #f7f7f7 !important;
+}
+
+.react-datepicker__day--selecting-range-end {
+    background-color: #39616e !important;
+    color: white;
+}
+  
+/* Start and end dates */
+.react-datepicker__day--range-start,
+.react-datepicker__day--range-end {
+    background-color: #39616e !important;
+    color: white;
+}
+
+/* Dates between start and end */
+.react-datepicker__day--in-range {
+    background-color: #f7f7f7 !important;
+}
+
+/* Selected date */
+.react-datepicker__day--selected {
+    background-color: #39616e !important;
+    color: white;
+}
+  
+/* Today's date */
+.react-datepicker__day--today {
+    font-weight: bolder;
+    background-color: white;
+}
+
+/* Preselected day in later months */
+.react-datepicker__day--keyboard-selected {
+    background-color: white;
+}
+
+/* Hide days outside of month */
+.react-datepicker__day--outside-month {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Arrow */
+.react-datepicker__navigation {
+    top: 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    z-index: 1;
+}
+  

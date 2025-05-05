@@ -46,7 +46,7 @@ const Lease = () => {
         <div className="flex min-h-screen">
         {/* Sidebar */}
         <div className="relative w-10 flex flex-col items-center">
-            <div className="absolute top-24 bottom-0 w-2 bg-white"/>
+            <div className="absolute top-24 bottom-0 w-3 bg-white bg-opacity-70"/>
             {slides.map((_, index) => (
             <div key={index} className="relative z-10 flex items-center justify-center w-10 h-10 mt-16 mb-80 bg-red-400 text-white text-xl rounded-full">
                 {index + 1}
@@ -56,10 +56,10 @@ const Lease = () => {
         {/* Slides */}
         <div className="flex flex-col gap-16 p-10">
             {slides.map((slide, index) => (
-            <section key={index} className="bg-white p-8 rounded-lg shadow-md">
-                <h2 className="text-2xl font-semibold mb-6">{slide.title}</h2>
+            <section key={index} className="bg-white bg-opacity-70 p-8 pt-6 rounded-lg shadow-md">
+                <h2 className="text-2xl font-semibold mb-4">{slide.title}</h2>
                 {slide.content.length === 6 ? (
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-3 gap-2 bg-white rounded-lg p-3">
                     {slide.content.map((item, index) => (
                     <div
                         key={index}
@@ -72,8 +72,8 @@ const Lease = () => {
                     </div>
                     ))}
                 </div>
-                ) : slide.content.length === 3 ? (
-                <div className="grid grid-cols-1 gap-4">
+                ) : slide.content.length === 3 ? ( 
+                <div className="grid grid-cols-1 gap-2 bg-white rounded-lg p-3">
                     {slide.content.map((item, index) => (
                     <div
                         key={index}
