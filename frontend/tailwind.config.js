@@ -25,7 +25,7 @@ export default {
         'custom-image-2': "url('https://auramodernhome.com/cdn/shop/articles/img-1707349210324.jpg')",
         'custom-image-3': "url('https://www.sunset.com/wp-content/uploads/spanish-style-living-room-mindy-laven-pc-ryan-garvin-1200x600.jpg')",
         'custom-image-4': "url('https://assets.vogue.com/photos/643ec0e67ae6be44942a6aa0/master/w_2240,c_limit/08%20Family%20Estate,%20Sonoma.jpg')",
-        'custom-image-5': "url('https://cdn-bnokp.nitrocdn.com/QNoeDwCprhACHQcnEmHgXDhDpbEOlRHH/assets/images/optimized/rev-b09352a/www.decorilla.com/online-decorating/wp-content/uploads/2023/12/Modern-interior-design-ideas-for-a-living-room-by-Decorilla.jpg')",
+        'custom-image-5': "url('https://www.decorilla.com/online-decorating/wp-content/uploads/2023/12/Modern-interior-design-ideas-for-a-living-room-by-Decorilla.jpg')",
         'teal-bg': "url('https://img.freepik.com/free-photo/luxury-plain-green-gradient-abstract-studio-background-empty-room-with-space-your-text-picture_1258-102387.jpg')",
         'lease-bg': "url('https://img.freepik.com/free-vector/soft-blurred-background_1034-273.jpg')",
       },

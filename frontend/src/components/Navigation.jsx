@@ -75,7 +75,7 @@ const Navigation = ({toggleMenu, isMenuOpen, closeMenu, isLoggedIn, setIsLoggedI
                                 <NavLink to="home" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-2">
                                     Find your home
                                 </NavLink>
-                                <NavLink to="lease" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-2">
+                                <NavLink to="lease-1" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-2">
                                     List your home
                                 </NavLink>
                                 <hr className="my-2 border-green-700 border-opacity-30"/>
@@ -122,11 +122,15 @@ const Navigation = ({toggleMenu, isMenuOpen, closeMenu, isLoggedIn, setIsLoggedI
                             Log in
                         </NavLink>
                         <hr className='my-2'/>
-                        <NavLink to="/list-your-property" onClick={closeMenu} className="block text-black hover:bg-gray-200 px-3 py-2">
-                            List your home
-                        </NavLink>
                         <NavLink to="/home" onClick={closeMenu} className="block text-black hover:bg-gray-200 px-3 py-2">
                             Find your home
+                        </NavLink>
+                        <NavLink to="/lease-1" onClick={closeMenu} className="block text-black hover:bg-gray-200 px-3 py-2">
+                            List your home
+                        </NavLink>
+                        <hr className='my-2'/>
+                        <NavLink to="/contact" onClick={closeMenu} className="block text-black hover:bg-gray-200 px-3 py-2">
+                            Contact us
                         </NavLink>
                         </div>
                     </div>

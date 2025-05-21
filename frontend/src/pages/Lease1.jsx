@@ -6,14 +6,9 @@ import { FaBuilding } from "react-icons/fa";
 import { MdCottage } from "react-icons/md";
 import { HiHomeModern } from "react-icons/hi2";
 import { FaHotel } from "react-icons/fa";
-import { ImHome } from "react-icons/im";
-import { LuDice1 } from "react-icons/lu";
-import { LuDice2 } from "react-icons/lu";
-import { LuDice3 } from "react-icons/lu";
-import { LuDice4 } from "react-icons/lu";
-import { LuDice5 } from "react-icons/lu";
+import { NavLink } from 'react-router-dom';
 
-const Lease = () => {
+const Lease1 = () => {
 
     const slides = [
         {
@@ -30,15 +25,6 @@ const Lease = () => {
                 "Guests will share the room with another person."
             ]
         },
-        {
-            title: "How many bedrooms?",
-            content: ["Studio", "One room", "Two rooms", "Three rooms", "Four rooms", "Five rooms"],
-            extra: [<ImHome /> , <LuDice1 />, <LuDice2 />, <LuDice3 />, <LuDice4 />, <LuDice5 />]
-        },
-        {
-            title: "Are you renting your place furnished?",
-            content:["Yes", "No", "Partially"]
-        }
       ];
 
     return (
@@ -54,7 +40,7 @@ const Lease = () => {
             ))}
         </div>
         {/* Slides */}
-        <div className="flex flex-col gap-16 p-10">
+        <div className="flex flex-col gap-12 p-10">
             {slides.map((slide, index) => (
             <section key={index} className="bg-white bg-opacity-70 p-8 pt-6 rounded-lg shadow-md">
                 <h2 className="text-2xl font-semibold mb-4">{slide.title}</h2>
@@ -89,6 +75,13 @@ const Lease = () => {
                 ) : null}
             </section>
             ))}
+        <div className='flex justify-end'>
+            <button
+            className="text-white bg-[rgb(232,240,232)] bg-opacity-50 font-bold rounded-full w-1/4"
+        >
+            <NavLink to="/lease-2">Next</NavLink> 
+        </button>  
+        </div>     
         </div>
         </div>
         </div>
@@ -96,4 +89,4 @@ const Lease = () => {
 
 }
 
-export default Lease
+export default Lease1

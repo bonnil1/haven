@@ -21,7 +21,7 @@ const Prelanding = ({closeMenu}) => {
                     <NavLink to="home" onClick={closeMenu} className="flex flex-row text-stone-700">I'm looking for a place <FaArrowRight className='mt-1 ml-5 text-[rgb(250,112,99)]'/></NavLink>
                   </button>
                   <button className='text-md sm:text-lg text-white hover:bg-white bg-slate-50 px-6 py-2 rounded-full mr-10'>
-                    <NavLink to="lease" onClick={closeMenu} className="flex flex-row text-stone-700">I'm listing my place <FaArrowRight className='mt-1 ml-5 text-[rgb(250,112,99)]'/></NavLink>
+                    <NavLink to="lease-1" onClick={closeMenu} className="flex flex-row text-stone-700">I'm listing my place <FaArrowRight className='mt-1 ml-5 text-[rgb(250,112,99)]'/></NavLink>
                   </button>
               </div>
               </div>
@@ -40,7 +40,7 @@ const Prelanding = ({closeMenu}) => {
               <NavLink to="home" onClick={closeMenu} className="flex flex-row text-sm text-stone-700 font-bold">Find <FaArrowRight className='mt-1 ml-2 text-[rgb(250,112,99)]'/></NavLink>
             </button>
             <button className='text-md hover:bg-white bg-slate-50 px-6 py-2 rounded-full ml-10'>
-              <NavLink to="lease" onClick={closeMenu} className="flex flex-row text-sm text-stone-700 font-bold">List<FaArrowRight className='mt-1 ml-2 text-[rgb(250,112,99)]'/></NavLink>
+              <NavLink to="lease-1" onClick={closeMenu} className="flex flex-row text-sm text-stone-700 font-bold">List<FaArrowRight className='mt-1 ml-2 text-[rgb(250,112,99)]'/></NavLink>
             </button>
             </div>
           </div>

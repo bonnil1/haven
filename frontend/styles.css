@@ -99,6 +99,11 @@
     background-color: white;
 }
 
+.react-datepicker__day--today:hover {
+    font-weight: bolder;
+    background-color: white !important;
+}
+
 /* Preselected day in later months */
 .react-datepicker__day--keyboard-selected {
     background-color: white;
