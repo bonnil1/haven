@@ -127,7 +127,7 @@ const Contact = () => {
                     name="Description"
                     rows='5'
                     onChange={handleChange}
-                    pattern="^[A-Za-z ]+$"
+                    pattern="^[A-Za-z0-9 ]+$"
                     required
                 >
                 </textarea>

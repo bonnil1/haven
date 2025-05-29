@@ -10,6 +10,28 @@ import { NavLink } from 'react-router-dom';
 
 const Lease1 = () => {
 
+    const [formData, setFormData] = useState({
+        guests: 1,
+        bedrooms: 1,
+        beds: 1,
+        bathrooms: 1,
+        amenities: [],
+    });
+
+    const handleIncrement = (field) => {
+        setFormData((prev) => ({
+        ...prev,
+        [field]: prev[field] + 1,
+        }));
+    };
+
+    const handleDecrement = (field) => {
+        setFormData((prev) => ({
+        ...prev,
+        [field]: Math.max(0, prev[field] - 1), // Prevent going below 0
+        }));
+    };
+
     const slides = [
         {
             title: "Which of these best describe your place?",
@@ -24,6 +46,10 @@ const Lease1 = () => {
                 "Guests will have a private room to themselves in a shared home.",
                 "Guests will share the room with another person."
             ]
+        },
+        {
+            title: "Share some basics about your place.",
+            content: ["Guests", "Bedrooms", "Beds", "Bathrooms"],
         },
       ];
 
@@ -72,16 +98,52 @@ const Lease1 = () => {
                     </div>
                     ))}
                 </div>
-                ) : null}
+                ) : slide.content.length === 4 ? ( 
+                    <div className="grid grid-cols-1 gap-2 bg-white rounded-lg p-3">
+                        <div className='border border-[rgb(232,240,232)] border-2 p-3'>
+                        <h4 className="text-lg font-light mb-4">You'll add more details later.</h4>
+                        {['guests', 'bedrooms', 'beds', 'bathrooms'].map((field) => (
+                            <div key={field} className="flex items-center justify-between mb-6">
+                            
+                            <label className="mb-2 text-gray-700 capitalize font-medium">
+                                {field}
+                            </label>
+                            <div className="flex items-center space-x-1">
+                                <button
+                                    type="button"
+                                    onClick={() => handleDecrement(field)}
+                                    className="w-10 h-10 text-lg font-bold text-gray-400 hover:bg-gray-200 border rounded-full"
+                                >
+                                −
+                                </button>
+
+                                <span className="w-10 text-center text-lg font-semibold text-slate-600">
+                                {formData[field]}
+                                </span>
+                                
+                                <button
+                                    type="button"
+                                    onClick={() => handleIncrement(field)}
+                                    className="w-10 h-10 text-lg font-bold text-gray-400 hover:bg-gray-200 border rounded-full"
+                                >
+                                +
+                                </button>
+                            </div>
+                            </div>
+                        ))}
+                    </div>
+                    </div>
+                    ) : null}
             </section>
             ))}
-        <div className='flex justify-end'>
-            <button
-            className="text-white bg-[rgb(232,240,232)] bg-opacity-50 font-bold rounded-full w-1/4"
-        >
-            <NavLink to="/lease-2">Next</NavLink> 
-        </button>  
-        </div>     
+
+            <div className='flex justify-end'>
+                <button
+                className="text-white bg-[rgb(232,240,232)] bg-opacity-50 font-bold rounded-full w-1/4"
+            >
+                <NavLink to="/lease-2">Next</NavLink> 
+            </button>  
+            </div>     
         </div>
         </div>
         </div>

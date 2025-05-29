@@ -13,6 +13,9 @@ import Show from './pages/Show';
 import HousingRequest from './pages/HousingRequest';
 import Lease1 from './pages/Lease1';
 import Lease2 from './pages/Lease2'
+import Lease3 from './pages/Lease3';
+import Lease4 from './pages/Lease4';
+import Lease5 from './pages/Lease5';
 import ListProperty from './pages/ListProperty';
 import UserProfile from './pages/UserProfile';
 import Contact from './pages/Contact';
@@ -67,6 +70,9 @@ return (
         <Route path='/housing-request' element={<HousingRequest />}/>
         <Route path='/lease-1' element={<Lease1 />}/>
         <Route path='/lease-2' element={<Lease2 />}/>
+        <Route path='/lease-3' element={<Lease3 />}/>
+        <Route path='/lease-4' element={<Lease4 />}/>
+        <Route path='/lease-5' element={<Lease5 />}/>
         <Route path='/list-your-property' element={<ListProperty />}/>
         <Route path='/profile' element={<UserProfile />}/>
         <Route path='/contact' element={<Contact />}/>
