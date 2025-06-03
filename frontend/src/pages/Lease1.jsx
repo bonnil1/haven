@@ -101,9 +101,8 @@ const Lease1 = () => {
                 ) : slide.content.length === 4 ? ( 
                     <div className="grid grid-cols-1 gap-2 bg-white rounded-lg p-3">
                         <div className='border border-[rgb(232,240,232)] border-2 p-3'>
-                        <h4 className="text-lg font-light mb-4">You'll add more details later.</h4>
                         {['guests', 'bedrooms', 'beds', 'bathrooms'].map((field) => (
-                            <div key={field} className="flex items-center justify-between mb-6">
+                            <div key={field} className="flex items-center justify-between mb-4">
                             
                             <label className="mb-2 text-gray-700 capitalize font-medium">
                                 {field}
@@ -131,7 +130,7 @@ const Lease1 = () => {
                             </div>
                             </div>
                         ))}
-                    </div>
+                        </div>
                     </div>
                     ) : null}
             </section>

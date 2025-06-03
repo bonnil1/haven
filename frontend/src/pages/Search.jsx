@@ -64,23 +64,25 @@ const Search = ({closeMenu}) => {
                             />
                         </div>
                         {/* Styled in between check in and check out to center */}
-                        <DatePicker
-                            ref={datepickerRef}
-                            selected={activeInput === 'start' ? startDate : endDate}
-                            onChange={(update) => {
-                                setDateRange(update);
-                                if (update[0] && update[1]) {
-                                datepickerRef.current.setOpen(false); // Close after both dates are selected
-                                }
-                            }}
-                            startDate={startDate}
-                            endDate={endDate}
-                            selectsRange
-                            inline={false}
-                            monthsShown={2}
-                            minDate={new Date()}
-                            className="hidden"
-                        />
+                        <div className='search-calendar'>
+                            <DatePicker
+                                ref={datepickerRef}
+                                selected={activeInput === 'start' ? startDate : endDate}
+                                onChange={(update) => {
+                                    setDateRange(update);
+                                    if (update[0] && update[1]) {
+                                    datepickerRef.current.setOpen(false); // Close after both dates are selected
+                                    }
+                                }}
+                                startDate={startDate}
+                                endDate={endDate}
+                                selectsRange
+                                inline={false}
+                                monthsShown={2}
+                                minDate={new Date()}
+                                className="hidden"
+                            />
+                        </div>
                         <div className="flex flex-col mt-2">
                         <label className='text-[rgb(42,98,112)] font-semibold'>Check Out</label>
                         <input

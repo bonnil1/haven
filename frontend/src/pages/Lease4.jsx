@@ -11,13 +11,8 @@ const Lease4 = () => {
     const titleWordLimit = 32;
     const descriptionWordLimit = 500;
 
-    const titleWordCount = title
-        .split(/\s+/)
-        .filter(Boolean).length;
-
-    const descriptionWordCount = description
-        .split(/\s+/)
-        .filter(Boolean).length;
+    const getWordCount = (str) => 
+        str.trim().split(/\s+/).filter((word) => word.length > 0).length;
 
     const handlePhotoChange = (e) => {
         const files = Array.from(e.target.files);
@@ -28,7 +23,7 @@ const Lease4 = () => {
             id: uuidv4(),
         }));
 
-        setPhotos((prevPhotos) => [...prevPhotos, ... newPhotos])
+        setPhotos((prevPhotos) => [...prevPhotos, ...newPhotos])
     }
 
     const handleRemovePhoto = (id) => {
@@ -45,25 +40,65 @@ const Lease4 = () => {
         })
     }
 
-    const handleTitleChange = (e) => {
-        const input = e.target.value;
+    const handleDrop = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const droppedFiles = event.dataTransfer.files;
+        if (droppedFiles && droppedFiles.length > 0) {
+          const files = Array.from(droppedFiles);
 
-        const words = input.trim().split(/\s+/)
-        
-        if (words.length <= titleWordLimit){
-            setTitle(e.target.value);
+          const newPhotos = files.map((file) => ({
+            file,
+            preview: URL.createObjectURL(file),
+            id: uuidv4(),
+            }));
+
+          setPhotos((prevPhotos) => [...prevPhotos, ...newPhotos]);
         }
+    };
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      };
+
+    const handleTitleChange = (e) => {
+        setTitle(e.target.value);
     };
 
     const handleDescriptionChange = (e) => {
-        const input = e.target.value;
-
-        const words = input.trim().split(/\s+/)
-        
-        if (words.length <= titleWordLimit){
-            setDescription(e.target.value);
-        }
+        setDescription(e.target.value);
     };
+
+    const handleBeforeTitleInput = (e) => {
+        const newChar = e.data || '';
+        const inputValue = title;
+        const cursorPos = e.target.selectionStart;
+
+        const updatedText = inputValue.slice(0, cursorPos) + newChar + inputValue.slice(cursorPos);
+        const words = updatedText.trim().split(/\s+/).filter(Boolean);
+
+        if (words.length > titleWordLimit) {
+            e.preventDefault();
+          }
+    }
+
+    const handleBeforeDesInput = (e) => {
+        const newChar = e.data || '';
+        const inputValue = description;
+        const cursorPos = e.target.selectionStart;
+
+        const updatedText = inputValue.slice(0, cursorPos) + newChar + inputValue.slice(cursorPos);
+        const words = updatedText.trim().split(/\s+/).filter(Boolean);
+
+        if (words.length > descriptionWordLimit) {
+            e.preventDefault();
+          }
+    }
+    
+    const titleWordCount = getWordCount(title)
+
+    const descriptionWordCount = getWordCount(description)
 
     const slides = [
         {
@@ -91,17 +126,31 @@ const Lease4 = () => {
             </div>
         {/* Slides */}
         <div className="flex flex-col gap-12 p-10">
-            <div className="bg-white bg-opacity-70 p-10 pt-6 pb-0 rounded-lg shadow-md">
+            <div className="bg-white bg-opacity-70 p-10 pt-6 pb-6 rounded-lg shadow-md">
                 <h2 className="text-2xl font-semibold mb-1">Add some photos for your listing.</h2>
                 <h4 className="text-lg font-light mb-4">You'll need to add 5 photos to get started. You can add more or make changes later.</h4>
-                <input
-                    type="file"
-                    multiple
-                    accept="image/*"
-                    onChange={handlePhotoChange}
-                    className="mb-6"
-                >
-                </input>
+                <div className={`transition-all duration-500 ease-in-out overflow-hidden w-full ${photos.length > 0 ? "h-16" : "aspect-[3/1]"}`}
+                    onDrop={handleDrop} onDragOver={handleDragOver}
+                    >
+                    <label
+                        htmlFor="file-upload"
+                        className="w-full h-full flex items-center justify-center
+                        text-lg font-medium text-stone-700
+                        border border-stone-400 rounded-md bg-gray-150
+                        hover:cursor-pointer hover:bg-[rgb(232,240,232)] hover:bg-opacity-40"
+                    >
+                        📁 Upload your images
+                    </label>
+                    <input
+                        id="file-upload"
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        onChange={handlePhotoChange}
+                        className="hidden"
+                    />
+                </div>
+
                 {photos.length > 0 && (
                     <div className="grid grid-cols-3 gap-4">
                     {photos.map((photo) => (
@@ -109,7 +158,7 @@ const Lease4 = () => {
                             <img
                                 src={photo.preview}
                                 alt="Preview"
-                                className="w-full h-40 object-cover rounded border mb-6"
+                                className="w-full h-40 object-cover rounded border"
                             />
                             <button
                                 onClick={() => handleRemovePhoto(photo.id)}
@@ -125,37 +174,41 @@ const Lease4 = () => {
             </div>
 
             <div className="bg-white bg-opacity-70 p-10 pt-6 pb-0 rounded-lg shadow-md">
+                <h2 className="text-2xl font-semibold mb-1">Write a description.</h2>
+                <h4 className="text-lg font-light">Share what makes your place special.</h4>
+                <textarea
+                    className='border border-gray-500 border-opacity-30 focus:outline-gray-400 rounded-md p-3 mt-4 text-sm w-full placeholder-gray-300 font-thin'
+                    type="text" 
+                    name="description"
+                    value={description}
+                    placeholder="Ex. 4 mins from subway J, M, N - Marcy Avenue (1 stop from Manhattan)"
+                    rows='10'
+                    onChange={handleDescriptionChange}
+                    onBeforeInput={handleBeforeDesInput}
+                    pattern="^[A-Za-z0-9 ]+$"
+                    required
+                >
+                </textarea>
+                <h4 className='text-sm text-gray-500 font-thin mt-2 mb-6'>{descriptionWordCount}/500 word count</h4>
+            </div>
+
+            <div className="bg-white bg-opacity-70 p-10 pt-6 pb-0 rounded-lg shadow-md">
                 <h2 className="text-2xl font-semibold mb-1">Now, let's give your listing a title.</h2>
                 <h4 className="text-lg font-light">Keep it short & have fun with it - you can always change it later.</h4>
                 <textarea
                     className='border border-gray-500 border-opacity-30 focus:outline-gray-400 rounded-md p-3 mt-4 text-sm w-full placeholder-gray-300 font-thin'
                     type="text" 
                     name="title"
+                    value={title}
                     placeholder="Ex. Cozy room near UC Davis"
                     rows='3'
                     onChange={handleTitleChange}
+                    onBeforeInput={handleBeforeTitleInput}
                     pattern="^[A-Za-z0-9 ]+$"
                     required
                 >
                 </textarea>
                 <h4 className='text-sm text-gray-500 font-thin mt-2 mb-6'>{titleWordCount}/32 word count</h4>
-            </div>
-
-            <div className="bg-white bg-opacity-70 p-10 pt-6 pb-0 rounded-lg shadow-md">
-                <h2 className="text-2xl font-semibold mb-1">Write a description.</h2>
-                <h4 className="text-lg font-light">Share what makes your place special.</h4>
-                <textarea
-                    className='border border-gray-500 border-opacity-30 focus:outline-gray-400 rounded-md p-3 mt-4 text-sm w-full placeholder-gray-300 font-thin'
-                    type="text" 
-                    name="title"
-                    placeholder="Ex. 4 mins from subway J, M, N - Marcy Avenue (1 stop from Manhattan)"
-                    rows='10'
-                    onChange={handleDescriptionChange}
-                    pattern="^[A-Za-z0-9 ]+$"
-                    required
-                >
-                </textarea>
-                <h4 className='text-sm text-gray-500 font-thin mt-2 mb-6'>{descriptionWordCount}/500 word count</h4>
             </div>
 
             <div className='flex justify-end'>
