@@ -6,6 +6,7 @@ const Lease2 = () => {
 
     const [formData, setFormData] = useState({
         amenities: [],
+        safety: [],
     });
 
     const kitchen = false;
@@ -25,11 +26,11 @@ const Lease2 = () => {
     const slides = [
         {
             title: "Tell guests what your place has to offer.",
-            content:["Yes", "No", "Partially"]
+            options:["Yes", "No", "Partially"]
         },
         {
             title: "Safety features.",
-            content: ["Smoke detector", "CO detector", "Fire extinguisher"],
+            options: ["Smoke detector", "CO detector", "Fire extinguisher"],
         },
     ]
 
@@ -55,7 +56,7 @@ const Lease2 = () => {
                     'TV', 'Kitchen', 'Fully furnished', 'Gym', 'Pool', 'Pet friendly'].map((field) => (
                         <div
                             key={field}
-                            className="border border-[rgb(232,240,232)] border-2 p-4 rounded-lg hover:shadow-lg cursor-pointer text-xl flex flex-col"
+                            className="border border-[rgb(232,240,232)] border-2 p-4 rounded-lg hover:shadow-lg cursor-pointer text-xl flex flex-col justify-center"
                         >
                             {/*<span className="text-xl">{photo}</span>*/}
                             <span className="flex justify-center text-sm text-slate-500 font-bold">

@@ -45,15 +45,15 @@ const Lease4 = () => {
         event.stopPropagation();
         const droppedFiles = event.dataTransfer.files;
         if (droppedFiles && droppedFiles.length > 0) {
-          const files = Array.from(droppedFiles);
+            const files = Array.from(droppedFiles);
 
-          const newPhotos = files.map((file) => ({
-            file,
-            preview: URL.createObjectURL(file),
-            id: uuidv4(),
-            }));
+            const newPhotos = files.map((file) => ({
+                file,
+                preview: URL.createObjectURL(file),
+                id: uuidv4(),
+                }));
 
-          setPhotos((prevPhotos) => [...prevPhotos, ...newPhotos]);
+            setPhotos((prevPhotos) => [...prevPhotos, ...newPhotos]);
         }
     };
 
@@ -95,9 +95,8 @@ const Lease4 = () => {
             e.preventDefault();
           }
     }
-    
-    const titleWordCount = getWordCount(title)
 
+    const titleWordCount = getWordCount(title)
     const descriptionWordCount = getWordCount(description)
 
     const slides = [
@@ -177,7 +176,7 @@ const Lease4 = () => {
                 <h2 className="text-2xl font-semibold mb-1">Write a description.</h2>
                 <h4 className="text-lg font-light">Share what makes your place special.</h4>
                 <textarea
-                    className='border border-gray-500 border-opacity-30 focus:outline-gray-400 rounded-md p-3 mt-4 text-sm w-full placeholder-gray-300 font-thin'
+                    className='border border-black border-opacity-30 focus:outline-[rgb(232,240,232)] rounded-md p-3 mt-4 text-sm w-full placeholder-gray-400 font-thin'
                     type="text" 
                     name="description"
                     value={description}
@@ -196,7 +195,7 @@ const Lease4 = () => {
                 <h2 className="text-2xl font-semibold mb-1">Now, let's give your listing a title.</h2>
                 <h4 className="text-lg font-light">Keep it short & have fun with it - you can always change it later.</h4>
                 <textarea
-                    className='border border-gray-500 border-opacity-30 focus:outline-gray-400 rounded-md p-3 mt-4 text-sm w-full placeholder-gray-300 font-thin'
+                    className='border border-black border-opacity-30 focus:outline-[rgb(232,240,232)] rounded-md p-3 mt-4 text-sm w-full placeholder-gray-400 font-thin'
                     type="text" 
                     name="title"
                     value={title}

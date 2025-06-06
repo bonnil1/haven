@@ -11,11 +11,12 @@ import { NavLink } from 'react-router-dom';
 const Lease1 = () => {
 
     const [formData, setFormData] = useState({
+        type: "",
+        space: "",
         guests: 1,
         bedrooms: 1,
         beds: 1,
         bathrooms: 1,
-        amenities: [],
     });
 
     const handleIncrement = (field) => {
@@ -28,19 +29,19 @@ const Lease1 = () => {
     const handleDecrement = (field) => {
         setFormData((prev) => ({
         ...prev,
-        [field]: Math.max(0, prev[field] - 1), // Prevent going below 0
+        [field]: Math.max(0, prev[field] - 1),
         }));
     };
 
     const slides = [
         {
             title: "Which of these best describe your place?",
-            content: ["House", "Apartment", "Condo", "Cottage", "Guesthouse", "Hotel"],
+            options: ["House", "Apartment", "Condo", "Cottage", "Guesthouse", "Hotel"],
             extra: [<FaHouseChimney />, <MdApartment />, <FaBuilding />, <MdCottage />, <HiHomeModern />, <FaHotel />]
         },
         {
             title: "What type of place will your guest stay?",
-            content: ["An entire place", "A private room", "A shared room"],
+            options: ["An entire place", "A private room", "A shared room"],
             extra: [
                 "Guests will have the entire place to themselves.",
                 "Guests will have a private room to themselves in a shared home.",
@@ -49,7 +50,7 @@ const Lease1 = () => {
         },
         {
             title: "Share some basics about your place.",
-            content: ["Guests", "Bedrooms", "Beds", "Bathrooms"],
+            options: ["Guests", "Bedrooms", "Beds", "Bathrooms"],
         },
       ];
 
@@ -70,9 +71,9 @@ const Lease1 = () => {
             {slides.map((slide, index) => (
             <section key={index} className="bg-white bg-opacity-70 p-8 pt-6 rounded-lg shadow-md">
                 <h2 className="text-2xl font-semibold mb-4">{slide.title}</h2>
-                {slide.content.length === 6 ? (
+                {slide.options.length === 6 ? (
                 <div className="grid grid-cols-3 gap-2 bg-white rounded-lg p-3">
-                    {slide.content.map((item, index) => (
+                    {slide.options.map((item, index) => (
                     <div
                         key={index}
                         className="border border-[rgb(232,240,232)] border-2 p-3 rounded-lg hover:shadow-lg cursor-pointer flex flex-col items-center gap-3"
@@ -84,9 +85,9 @@ const Lease1 = () => {
                     </div>
                     ))}
                 </div>
-                ) : slide.content.length === 3 ? ( 
+                ) : slide.options.length === 3 ? ( 
                 <div className="grid grid-cols-1 gap-2 bg-white rounded-lg p-3">
-                    {slide.content.map((item, index) => (
+                    {slide.options.map((item, index) => (
                     <div
                         key={index}
                         className="border border-[rgb(232,240,232)] border-2 p-4 rounded-lg hover:shadow-lg cursor-pointer text-xl flex flex-col"
@@ -98,7 +99,7 @@ const Lease1 = () => {
                     </div>
                     ))}
                 </div>
-                ) : slide.content.length === 4 ? ( 
+                ) : slide.options.length === 4 ? ( 
                     <div className="grid grid-cols-1 gap-2 bg-white rounded-lg p-3">
                         <div className='border border-[rgb(232,240,232)] rounded-lg border-2 p-3'>
                         {['guests', 'bedrooms', 'beds', 'bathrooms'].map((field) => (

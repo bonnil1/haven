@@ -1,14 +1,14 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom';
-import { useState, useEffect, useRef } from "react";
-import { GoogleMap, LoadScript, Autocomplete, Marker } from '@react-google-maps/api';
+import { useState, useRef } from "react";
+import { GoogleMap, Autocomplete, Marker } from '@react-google-maps/api';
 
 const containerStyle = {
     width: '100%',
     height: '300px',
 };
   
-  const center = {
+const center = {
     lat: 37.7749,
     lng: -122.4194,
 };
@@ -20,7 +20,6 @@ function getAddressComponent(components, type) {
 
 const Lease3 = () => {
 
-    const API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
     const [address, setAddress] = useState({
         streetAddress: '',
         city: '',
@@ -57,8 +56,8 @@ const Lease3 = () => {
 
         const location = place.geometry.location;
         const newCenter = {
-        lat: location.lat(),
-        lng: location.lng(),
+            lat: location.lat(),
+            lng: location.lng(),
         };
 
         setMapCenter(newCenter);
@@ -102,19 +101,19 @@ const Lease3 = () => {
                         type="text"
                         placeholder="Search an address"
                         style={{
-                        boxSizing: 'border-box',
-                        border: '1px solid transparent',
-                        width: '240px',
-                        height: '40px',
-                        padding: '0 12px',
-                        borderRadius: '4px',
-                        boxShadow: '0 2px 6px rgba(0,0,0,0.3)',
-                        fontSize: '16px',
-                        position: 'absolute',
-                        left: '66%',
-                        marginLeft: '-120px',
-                        top: '10px',
-                        zIndex: 5,
+                            boxSizing: 'border-box',
+                            border: '1px solid transparent',
+                            width: '240px',
+                            height: '40px',
+                            padding: '0 12px',
+                            borderRadius: '8px',
+                            boxShadow: '0 2px 6px rgba(0,0,0,0.3)',
+                            fontSize: '16px',
+                            position: 'absolute',
+                            left: '66%',
+                            marginLeft: '-120px',
+                            top: '10px',
+                            zIndex: 5,
                         }}
                     />
                     </Autocomplete>
@@ -127,8 +126,8 @@ const Lease3 = () => {
             <div className="bg-white bg-opacity-70 p-10 pt-6 pb-0 rounded-lg shadow-md">
                 <h2 className="text-2xl font-semibold mb-1">Confirm the address.</h2>
                 <h4 className="text-lg font-light mb-4">Please check all details before we continue...</h4>
-                <form onSubmit={handleSubmit} className='border border-slate-300 rounded-lg bg-grey-100 p-5 mb-6'>
-                    <div className='flex flex-col w-full'>
+                <form onSubmit={handleSubmit} className='rounded-lg bg-white p-4 mb-6'>
+                    <div className='flex flex-col w-full border border-[rgb(232,240,232)] border-2 p-4 rounded-lg'>
                         <div className='flex flex-col'>
                             <label className='text-xs'>Street Address</label>
                             <input
