@@ -22,6 +22,7 @@ const Lease3 = () => {
 
     const [address, setAddress] = useState({
         streetAddress: '',
+        unit: '',
         city: '',
         state: '',
         zipCode: '',
@@ -64,8 +65,13 @@ const Lease3 = () => {
         setMarkerPosition(newCenter);
     };
 
-    const handleSubmit = async (e) => {
+    const handleChange = (event) => {
+        setAddress(prevState => {
+            const updatedAddress = {...prevState,[event.target.name]: event.target.value};
 
+            return updatedAddress;
+        })
+        console.log(address)
     }
 
     const slides = [
@@ -77,6 +83,33 @@ const Lease3 = () => {
         }
     ]
 
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        try {
+            const response = await fetch("/api/lease-3", {
+                //"/api/lease-3"
+                //"http://localhost:4000/api/lease-3"
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(address)
+            });
+
+            const data = await response.json();
+            console.log(data);
+
+            if (data.message === "Lease 3 created successfully!") {
+                setMessage(data.message);
+                navigate('/lease-4')
+            } 
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     return (
         <div className="flex justify-center font-nunito font-semibold text-slate-700 bg-lease-bg bg-cover bg-opacity-25">
         <div className="flex min-h-screen">
@@ -84,7 +117,7 @@ const Lease3 = () => {
         <div className="relative w-10 flex flex-col items-center">
             <div className="absolute top-24 bottom-0 w-3 bg-white bg-opacity-70"/>
             {slides.map((_, index) => (
-            <div key={index} className="relative z-10 flex items-center justify-center w-10 h-10 mt-16 mb-80 bg-red-400 text-white text-xl rounded-full">
+            <div key={index} className="relative z-10 flex items-center justify-center w-10 h-10 mt-16 mb-96 bg-red-400 text-white text-xl rounded-full">
                 {index + 5}
             </div>
             ))}
@@ -133,10 +166,10 @@ const Lease3 = () => {
                             <input
                                 className="bg-transparent focus:outline-none p-1 text-xs font-normal w-2/3" 
                                 type="text" 
-                                name="street_address"
+                                name="streetAddress"
                                 value={address.streetAddress}
+                                onChange={handleChange}
                                 pattern="^[A-Za-z0-9 ]+$"
-                                //readOnly
                             >
                             </input>
                         </div>
@@ -147,9 +180,9 @@ const Lease3 = () => {
                                 className="bg-transparent focus:outline-none p-1 text-xs font-normal w-2/3" 
                                 type="text" 
                                 name="unit"
-                                //value={lastname}
+                                value={address.unit || ""}
+                                onChange={handleChange}
                                 pattern="^[A-Za-z0-9 ]+$"
-                                //readOnly
                             >
                             </input>
                         </div>
@@ -161,8 +194,8 @@ const Lease3 = () => {
                                 type="text" 
                                 name="city"
                                 value={address.city}
+                                onChange={handleChange}
                                 pattern="^[A-Za-z ]+$"
-                                //readOnly
                             >
                             </input>
                         </div>
@@ -174,8 +207,8 @@ const Lease3 = () => {
                                 type="text" 
                                 name="state"
                                 value={address.state}
+                                onChange={handleChange}
                                 pattern="^[A-Za-z ]+$"
-                                //readOnly
                             >
                             </input>
                         </div>
@@ -185,10 +218,10 @@ const Lease3 = () => {
                             <input
                                 className="bg-transparent focus:outline-none p-1 text-xs font-normal w-2/3" 
                                 type="text" 
-                                name="zip"
+                                name="zipCode"
                                 value={address.zipCode}
+                                onChange={handleChange}
                                 pattern="^[0-9 ]+$"
-                                //readOnly
                             >
                             </input>
                         </div>
@@ -200,8 +233,8 @@ const Lease3 = () => {
                                 type="text" 
                                 name="country"
                                 value={address.country}
+                                onChange={handleChange}
                                 pattern="^[A-Za-z ]+$"
-                                //readOnly
                             >
                             </input>
                         </div>
@@ -223,50 +256,3 @@ const Lease3 = () => {
 }
 
 export default Lease3
-
-{/*
-    
-    const autoCompleteRef = useRef(null);
-    const [mapUrl, setMapUrl] = useState('');
-    const API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
-
-    useEffect(() => {
-        const el = autoCompleteRef.current;
-        
-        if (!el) return;
-        
-        const handlePlaceChange = (e) => {
-            const place = e.target.getPlace?.();
-            const address = place?.formatted_address || place?.description || place?.name;
-            console.log(address)
-
-            if (address) {
-                const encodeAddress = encodeURIComponent(address);
-                setMapUrl(`https://www.google.com/maps/embed/v1/place?key=${API_KEY}&q=${encodeAddress}`);
-            }
-            };
-            
-            el.addEventListener('gmp-placechange', handlePlaceChange);
-
-            return () => {
-                el.removeEventListener('gmp-placechange', handlePlaceChange);
-            };
-    }, [API_KEY]);
-
-    <div className="border border-gray-300 rounded-md p-2 bg-transparent focus:outline-none mb-6">
-                    <gmp-place-autocomplete
-                        ref={autoCompleteRef}
-                    ></gmp-place-autocomplete>
-                </div>
-                {mapUrl && (
-                    <div style={{ marginTop: '20px', height: '400px' }}>
-                    <iframe
-                        title="Google Map"
-                        width="100%"
-                        height="100%"
-                        style={{ border: 0 }}
-                        src={mapUrl}
-                    ></iframe>
-                    </div>
-                )}
-*/}

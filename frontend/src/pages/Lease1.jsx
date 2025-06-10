@@ -19,17 +19,21 @@ const Lease1 = () => {
         bathrooms: 1,
     });
 
-    const handleIncrement = (field) => {
+    const [selectedType, setSelectedType] = useState("");
+    const [selectedSpace, setSelectedSpace] = useState("")
+    const [message, setMessage] = useState("")
+
+    const handleIncrement = (item) => {
         setFormData((prev) => ({
         ...prev,
-        [field]: prev[field] + 1,
+        [item]: prev[item] + 1,
         }));
     };
 
-    const handleDecrement = (field) => {
+    const handleDecrement = (item) => {
         setFormData((prev) => ({
         ...prev,
-        [field]: Math.max(0, prev[field] - 1),
+        [item]: Math.max(0, prev[item] - 1),
         }));
     };
 
@@ -50,9 +54,37 @@ const Lease1 = () => {
         },
         {
             title: "Share some basics about your place.",
-            options: ["Guests", "Bedrooms", "Beds", "Bathrooms"],
+            options: ["guests", "bedrooms", "beds", "bathrooms"],
         },
-      ];
+    ];
+
+    const handleSubmit = async (event) => {
+
+        event.preventDefault();
+
+        try {
+            const response = await fetch("/api/lease-1", {
+                //"/api/lease-1"
+                //"http://localhost:4000/api/lease-1"
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+            console.log(data);
+
+            if (data.message === "Lease 1 created successfully!") {
+                setMessage(data.message);
+                navigate('/lease-2')
+            } 
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     return (
         <div className="flex justify-center font-nunito font-semibold text-slate-700 bg-lease-bg bg-cover bg-opacity-25">
@@ -61,9 +93,9 @@ const Lease1 = () => {
         <div className="relative w-10 flex flex-col items-center">
             <div className="absolute top-24 bottom-0 w-3 bg-white bg-opacity-70"/>
             {slides.map((_, index) => (
-            <div key={index} className="relative z-10 flex items-center justify-center w-10 h-10 mt-16 mb-80 bg-red-400 text-white text-xl rounded-full">
-                {index + 1}
-            </div>
+                <div key={index} className="relative z-10 flex items-center justify-center w-10 h-10 mt-16 mb-80 bg-red-400 text-white text-xl rounded-full">
+                    {index + 1}
+                </div>
             ))}
         </div>
         {/* Slides */}
@@ -76,7 +108,12 @@ const Lease1 = () => {
                     {slide.options.map((item, index) => (
                     <div
                         key={index}
-                        className="border border-[rgb(232,240,232)] border-2 p-3 rounded-lg hover:shadow-lg cursor-pointer flex flex-col items-center gap-3"
+                        onClick={() => {
+                            setSelectedType(item);
+                            setFormData(prev => ({ ...prev, type: item }));
+                        }}
+                        className={`border border-[rgb(232,240,232)] border-2 p-3 rounded-lg hover:shadow-lg cursor-pointer flex flex-col items-center gap-3 
+                        ${selectedType === item ? "border-teal-700 shadow-md" : "border-[rgb(232,240,232)]"}`}
                     >
                         <span className="text-4xl text-cyan-900">
                             {slide.extra?.[index]}
@@ -90,7 +127,12 @@ const Lease1 = () => {
                     {slide.options.map((item, index) => (
                     <div
                         key={index}
-                        className="border border-[rgb(232,240,232)] border-2 p-4 rounded-lg hover:shadow-lg cursor-pointer text-xl flex flex-col"
+                        onClick={() => {
+                            setSelectedSpace(item);
+                            setFormData(prev => ({ ...prev, space: item }));
+                        }}
+                        className={`border border-[rgb(232,240,232)] border-2 p-4 rounded-lg hover:shadow-lg cursor-pointer text-xl flex flex-col
+                        ${selectedSpace === item ? "border-teal-700 shadow-md" : "border-[rgb(232,240,232)]"}`}
                     >
                         <span className="text-xl">{item}</span>
                         <span className="text-sm text-slate-500 font-normal">
@@ -102,33 +144,32 @@ const Lease1 = () => {
                 ) : slide.options.length === 4 ? ( 
                     <div className="grid grid-cols-1 gap-2 bg-white rounded-lg p-3">
                         <div className='border border-[rgb(232,240,232)] rounded-lg border-2 p-3'>
-                        {['guests', 'bedrooms', 'beds', 'bathrooms'].map((field) => (
-                            <div key={field} className="flex items-center justify-between mb-4">
-                            
-                            <label className="mb-2 text-gray-700 capitalize font-medium">
-                                {field}
-                            </label>
-                            <div className="flex items-center space-x-1">
-                                <button
-                                    type="button"
-                                    onClick={() => handleDecrement(field)}
-                                    className="w-10 h-10 text-lg font-bold text-gray-400 hover:bg-gray-200 border rounded-full"
-                                >
-                                −
-                                </button>
+                        {slide.options.map((item, index) => (
+                            <div key={index} className="flex items-center justify-between mb-4">
+                                <label className="mb-2 text-gray-700 capitalize font-medium">
+                                    {item}
+                                </label>
+                                <div className="flex items-center space-x-1">
+                                    <button
+                                        type="button"
+                                        onClick={() => handleDecrement(item)}
+                                        className="w-10 h-10 text-lg font-bold text-gray-400 hover:bg-gray-200 border rounded-full"
+                                    >
+                                    −
+                                    </button>
 
-                                <span className="w-10 text-center text-lg font-semibold text-slate-600">
-                                {formData[field]}
-                                </span>
-                                
-                                <button
-                                    type="button"
-                                    onClick={() => handleIncrement(field)}
-                                    className="w-10 h-10 text-lg font-bold text-gray-400 hover:bg-gray-200 border rounded-full"
-                                >
-                                +
-                                </button>
-                            </div>
+                                    <span className="w-10 text-center text-lg font-semibold text-slate-600">
+                                    {formData[item]}
+                                    </span>
+                                    
+                                    <button
+                                        type="button"
+                                        onClick={() => handleIncrement(item)}
+                                        className="w-10 h-10 text-lg font-bold text-gray-400 hover:bg-gray-200 border rounded-full"
+                                    >
+                                    +
+                                    </button>
+                                </div>
                             </div>
                         ))}
                         </div>

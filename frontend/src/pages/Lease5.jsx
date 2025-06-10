@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { v4 as uuidv4 } from 'uuid';
@@ -10,6 +10,38 @@ const Lease5 = () => {
     const [dateRanges, setDateRanges] = useState([{ id: uuidv4(), startDate: null, endDate: null }]);
     const [activeInput, setActiveInput] = useState({ index: null, type: null });
     const datepickerRef = useRef([]);
+    const [formData, setFormData] = useState({
+        rent: "",
+        baseRent: "",
+        utilities: "",
+        water: "",
+        electricity: "",
+        availability: dateRanges,
+    });
+
+    useEffect(() => {
+        const { baseRent, water, electricity } = formData;
+
+        if (baseRent && water && electricity) {
+            const totalUtilities = Number(water) + Number(electricity);
+            const total = totalUtilities + Number(baseRent);
+
+            setFormData(prev => ({
+                ...prev,
+                rent: total,
+                utilities: totalUtilities
+            }));
+        }
+    }, [formData.baseRent, formData.water, formData.electricity]);
+
+    const handleChange = (event) => {
+        setFormData(prevState => {
+            const updatedFormData = {...prevState,[event.target.name]: event.target.value};
+
+            return updatedFormData;
+        })
+        console.log(formData)
+    }
 
     const handleDateChange = (dates, index) => {
         const [start, end] = dates;
@@ -35,6 +67,33 @@ const Lease5 = () => {
         }
     ]
 
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        try {
+            const response = await fetch("/api/lease-5", {
+                //"/api/lease-5"
+                //"http://localhost:4000/api/lease-5"
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+            console.log(data);
+
+            if (data.message === "Lease 5 created successfully!") {
+                setMessage(data.message);
+                //navigate('/')
+            } 
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     return (
         <div className="flex justify-center font-nunito font-semibold text-slate-700 bg-lease-bg bg-cover bg-opacity-25">
         <div className="flex min-h-screen">
@@ -51,16 +110,18 @@ const Lease5 = () => {
         <div className="flex flex-col gap-12 p-10">
             <div className="bg-white bg-opacity-70 p-10 pt-6 pb-0 rounded-lg shadow-md">
                 <h2 className="text-2xl font-semibold mb-2">Monthly rent.</h2>
+                <h4 className="text-lg font-light mb-4">Enter the base rent, water, and electricity.</h4>
                 <div className='flex flex-row border border-gray-500 rounded-md mb-6 p-1'>
                     <h4 className="text-3xl mx-3 mt-4">$</h4>
                     <textarea
                         className='bg-[rgb(232,240,232)] bg-opacity-70 focus:outline-none rounded-md p-4 w-full font-thin text-2xl'
-                        type="text" 
+                        type="number" 
                         name="rent"
                         rows='1'
-                        //onChange={handleTitleChange}
+                        value={formData.rent}
                         pattern="^[0-9 ]+$"
-                        required
+                        readOnly
+
                     >
                     </textarea>
                 </div>
@@ -73,10 +134,10 @@ const Lease5 = () => {
                             <h4 className="text-xs mr-1 mt-0.5">$</h4>
                             <textarea
                                 className='bg-[rgb(232,240,232)] bg-opacity-70 focus:outline-none rounded-md w-1/2 font-thin text-sm'
-                                type="text" 
-                                name="rent"
+                                type="number" 
+                                name="baseRent"
                                 rows='1'
-                                //onChange={handleTitleChange}
+                                onChange={handleChange}
                                 pattern="^[0-9 ]+$"
                                 required
                             >
@@ -89,12 +150,12 @@ const Lease5 = () => {
                             <h4 className="text-xs mr-1 mt-0.5">$</h4>
                             <textarea
                                 className='bg-[rgb(232,240,232)] bg-opacity-70 focus:outline-none rounded-md w-1/2 font-thin text-sm'
-                                type="text" 
-                                name="rent"
+                                type="number" 
+                                name="utilities"
                                 rows='1'
-                                //onChange={handleTitleChange}
+                                value={formData.utilities}
                                 pattern="^[0-9 ]+$"
-                                required
+                                readOnly
                             >
                             </textarea>
                         </div>
@@ -105,10 +166,10 @@ const Lease5 = () => {
                             <h4 className="text-xs mr-1 mt-0.5">$</h4>
                             <textarea
                                 className='bg-[rgb(232,240,232)] bg-opacity-70 focus:outline-none rounded-md w-1/2 font-thin text-sm'
-                                type="text" 
-                                name="rent"
+                                type="number" 
+                                name="water"
                                 rows='1'
-                                //onChange={handleTitleChange}
+                                onChange={handleChange}
                                 pattern="^[0-9 ]+$"
                                 required
                             >
@@ -121,10 +182,10 @@ const Lease5 = () => {
                             <h4 className="text-xs mr-1 mt-0.5">$</h4>
                             <textarea
                                 className='bg-[rgb(232,240,232)] bg-opacity-70 focus:outline-none rounded-md w-1/2 font-thin text-sm'
-                                type="text" 
-                                name="rent"
+                                type="number" 
+                                name="electricity"
                                 rows='1'
-                                //onChange={handleTitleChange}
+                                onChange={handleChange}
                                 pattern="^[0-9 ]+$"
                                 required
                             >
@@ -138,12 +199,12 @@ const Lease5 = () => {
                             <h4 className="text-xs mr-1 mt-0.5">$</h4>
                             <textarea
                                 className='bg-[rgb(232,240,232)] bg-opacity-70 focus:outline-none rounded-md w-1/2 font-thin text-sm'
-                                type="text" 
+                                type="number" 
                                 name="rent"
                                 rows='1'
-                                //onChange={handleTitleChange}
+                                value={formData.rent}
                                 pattern="^[0-9 ]+$"
-                                required
+                                readOnly
                             >
                             </textarea>
                         </div>

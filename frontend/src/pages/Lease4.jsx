@@ -23,7 +23,7 @@ const Lease4 = () => {
             id: uuidv4(),
         }));
 
-        setPhotos((prevPhotos) => [...prevPhotos, ...newPhotos])
+        setPhotos((prevPhotos) => [...prevPhotos, ...newPhotos]) 
     }
 
     const handleRemovePhoto = (id) => {
@@ -43,7 +43,9 @@ const Lease4 = () => {
     const handleDrop = (event) => {
         event.preventDefault();
         event.stopPropagation();
+
         const droppedFiles = event.dataTransfer.files;
+
         if (droppedFiles && droppedFiles.length > 0) {
             const files = Array.from(droppedFiles);
 
@@ -51,7 +53,7 @@ const Lease4 = () => {
                 file,
                 preview: URL.createObjectURL(file),
                 id: uuidv4(),
-                }));
+            }));
 
             setPhotos((prevPhotos) => [...prevPhotos, ...newPhotos]);
         }
@@ -60,7 +62,7 @@ const Lease4 = () => {
     const handleDragOver = (e) => {
         e.preventDefault();
         e.stopPropagation();
-      };
+    };
 
     const handleTitleChange = (e) => {
         setTitle(e.target.value);
@@ -111,6 +113,43 @@ const Lease4 = () => {
         }
     ]
 
+    const handleSubmit = async (event) => {
+  
+        event.preventDefault();
+
+        try {
+            const form = new FormData();
+
+            form.append("title", title);
+            form.append("description", description);
+            photos.forEach((photo, index) => {
+                form.append("photos", photo.file)
+            });
+
+            const response = await fetch("/api/lease-4", {
+                //"/api/lease-4"
+                //"http://localhost:4000/api/lease-4"
+                method: "POST",
+                body: form
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to submit data");
+            }
+
+            const data = await response.json();
+            console.log(data.message);
+
+            if (data.message === "Lease 4 submitted successfully.") {
+                setMessage(data.message);
+                navigate('/lease-5')
+            } 
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     return (
         <div className="flex justify-center font-nunito font-semibold text-slate-700 bg-lease-bg bg-cover bg-opacity-25">
         <div className="flex min-h-screen">
@@ -118,7 +157,8 @@ const Lease4 = () => {
         <div className="relative w-10 flex flex-col items-center">
             <div className="absolute top-24 bottom-0 w-3 bg-white bg-opacity-70"/>
             {slides.map((_, index) => (
-            <div key={index} className="relative z-10 flex items-center justify-center w-10 h-10 mt-16 mb-80 bg-red-400 text-white text-xl rounded-full">
+            <div key={index} className={`relative z-10 flex items-center justify-center w-10 h-10 mt-16 bg-red-400 text-white text-xl rounded-full
+                ${photos.length > 3 ? "mb-[30rem]" : "mb-80"}`}>
                 {index + 7}
             </div>
             ))}
@@ -182,8 +222,8 @@ const Lease4 = () => {
                     value={description}
                     placeholder="Ex. 4 mins from subway J, M, N - Marcy Avenue (1 stop from Manhattan)"
                     rows='10'
-                    onChange={handleDescriptionChange}
                     onBeforeInput={handleBeforeDesInput}
+                    onChange={handleDescriptionChange}
                     pattern="^[A-Za-z0-9 ]+$"
                     required
                 >
@@ -201,8 +241,8 @@ const Lease4 = () => {
                     value={title}
                     placeholder="Ex. Cozy room near UC Davis"
                     rows='3'
-                    onChange={handleTitleChange}
                     onBeforeInput={handleBeforeTitleInput}
+                    onChange={handleTitleChange}
                     pattern="^[A-Za-z0-9 ]+$"
                     required
                 >
