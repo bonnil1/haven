@@ -1,6 +1,20 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
+import { MdOutlineLocalLaundryService } from "react-icons/md";
+import { GiWashingMachine } from "react-icons/gi";
+import { FaWifi } from "react-icons/fa";
+import { FaFire } from "react-icons/fa6";
+import { FaRegSnowflake } from "react-icons/fa";
+import { FaCar } from "react-icons/fa6";
+import { ImTv } from "react-icons/im";
+import { TbToolsKitchen3 } from "react-icons/tb";
+import { FaCouch } from "react-icons/fa";
+import { CgGym } from "react-icons/cg";
+import { MdOutlinePool } from "react-icons/md";
+import { FaPaw } from "react-icons/fa";
+import { LuAlarmSmoke } from "react-icons/lu";
+import { FaFireExtinguisher } from "react-icons/fa6";
 
 const Lease2 = () => {
 
@@ -18,17 +32,21 @@ const Lease2 = () => {
         {
             title: "Tell guests what your place has to offer.",
             options:['In-unit laundry', 'Building laundry', 'Wifi', 'Heater', 'Air conditioning', 'Parking',
-                'TV', 'Kitchen', 'Fully furnished', 'Gym', 'Pool', 'Pet friendly']
+                'TV', 'Kitchen', 'Furnished', 'Gym', 'Pool', 'Pet friendly'],
+            icon: [<MdOutlineLocalLaundryService />, <GiWashingMachine />, <FaWifi />, <FaFire />, <FaRegSnowflake />,
+                <FaCar />, <ImTv />, <TbToolsKitchen3 />, <FaCouch />, <CgGym />, <MdOutlinePool />, <FaPaw />]
         },
         {
             title: "Safety features.",
             options: ["Smoke detector", "CO detector", "Fire extinguisher"],
+            icons: [<LuAlarmSmoke />, <LuAlarmSmoke />, <FaFireExtinguisher />]
         },
     ]
     
     const handleSubmit = async (event) => {
         
         event.preventDefault();
+        console.log(formData)
 
         try {
             const response = await fetch("/api/lease-2", {
@@ -69,13 +87,13 @@ const Lease2 = () => {
         </div>
 
         {/* Slides */}
-        <div className="flex flex-col gap-12 p-10">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-12 p-10">
             <div className="bg-white bg-opacity-70 p-10 pt-6 pb-0 rounded-lg shadow-md">
                 <h2 className="text-2xl font-semibold mb-1">Tell guests what your place has to offer.</h2>
                 <h4 className="text-lg font-light mb-4">Select items that apply.</h4>
                 <div className="grid grid-cols-3 gap-2 bg-white rounded-lg p-3 mb-6">
                     {['In-unit laundry', 'Building laundry', 'Wifi', 'Heater', 'Air conditioning', 'Parking',
-                    'TV', 'Kitchen', 'Fully furnished', 'Gym', 'Pool', 'Pet friendly'].map((item) => (
+                    'TV', 'Kitchen', 'Furnished', 'Gym', 'Pool', 'Pet friendly'].map((item) => (
                         <div
                             key={item}
                             onClick={() => {
@@ -84,7 +102,7 @@ const Lease2 = () => {
                                     ? formData.amenities.filter(a => a !== item) // creates a new array with that item removed
                                     : [...formData.amenities, item] // creates a new array with the item added to the end
                                 setKitchen(updatedAmenities.includes('Kitchen'));
-                                setFurniture(updatedAmenities.includes('Fully furnished'));
+                                setFurniture(updatedAmenities.includes('Furnished'));
                                 setFormData(prev => ({ ...prev, amenities: updatedAmenities }));
                                 setSelectedAmenities(updatedAmenities);
                             }}
@@ -189,11 +207,13 @@ const Lease2 = () => {
             <div className='flex justify-end'>
                 <button
                     className="text-white bg-[rgb(232,240,232)] bg-opacity-50 font-bold rounded-full w-1/4"
+                    type="submit"
                 >
-                <NavLink to="/lease-3">Next</NavLink> 
+                {/* <NavLink to="/lease-3">Next</NavLink> */}
+                Next
                 </button>  
             </div>
-        </div>         
+        </form>         
         </div>     
         </div>
     )

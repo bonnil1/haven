@@ -84,7 +84,9 @@ const Lease3 = () => {
     ]
 
     const handleSubmit = async (event) => {
+
         event.preventDefault();
+        console.log(address)
 
         try {
             const response = await fetch("/api/lease-3", {
@@ -123,11 +125,12 @@ const Lease3 = () => {
             ))}
             </div>
         {/* Slides */}
-        <div className="flex flex-col gap-12 p-10">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-12 p-10">
             <div className="bg-white bg-opacity-70 p-10 pt-6 pb-0 rounded-lg shadow-md">
                 <h2 className="text-2xl font-semibold mb-1">Where is the place located?</h2>
                 <h4 className="text-lg font-light mb-4">The address will be kept private until you confirm the reservation.</h4>
                 <div className='mb-6'>
+                {typeof window !== 'undefined' && window.google && (
                 <GoogleMap mapContainerStyle={containerStyle} center={mapCenter} zoom={14}>
                     <Autocomplete onLoad={(ref) => (autoCompleteRef.current = ref)} onPlaceChanged={onPlaceChanged}>
                     <input
@@ -152,6 +155,7 @@ const Lease3 = () => {
                     </Autocomplete>
                     <Marker position={markerPosition} />
                 </GoogleMap>
+                )}
                 </div>
    
             </div>
@@ -159,7 +163,7 @@ const Lease3 = () => {
             <div className="bg-white bg-opacity-70 p-10 pt-6 pb-0 rounded-lg shadow-md">
                 <h2 className="text-2xl font-semibold mb-1">Confirm the address.</h2>
                 <h4 className="text-lg font-light mb-4">Please check all details before we continue...</h4>
-                <form onSubmit={handleSubmit} className='rounded-lg bg-white p-4 mb-6'>
+                <div className='rounded-lg bg-white p-4 mb-6'>
                     <div className='flex flex-col w-full border border-[rgb(232,240,232)] border-2 p-4 rounded-lg'>
                         <div className='flex flex-col'>
                             <label className='text-xs'>Street Address</label>
@@ -239,17 +243,19 @@ const Lease3 = () => {
                             </input>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
 
             <div className='flex justify-end'>
                 <button
                     className="text-white bg-[rgb(232,240,232)] bg-opacity-50 font-bold rounded-full w-1/4"
+                    type="submit"
                 >
-                <NavLink to="/lease-4">Next</NavLink> 
+                {/* <NavLink to="/lease-4">Next</NavLink> */}
+                Next
                 </button>  
             </div>
-        </div>     
+        </form>     
         </div>
         </div>
     )

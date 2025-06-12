@@ -41,12 +41,12 @@ const Lease1 = () => {
         {
             title: "Which of these best describe your place?",
             options: ["House", "Apartment", "Condo", "Cottage", "Guesthouse", "Hotel"],
-            extra: [<FaHouseChimney />, <MdApartment />, <FaBuilding />, <MdCottage />, <HiHomeModern />, <FaHotel />]
+            icon: [<FaHouseChimney />, <MdApartment />, <FaBuilding />, <MdCottage />, <HiHomeModern />, <FaHotel />]
         },
         {
             title: "What type of place will your guest stay?",
             options: ["An entire place", "A private room", "A shared room"],
-            extra: [
+            icon: [
                 "Guests will have the entire place to themselves.",
                 "Guests will have a private room to themselves in a shared home.",
                 "Guests will share the room with another person."
@@ -61,6 +61,7 @@ const Lease1 = () => {
     const handleSubmit = async (event) => {
 
         event.preventDefault();
+        console.log(formData)
 
         try {
             const response = await fetch("/api/lease-1", {
@@ -99,7 +100,7 @@ const Lease1 = () => {
             ))}
         </div>
         {/* Slides */}
-        <div className="flex flex-col gap-12 p-10">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-12 p-10">
             {slides.map((slide, index) => (
             <section key={index} className="bg-white bg-opacity-70 p-8 pt-6 rounded-lg shadow-md">
                 <h2 className="text-2xl font-semibold mb-4">{slide.title}</h2>
@@ -116,7 +117,7 @@ const Lease1 = () => {
                         ${selectedType === item ? "border-teal-700 shadow-md" : "border-[rgb(232,240,232)]"}`}
                     >
                         <span className="text-4xl text-cyan-900">
-                            {slide.extra?.[index]}
+                            {slide.icon?.[index]}
                         </span>
                         <span className='text-lg'>{item}</span>
                     </div>
@@ -136,7 +137,7 @@ const Lease1 = () => {
                     >
                         <span className="text-xl">{item}</span>
                         <span className="text-sm text-slate-500 font-normal">
-                            {slide.extra?.[index]}
+                            {slide.icon?.[index]}
                         </span>
                     </div>
                     ))}
@@ -181,11 +182,13 @@ const Lease1 = () => {
             <div className='flex justify-end'>
                 <button
                 className="text-white bg-[rgb(232,240,232)] bg-opacity-50 font-bold rounded-full w-1/4"
-            >
-                <NavLink to="/lease-2">Next</NavLink> 
+                type="submit"
+                >
+                {/* <NavLink to="/lease-2">Next</NavLink> */}
+                Next
             </button>  
             </div>     
-        </div>
+        </form>
         </div>
         </div>
     );

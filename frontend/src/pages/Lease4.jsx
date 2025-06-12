@@ -126,6 +126,12 @@ const Lease4 = () => {
                 form.append("photos", photo.file)
             });
 
+            {/* to check form
+            for (const [key, value] of form.entries()) {
+                console.log(`${key}:`, value);
+            }
+            */}
+
             const response = await fetch("/api/lease-4", {
                 //"/api/lease-4"
                 //"http://localhost:4000/api/lease-4"
@@ -164,10 +170,10 @@ const Lease4 = () => {
             ))}
             </div>
         {/* Slides */}
-        <div className="flex flex-col gap-12 p-10">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-12 p-10">
             <div className="bg-white bg-opacity-70 p-10 pt-6 pb-6 rounded-lg shadow-md">
                 <h2 className="text-2xl font-semibold mb-1">Add some photos for your listing.</h2>
-                <h4 className="text-lg font-light mb-4">You'll need to add 5 photos to get started. You can add more or make changes later.</h4>
+                <h4 className="text-lg font-light mb-4">You'll need to add 5 photos to get started. </h4>
                 <div className={`transition-all duration-500 ease-in-out overflow-hidden w-full ${photos.length > 0 ? "h-16" : "aspect-[3/1]"}`}
                     onDrop={handleDrop} onDragOver={handleDragOver}
                     >
@@ -253,11 +259,13 @@ const Lease4 = () => {
             <div className='flex justify-end'>
                 <button
                     className="text-white bg-[rgb(232,240,232)] bg-opacity-50 font-bold rounded-full w-1/4"
+                    type="submit"
                 >
-                <NavLink to="/lease-5">Next</NavLink> 
+                {/* <NavLink to="/lease-5">Next</NavLink> */}
+                Next
                 </button>  
             </div>
-        </div>     
+        </form>     
         </div>
         </div>
     )

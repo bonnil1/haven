@@ -16,7 +16,6 @@ const Lease5 = () => {
         utilities: "",
         water: "",
         electricity: "",
-        availability: dateRanges,
     });
 
     useEffect(() => {
@@ -47,6 +46,7 @@ const Lease5 = () => {
         const [start, end] = dates;
         const updated = [...dateRanges];
         updated[index] = { ...updated[index], startDate: start, endDate: end };
+        console.log(updated)
         setDateRanges(updated)
     }
 
@@ -68,7 +68,15 @@ const Lease5 = () => {
     ]
 
     const handleSubmit = async (event) => {
+
         event.preventDefault();
+        
+
+        const payload = {
+            ...formData,
+            availability: dateRanges, // Use the up-to-date value directly here
+        };
+        console.log(payload)
 
         try {
             const response = await fetch("/api/lease-5", {
@@ -78,7 +86,7 @@ const Lease5 = () => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(payload)
             });
 
             const data = await response.json();
@@ -107,7 +115,7 @@ const Lease5 = () => {
             ))}
             </div>
         {/* Slides */}
-        <div className="flex flex-col gap-12 p-10">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-12 p-10">
             <div className="bg-white bg-opacity-70 p-10 pt-6 pb-0 rounded-lg shadow-md">
                 <h2 className="text-2xl font-semibold mb-2">Monthly rent.</h2>
                 <h4 className="text-lg font-light mb-4">Enter the base rent, water, and electricity.</h4>
@@ -288,11 +296,13 @@ const Lease5 = () => {
             <div className='flex justify-end'>
                 <button
                     className="text-white bg-[rgb(232,240,232)] bg-opacity-50 font-bold rounded-full w-1/4"
+                    type="submit"
                 >
-                <NavLink to="/lease-5">Submit</NavLink> 
+                {/* <NavLink to="/lease-5">Submit</NavLink> */}
+                Next
                 </button>  
             </div>
-        </div>     
+        </form>     
         </div>
         </div>
     )
