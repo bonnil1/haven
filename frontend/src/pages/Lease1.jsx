@@ -6,7 +6,8 @@ import { FaBuilding } from "react-icons/fa";
 import { MdCottage } from "react-icons/md";
 import { HiHomeModern } from "react-icons/hi2";
 import { FaHotel } from "react-icons/fa";
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { saveToSession, loadFromSession } from '../utils/sessionStorage';
 
 const Lease1 = () => {
 
@@ -19,9 +20,18 @@ const Lease1 = () => {
         bathrooms: 1,
     });
 
-    const [selectedType, setSelectedType] = useState("");
-    const [selectedSpace, setSelectedSpace] = useState("")
+    const [selectedType, setSelectedType] = useState(() => {
+        const savedForm = sessionStorage.getItem('form1');
+        const type = savedForm ? JSON.parse(savedForm).type : null;
+        return type
+    });
+    const [selectedSpace, setSelectedSpace] = useState(() => {
+        const savedForm = sessionStorage.getItem('form1');
+        const space = savedForm ? JSON.parse(savedForm).space : null;
+        return space
+    });
     const [message, setMessage] = useState("")
+    const navigate = useNavigate();
 
     const handleIncrement = (item) => {
         setFormData((prev) => ({
@@ -87,22 +97,37 @@ const Lease1 = () => {
         }
     }
 
+    useEffect(() => {
+        const stored = loadFromSession('form1');
+        if (stored) setFormData(stored);
+        //console.log(stored)
+    }, []);
+  
+    const handleNext = (e) => {
+      e.preventDefault();
+      saveToSession('form1', formData);
+      navigate('/lease-2');
+    };
+
     return (
         <div className="flex justify-center font-nunito font-semibold text-slate-700 bg-lease-bg bg-cover bg-opacity-25">
         <div className="flex min-h-screen">
         {/* Sidebar */}
-        <div className="relative w-10 flex flex-col items-center">
-            <div className="absolute top-24 bottom-0 w-3 bg-white bg-opacity-70"/>
+        <div className="relative w-10 flex flex-col items-center pt-10">
+            <div className="absolute top-12 bottom-28 w-3 bg-white bg-opacity-70 rounded-md" />
             {slides.map((_, index) => (
-                <div key={index} className="relative z-10 flex items-center justify-center w-10 h-10 mt-16 mb-80 bg-red-400 text-white text-xl rounded-full">
+                <div
+                    key={index}
+                    className="relative z-10 flex items-center justify-center w-10 h-10 mb-96 bg-red-400 text-white text-xl rounded-full"
+                >
                     {index + 1}
                 </div>
             ))}
-        </div>
+            </div>
         {/* Slides */}
-        <form onSubmit={handleSubmit} className="flex flex-col gap-12 p-10">
+        <form onSubmit={handleNext} className="flex flex-col gap-12 p-10">
             {slides.map((slide, index) => (
-            <section key={index} className="bg-white bg-opacity-70 p-8 pt-6 rounded-lg shadow-md">
+            <section key={index} className="bg-white bg-opacity-70 p-8 pt-6 rounded-lg shadow-md w-[42rem]">
                 <h2 className="text-2xl font-semibold mb-4">{slide.title}</h2>
                 {slide.options.length === 6 ? (
                 <div className="grid grid-cols-3 gap-2 bg-white rounded-lg p-3">

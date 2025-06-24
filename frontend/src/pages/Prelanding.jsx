@@ -1,5 +1,5 @@
 import React from 'react'
-import Landing from './Search'
+import Landing from './Landing'
 import ListProperty from './ListProperty'
 import { NavLink } from 'react-router-dom'
 import { FaArrowRight } from "react-icons/fa6";

@@ -7,7 +7,7 @@ import Password from './pages/Password';
 import Profile from './pages/Profile';
 import Login from './pages/Login';
 import Prelanding from './pages/Prelanding';
-import Search from './pages/Search'
+import Landing from './pages/Landing'
 import Rentals from './pages/Rentals';
 import Show from './pages/Show';
 import HousingRequest from './pages/HousingRequest';
@@ -64,7 +64,7 @@ return (
         <Route path='/signup/pw/profile' element={<Profile />}/>
         <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} />}/>
         <Route path='/' element={<Prelanding closeMenu={closeMenu} />}/>
-        <Route path='/home' element={<Search closeMenu={closeMenu}/>} />
+        <Route path='/home' element={<Landing closeMenu={closeMenu}/>} />
         <Route path='/home/rentals' element={<Rentals />}/>
         <Route path='/home/rentals/show' element={<Show />}/>
         <Route path='/housing-request' element={<HousingRequest />}/>

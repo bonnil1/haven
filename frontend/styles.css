@@ -77,8 +77,8 @@
 /* Hovered over date */
 .react-datepicker__day:hover {  
     cursor: pointer;
-    background-color: #e8f0e8 !important;
-    color: #ed7063;
+    background-color: #ed7063 !important;
+    color: white;
 }
 
 /* Selecting */
@@ -101,7 +101,7 @@
 .react-datepicker__day--range-start,
 .react-datepicker__day--range-end {
     background-color: #ed7063 !important;
-    color: white;
+    color: white !important;
 }
 
 /* Dates between start and end */
@@ -113,13 +113,7 @@
 /* Selected date */
 .react-datepicker__day--selected {
     background-color: #ed7063 !important;
-    color: white;
-}
-  
-/* Today's date */
-.react-datepicker__day--today {
-    font-weight: bolder;
-    background-color: white;
+    color: white !important;
 }
 
 .availability-calendar .react-datepicker__day--today {
@@ -128,8 +122,8 @@
 }
 
 .react-datepicker__day--today:hover {
-    font-weight: 900;
-    background-color: white !important;
+    color: white;
+    background-color: #ed7063 !important;
 }
 
 /* Preselected day in later months */

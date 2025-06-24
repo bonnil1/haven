@@ -1,11 +1,13 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom';
-import { useState, useRef } from "react";
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useState, useRef, useEffect } from "react";
 import { GoogleMap, Autocomplete, Marker } from '@react-google-maps/api';
+import { saveToSession, loadFromSession } from '../utils/sessionStorage';
 
 const containerStyle = {
     width: '100%',
     height: '300px',
+    borderRadius: '10px',
 };
   
 const center = {
@@ -31,6 +33,7 @@ const Lease3 = () => {
     const [mapCenter, setMapCenter] = useState(center);
     const [markerPosition, setMarkerPosition] = useState(center);
     const autoCompleteRef = useRef(null);
+    const navigate = useNavigate();
 
     const onPlaceChanged = () => {
         const place = autoCompleteRef.current.getPlace();
@@ -112,25 +115,41 @@ const Lease3 = () => {
         }
     }
 
+    useEffect(() => {
+        const stored = loadFromSession('form3');
+        if (stored) setAddress(stored);
+        console.log(stored)
+    }, []);
+    
+    const handleNext = (e) => {
+        e.preventDefault();
+        saveToSession('form3', address);
+        navigate('/lease-4');
+    };
+
     return (
         <div className="flex justify-center font-nunito font-semibold text-slate-700 bg-lease-bg bg-cover bg-opacity-25">
         <div className="flex min-h-screen">
         {/* Sidebar */}
-        <div className="relative w-10 flex flex-col items-center">
-            <div className="absolute top-24 bottom-0 w-3 bg-white bg-opacity-70"/>
+        <div className="relative w-10 flex flex-col items-center pt-10">
+            <div className="absolute top-12 bottom-28 w-3 bg-white bg-opacity-70 rounded-md" />
             {slides.map((_, index) => (
-            <div key={index} className="relative z-10 flex items-center justify-center w-10 h-10 mt-16 mb-96 bg-red-400 text-white text-xl rounded-full">
-                {index + 5}
-            </div>
+                <div
+                    key={index}
+                    className="relative z-10 flex items-center justify-center w-10 h-10 mb-[27rem] bg-red-400 text-white text-xl rounded-full"
+                >
+                    {index + 5}
+                </div>
             ))}
             </div>
         {/* Slides */}
-        <form onSubmit={handleSubmit} className="flex flex-col gap-12 p-10">
-            <div className="bg-white bg-opacity-70 p-10 pt-6 pb-0 rounded-lg shadow-md">
+        <form onSubmit={handleNext} className="flex flex-col gap-12 p-10">
+            <div className="bg-white bg-opacity-70 p-10 pt-6 pb-0 rounded-lg shadow-md w-[42rem]">
                 <h2 className="text-2xl font-semibold mb-1">Where is the place located?</h2>
                 <h4 className="text-lg font-light mb-4">The address will be kept private until you confirm the reservation.</h4>
                 <div className='mb-6'>
-                {typeof window !== 'undefined' && window.google && (
+                    {/* fixes re-rendering problem from type=submit */}
+                {typeof window !== 'undefined' && window.google && ( 
                 <GoogleMap mapContainerStyle={containerStyle} center={mapCenter} zoom={14}>
                     <Autocomplete onLoad={(ref) => (autoCompleteRef.current = ref)} onPlaceChanged={onPlaceChanged}>
                     <input
@@ -246,7 +265,12 @@ const Lease3 = () => {
                 </div>
             </div>
 
-            <div className='flex justify-end'>
+            <div className='flex justify-between'>
+                <button
+                    className="text-white text-opacity-70 bg-[rgb(232,240,232)] bg-opacity-30 font-bold rounded-full w-1/4"
+                >
+                    <NavLink to="/lease-2">Back</NavLink>
+                </button> 
                 <button
                     className="text-white bg-[rgb(232,240,232)] bg-opacity-50 font-bold rounded-full w-1/4"
                     type="submit"

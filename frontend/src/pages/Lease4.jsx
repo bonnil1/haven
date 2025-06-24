@@ -1,154 +1,102 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom';
-import { useState } from 'react';
+import React from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useState, useRef, useEffect } from 'react';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 import { v4 as uuidv4 } from 'uuid';
+import { saveToSession, loadFromSession } from '../utils/sessionStorage';
 
 const Lease4 = () => {
 
-    const [photos, setPhotos] = useState([])
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("")
-    const titleWordLimit = 32;
-    const descriptionWordLimit = 500;
+    const [dateRanges, setDateRanges] = useState([{ id: uuidv4(), startDate: null, endDate: null }]);
+    const [activeInput, setActiveInput] = useState({ index: null, type: null });
+    const datepickerRef = useRef([]);
+    const [formData, setFormData] = useState({
+        rent: "",
+        baseRent: "",
+        utilities: "",
+        water: "",
+        electricity: "",
+    });
+    const navigate = useNavigate();
 
-    const getWordCount = (str) => 
-        str.trim().split(/\s+/).filter((word) => word.length > 0).length;
+    useEffect(() => {
+        const { baseRent, water, electricity } = formData;
 
-    const handlePhotoChange = (e) => {
-        const files = Array.from(e.target.files);
+        if (baseRent && water && electricity) {
+            const totalUtilities = Number(water) + Number(electricity);
+            const total = totalUtilities + Number(baseRent);
 
-        const newPhotos = files.map((file) => ({
-            file,
-            preview: URL.createObjectURL(file),
-            id: uuidv4(),
-        }));
-
-        setPhotos((prevPhotos) => [...prevPhotos, ...newPhotos]) 
-    }
-
-    const handleRemovePhoto = (id) => {
-        setPhotos((prevPhotos) => {
-            const updated = prevPhotos.filter((photo) => photo.id !== id)
-
-            const removedPhoto = prevPhotos.find((photo) => photo.id === id)
-
-            if (removedPhoto) {
-                URL.revokeObjectURL(removedPhoto.preview);
-            }
-
-            return updated;
-        })
-    }
-
-    const handleDrop = (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-
-        const droppedFiles = event.dataTransfer.files;
-
-        if (droppedFiles && droppedFiles.length > 0) {
-            const files = Array.from(droppedFiles);
-
-            const newPhotos = files.map((file) => ({
-                file,
-                preview: URL.createObjectURL(file),
-                id: uuidv4(),
+            setFormData(prev => ({
+                ...prev,
+                rent: total,
+                utilities: totalUtilities
             }));
-
-            setPhotos((prevPhotos) => [...prevPhotos, ...newPhotos]);
         }
-    };
+    }, [formData.baseRent, formData.water, formData.electricity]);
 
-    const handleDragOver = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-    };
+    const handleChange = (event) => {
+        setFormData(prevState => {
+            const updatedFormData = {...prevState,[event.target.name]: event.target.value};
 
-    const handleTitleChange = (e) => {
-        setTitle(e.target.value);
-    };
-
-    const handleDescriptionChange = (e) => {
-        setDescription(e.target.value);
-    };
-
-    const handleBeforeTitleInput = (e) => {
-        const newChar = e.data || '';
-        const inputValue = title;
-        const cursorPos = e.target.selectionStart;
-
-        const updatedText = inputValue.slice(0, cursorPos) + newChar + inputValue.slice(cursorPos);
-        const words = updatedText.trim().split(/\s+/).filter(Boolean);
-
-        if (words.length > titleWordLimit) {
-            e.preventDefault();
-          }
+            return updatedFormData;
+        })
+        console.log(formData)
     }
 
-    const handleBeforeDesInput = (e) => {
-        const newChar = e.data || '';
-        const inputValue = description;
-        const cursorPos = e.target.selectionStart;
-
-        const updatedText = inputValue.slice(0, cursorPos) + newChar + inputValue.slice(cursorPos);
-        const words = updatedText.trim().split(/\s+/).filter(Boolean);
-
-        if (words.length > descriptionWordLimit) {
-            e.preventDefault();
-          }
+    const handleDateChange = (dates, index) => {
+        const [start, end] = dates;
+        const updated = [...dateRanges];
+        updated[index] = { ...updated[index], startDate: start, endDate: end };
+        console.log(updated)
+        setDateRanges(updated)
     }
 
-    const titleWordCount = getWordCount(title)
-    const descriptionWordCount = getWordCount(description)
+    const handleAddRange = () => {
+        setDateRanges([...dateRanges, { id: uuidv4(), startDate: null, endDate: null }]);
+    };
+
+    const handleDeleteRange = (idToDelete) => {
+        setDateRanges(dateRanges.filter(range => range.id !== idToDelete));
+    };
 
     const slides = [
         {
-            title: "Add some photos for your listing.",
+            title: "Monthly rent.",
         },
         {
-            title: "Now, let's give your listing a title.",
-        },
-        {
-            title: "Write a description for your listing."
+            title: "Add availability.",
         }
     ]
 
     const handleSubmit = async (event) => {
-  
+
         event.preventDefault();
+        
+
+        const payload = {
+            ...formData,
+            availability: dateRanges, // Use the up-to-date value directly here
+        };
+        console.log(payload)
 
         try {
-            const form = new FormData();
-
-            form.append("title", title);
-            form.append("description", description);
-            photos.forEach((photo, index) => {
-                form.append("photos", photo.file)
-            });
-
-            {/* to check form
-            for (const [key, value] of form.entries()) {
-                console.log(`${key}:`, value);
-            }
-            */}
-
-            const response = await fetch("/api/lease-4", {
-                //"/api/lease-4"
-                //"http://localhost:4000/api/lease-4"
+            const response = await fetch("/api/lease-5", {
+                //"/api/lease-5"
+                //"http://localhost:4000/api/lease-5"
                 method: "POST",
-                body: form
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
             });
-
-            if (!response.ok) {
-                throw new Error("Failed to submit data");
-            }
 
             const data = await response.json();
-            console.log(data.message);
+            console.log(data);
 
-            if (data.message === "Lease 4 submitted successfully.") {
+            if (data.message === "Lease 5 created successfully!") {
                 setMessage(data.message);
-                navigate('/lease-5')
+                //navigate('/')
             } 
 
         } catch (error) {
@@ -156,112 +104,237 @@ const Lease4 = () => {
         }
     }
 
+    useEffect(() => {
+        const stored = loadFromSession('form4');
+        if (stored) {
+          if (stored.formData) {
+            setFormData(stored.formData);
+          }
+      
+          // Set dateRanges and ensure correct formatting
+          if (stored.dateRanges) {
+            const converted = stored.dateRanges.map((range) => ({
+                ...range,
+                id: range.id || uuidv4(),
+                startDate: range.startDate ? new Date(range.startDate) : null,
+                endDate: range.endDate ? new Date(range.endDate) : null,
+            }));
+            setDateRanges(converted);
+          }
+        }
+    }, []);
+    
+    const handleNext = (e) => {
+        e.preventDefault();
+        saveToSession('form4', {formData, dateRanges});
+        navigate('/lease-5');
+    };
+
     return (
         <div className="flex justify-center font-nunito font-semibold text-slate-700 bg-lease-bg bg-cover bg-opacity-25">
         <div className="flex min-h-screen">
         {/* Sidebar */}
         <div className="relative w-10 flex flex-col items-center">
-            <div className="absolute top-24 bottom-0 w-3 bg-white bg-opacity-70"/>
+            <div className="absolute top-12 bottom-44 w-3 bg-white bg-opacity-70 rounded-md"/>
             {slides.map((_, index) => (
-            <div key={index} className={`relative z-10 flex items-center justify-center w-10 h-10 mt-16 bg-red-400 text-white text-xl rounded-full
-                ${photos.length > 3 ? "mb-[30rem]" : "mb-80"}`}>
+            <div key={index} className="relative z-10 flex items-center justify-center w-10 h-10 mt-10 mb-96 bg-red-400 text-white text-xl rounded-full">
                 {index + 7}
             </div>
             ))}
             </div>
         {/* Slides */}
-        <form onSubmit={handleSubmit} className="flex flex-col gap-12 p-10">
-            <div className="bg-white bg-opacity-70 p-10 pt-6 pb-6 rounded-lg shadow-md">
-                <h2 className="text-2xl font-semibold mb-1">Add some photos for your listing.</h2>
-                <h4 className="text-lg font-light mb-4">You'll need to add 5 photos to get started. </h4>
-                <div className={`transition-all duration-500 ease-in-out overflow-hidden w-full ${photos.length > 0 ? "h-16" : "aspect-[3/1]"}`}
-                    onDrop={handleDrop} onDragOver={handleDragOver}
+        <form onSubmit={handleNext} className="flex flex-col gap-12 p-10">
+            <div className="bg-white bg-opacity-70 p-10 pt-6 pb-0 rounded-lg shadow-md w-[42rem]">
+                <h2 className="text-2xl font-semibold mb-2">Monthly rent.</h2>
+                <h4 className="text-lg font-light mb-4">Enter the base rent, water, and electricity.</h4>
+                <div className='flex flex-row border border-gray-500 rounded-md mb-6 p-1'>
+                    <h4 className="text-3xl mx-3 mt-4">$</h4>
+                    <textarea
+                        className='bg-[rgb(232,240,232)] bg-opacity-70 focus:outline-none rounded-md p-4 w-full font-thin text-2xl'
+                        type="number" 
+                        name="rent"
+                        rows='1'
+                        value={formData.rent}
+                        pattern="^[0-9 ]+$"
+                        readOnly
+
                     >
-                    <label
-                        htmlFor="file-upload"
-                        className="w-full h-full flex items-center justify-center
-                        text-lg font-medium text-stone-700
-                        border border-stone-400 rounded-md bg-gray-150
-                        hover:cursor-pointer hover:bg-[rgb(232,240,232)] hover:bg-opacity-40"
-                    >
-                        📁 Upload your images
-                    </label>
-                    <input
-                        id="file-upload"
-                        type="file"
-                        multiple
-                        accept="image/*"
-                        onChange={handlePhotoChange}
-                        className="hidden"
-                    />
+                    </textarea>
                 </div>
 
-                {photos.length > 0 && (
-                    <div className="grid grid-cols-3 gap-4">
-                    {photos.map((photo) => (
-                        <div key={photo.id} className="relative group">
-                            <img
-                                src={photo.preview}
-                                alt="Preview"
-                                className="w-full h-40 object-cover rounded border"
-                            />
-                            <button
-                                onClick={() => handleRemovePhoto(photo.id)}
-                                className="absolute top-2 right-2 bg-gray-400 text-white rounded-full py-1 px-2 text-xs opacity-0 group-hover:opacity-100 transition"
+                <div className='border border-gray-500 rounded-md mb-8 p-1'>
+                    <h4 className='flex flex-col ml-2 mt-2'>Price Breakdown</h4>
+                    <div className='flex flex-row justify-between' >
+                        <h4 className="text-sm ml-5">Base Rent</h4>
+                        <div className='flex flex-row justify-end'>
+                            <h4 className="text-xs mr-1 mt-0.5">$</h4>
+                            <textarea
+                                className='bg-[rgb(232,240,232)] bg-opacity-70 focus:outline-none rounded-md w-1/2 font-thin text-sm'
+                                type="number" 
+                                name="baseRent"
+                                rows='1'
+                                onChange={handleChange}
+                                value={formData.baseRent}
+                                pattern="^[0-9 ]+$"
+                                required
                             >
-                                ✕
-                            </button>
+                            </textarea>
                         </div>
-                    ))}
                     </div>
-                )}
-
+                    <div className='flex flex-row justify-between' >
+                        <h4 className="text-sm ml-5">Utilities</h4>
+                        <div className='flex flex-row justify-end'>
+                            <h4 className="text-xs mr-1 mt-0.5">$</h4>
+                            <textarea
+                                className='bg-[rgb(232,240,232)] bg-opacity-70 focus:outline-none rounded-md w-1/2 font-thin text-sm'
+                                type="number" 
+                                name="utilities"
+                                rows='1'
+                                value={formData.utilities}
+                                pattern="^[0-9 ]+$"
+                                readOnly
+                            >
+                            </textarea>
+                        </div>
+                    </div>
+                    <div className='flex flex-row justify-between' >
+                        <h4 className="text-sm ml-10 font-thin">Water</h4>
+                        <div className='flex flex-row justify-end'>
+                            <h4 className="text-xs mr-1 mt-0.5">$</h4>
+                            <textarea
+                                className='bg-[rgb(232,240,232)] bg-opacity-70 focus:outline-none rounded-md w-1/2 font-thin text-sm'
+                                type="number" 
+                                name="water"
+                                rows='1'
+                                onChange={handleChange}
+                                value={formData.water}
+                                pattern="^[0-9 ]+$"
+                                required
+                            >
+                            </textarea>
+                        </div>
+                    </div>
+                    <div className='flex flex-row justify-between' >
+                        <h4 className="text-sm ml-10 font-thin">Electricity</h4>
+                        <div className='flex flex-row justify-end'>
+                            <h4 className="text-xs mr-1 mt-0.5">$</h4>
+                            <textarea
+                                className='bg-[rgb(232,240,232)] bg-opacity-70 focus:outline-none rounded-md w-1/2 font-thin text-sm'
+                                type="number" 
+                                name="electricity"
+                                rows='1'
+                                onChange={handleChange}
+                                value={formData.electricity}
+                                pattern="^[0-9 ]+$"
+                                required
+                            >
+                            </textarea>
+                        </div>
+                    </div>
+                    <hr className='my-2'/>
+                    <div className='flex flex-row justify-between' >
+                        <h4 className="text-sm ml-5 mb-2">Total Pre-Tax Guest Price</h4>
+                        <div className='flex flex-row justify-end'>
+                            <h4 className="text-xs mr-1 mt-0.5">$</h4>
+                            <textarea
+                                className='bg-[rgb(232,240,232)] bg-opacity-70 focus:outline-none rounded-md w-1/2 font-thin text-sm'
+                                type="number" 
+                                name="rent"
+                                rows='1'
+                                value={formData.rent}
+                                pattern="^[0-9 ]+$"
+                                readOnly
+                            >
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div className="bg-white bg-opacity-70 p-10 pt-6 pb-0 rounded-lg shadow-md">
-                <h2 className="text-2xl font-semibold mb-1">Write a description.</h2>
-                <h4 className="text-lg font-light">Share what makes your place special.</h4>
-                <textarea
-                    className='border border-black border-opacity-30 focus:outline-[rgb(232,240,232)] rounded-md p-3 mt-4 text-sm w-full placeholder-gray-400 font-thin'
-                    type="text" 
-                    name="description"
-                    value={description}
-                    placeholder="Ex. 4 mins from subway J, M, N - Marcy Avenue (1 stop from Manhattan)"
-                    rows='10'
-                    onBeforeInput={handleBeforeDesInput}
-                    onChange={handleDescriptionChange}
-                    pattern="^[A-Za-z0-9 ]+$"
-                    required
-                >
-                </textarea>
-                <h4 className='text-sm text-gray-500 font-thin mt-2 mb-6'>{descriptionWordCount}/500 word count</h4>
+                <h2 className="text-2xl font-semibold mb-1">Add availability.</h2>
+                <h4 className="text-lg font-light mb-2">Add one or more date windows for when your place is available.</h4>
+                {dateRanges.map((range, index) => (
+                <>
+                <div key={range.id} className='flex justify-between flex-wrap'>
+                    <div className="flex flex-col mt-2">
+                        <label className='text-[rgb(42,98,112)] font-semibold'>Move-in</label>
+                        <input 
+                            type="text"
+                            value={range.startDate ? range.startDate.toLocaleDateString() : ''}
+                            readOnly
+                            onClick={() => {
+                                setActiveInput({ index, type: 'start' });
+                                datepickerRef.current[index]?.setOpen(true);
+                            }}
+                            className="border border-gray-300 bg-white bg-opacity-40 rounded-md text-md p-2 focus:outline-none mt-1"
+                        />
+                    </div>
+                    {/* Styled in between to center */}
+                    <div className='availability-calendar'>
+                        <DatePicker
+                            ref={el => (datepickerRef.current[index] = el)}
+                            selected={activeInput.index === index ? (activeInput.type === 'start' ? range.startDate : range.endDate) : null}
+                            onChange={(update) => {
+                                handleDateChange(update, index);
+                                if (update[0] && update[1]) {
+                                    datepickerRef.current[index]?.setOpen(false); // Close after both dates are selected
+                                }
+                            }}
+                            startDate={range.startDate}
+                            endDate={range.endDate}
+                            selectsRange
+                            inline={false}
+                            monthsShown={2}
+                            minDate={new Date()}
+                            className="hidden"
+                        />
+                    </div>
+                    <div className="flex flex-col mt-2">
+                        <label className='text-[rgb(42,98,112)] font-semibold'>Move-out</label>
+                        <input
+                            type="text"
+                            value={range.endDate ? range.endDate.toLocaleDateString() : ''}
+                            readOnly
+                            onClick={() => {
+                                setActiveInput({ index, type: 'end' });
+                                datepickerRef.current[index]?.setOpen(true);
+                            }}
+                            className="border border-gray-300 bg-white bg-opacity-40 rounded-md text-md p-2 focus:outline-none mt-1"
+                        />
+                    </div>  
+                </div>
+                    {index > 0 && (
+                        <button
+                            onClick={() => handleDeleteRange(range.id)}
+                            className="text-xs text-red-400 "
+                            >
+                            Delete
+                        </button>
+                    )}  
+                </>
+                ))}                
+                <div>
+                    <button 
+                        onClick={handleAddRange}
+                        className='border text-sm text-white bg-red-400 p-1.5 rounded-md mb-6 mt-4'
+                    >
+                        Add another window
+                    </button>
+                </div>
             </div>
 
-            <div className="bg-white bg-opacity-70 p-10 pt-6 pb-0 rounded-lg shadow-md">
-                <h2 className="text-2xl font-semibold mb-1">Now, let's give your listing a title.</h2>
-                <h4 className="text-lg font-light">Keep it short & have fun with it - you can always change it later.</h4>
-                <textarea
-                    className='border border-black border-opacity-30 focus:outline-[rgb(232,240,232)] rounded-md p-3 mt-4 text-sm w-full placeholder-gray-400 font-thin'
-                    type="text" 
-                    name="title"
-                    value={title}
-                    placeholder="Ex. Cozy room near UC Davis"
-                    rows='3'
-                    onBeforeInput={handleBeforeTitleInput}
-                    onChange={handleTitleChange}
-                    pattern="^[A-Za-z0-9 ]+$"
-                    required
+            <div className='flex justify-between'>
+                <button
+                    className="text-white text-opacity-70 bg-[rgb(232,240,232)] bg-opacity-30 font-bold rounded-full w-1/4"
                 >
-                </textarea>
-                <h4 className='text-sm text-gray-500 font-thin mt-2 mb-6'>{titleWordCount}/32 word count</h4>
-            </div>
-
-            <div className='flex justify-end'>
+                    <NavLink to="/lease-3">Back</NavLink>
+                </button> 
                 <button
                     className="text-white bg-[rgb(232,240,232)] bg-opacity-50 font-bold rounded-full w-1/4"
                     type="submit"
                 >
-                {/* <NavLink to="/lease-5">Next</NavLink> */}
+                {/* <NavLink to="/lease-4">Submit</NavLink> */}
                 Next
                 </button>  
             </div>
