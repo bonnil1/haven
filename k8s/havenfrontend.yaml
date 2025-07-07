@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: havenf
-        image: bonnil1/haven-frontend:5.0
+        image: bonnil1/haven-frontend:6.0
         resources:
           requests:
             memory: "512Mi"
@@ -23,7 +23,7 @@ spec:
             memory: "1Gi"
             cpu: "500m"
         ports:
-        - containerPort: 3000 # 80: apache listening on port 80 in container
+        - containerPort: 3000 # 80: apache listening on port 80 in container OR 3000 for local and nginx
 
 ---
 
@@ -36,7 +36,7 @@ spec:
     app: havenf
   ports:
   - port: 3000 # http://frontend:3000
-    targetPort: 3000 # 80: where apache is serving react app
+    targetPort: 3000 # 80: where apache is serving react app OR 3000 for local and nginx
   #type: LoadBalancer
     nodePort: 31559
   type: NodePort

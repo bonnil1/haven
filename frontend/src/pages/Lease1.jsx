@@ -74,7 +74,7 @@ const Lease1 = () => {
         console.log(formData)
 
         try {
-            const response = await fetch("/api/lease-1", {
+            const response = await fetch("http://localhost:4000/api/lease-1", {
                 //"/api/lease-1"
                 //"http://localhost:4000/api/lease-1"
                 method: "POST",

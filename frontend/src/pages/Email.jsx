@@ -13,7 +13,7 @@ const Email = () => {
         event.preventDefault()
 
         try {
-            const response = await fetch("/api/new-user-resend", {
+            const response = await fetch("http://localhost:4000/api/new-user-resend", {
                 //"/api/new-user-resend"
                 //"http://localhost:4000/api/new-user-resend"
                 method: "POST",

@@ -109,7 +109,7 @@ const Password = ({setIsLoggedIn}) => {
 
         if (password === confirmPassword && password !== "") {
             try {
-                const response = await fetch(`/api/signup/pw?token=${tokenFromUrl}`, {
+                const response = await fetch(`http://localhost:4000/api/signup/pw?token=${tokenFromUrl}`, {
                     //`http://192.168.49.2:31560/api/signup/pw?token=${tokenFromUrl}`
                     ///api/signup/pw?token=${tokenFromUrl}
                     //http://localhost:4000/api/signup/pw?token=${tokenFromUrl}

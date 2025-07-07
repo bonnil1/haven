@@ -2,9 +2,10 @@ import React from 'react'
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css"
 import { useState, useRef, useEffect } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { FaSearch } from "react-icons/fa";
 import { Autocomplete } from '@react-google-maps/api';
+import { saveToSession } from '../utils/sessionStorage';
 
 function getAddressComponent(components, type) {
     const comp = components.find((c) => c.types.includes(type));
@@ -37,6 +38,8 @@ const Search = ({closeMenu}) => {
     const inputRef = useRef(null);
 
     const [guests, setGuests] = useState("")
+    const [results, setResults] = useState({})
+    const navigate = useNavigate();
 
     const onPlaceChanged = () => {
         const place = autoCompleteRef.current.getPlace();
@@ -53,6 +56,14 @@ const Search = ({closeMenu}) => {
             state,
             country
         });
+
+        const location = place.geometry.location;
+        const newCenter = {
+            lat: location.lat(),
+            lng: location.lng(),
+        };
+
+        saveToSession('search_dest', newCenter);
     }
 
     const handleIncrement = (item) => {
@@ -91,17 +102,6 @@ const Search = ({closeMenu}) => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    const submitForm = (e) => {
-        e.preventDefault();
-
-        const newRequest = {
-        destination,
-        startDate,
-        endDate,
-        guests
-        };
-    }
-
     const slides = [
         {
             title: "Occupancy",
@@ -113,18 +113,23 @@ const Search = ({closeMenu}) => {
     const handleSubmit = async (e) => {
 
         e.preventDefault();
+
+        const formattedDateRange = [
+            startDate ? startDate.toISOString().split("T")[0] : null,
+            endDate ? endDate.toISOString().split("T")[0] : null
+        ];
         
         const payload = {
             ...formData,
-            date: dateRange,
+            date: formattedDateRange,
         };
 
         console.log(payload)
 
         try {
-            const response = await fetch("/api/search_results", {
+            const response = await fetch("http://localhost:4000/api/search/results", {
                 //"/api/search_results"
-                //"http://localhost:4000/api/search_results"
+                //"http://localhost:4000/api/search/results"
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -136,8 +141,8 @@ const Search = ({closeMenu}) => {
             console.log(data);
 
             if (data.message === "Search results returned successfully!") {
-                setMessage(data.message);
-                //navigate('/home/rentals')
+                setResults(data.results)
+                navigate('/home/rentals', {state: {results: results}})
             } 
 
         } catch (error) {

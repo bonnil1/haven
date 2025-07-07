@@ -34,7 +34,7 @@ const Login = ({setIsLoggedIn}) => {
         event.preventDefault();
 
         try {
-            const response = await fetch("/api/login", {
+            const response = await fetch("http://localhost:4000/api/login", {
                 //"http://192.168.49.2:31560/api/login"
                 //"/api/login"
                 //"http://localhost:4000/api/login"

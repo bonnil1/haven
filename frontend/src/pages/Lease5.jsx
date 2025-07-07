@@ -13,6 +13,12 @@ const Lease5 = () => {
     const titleWordLimit = 32;
     const descriptionWordLimit = 500;
 
+    const form1 = loadFromSession("form1")
+    const form2 = loadFromSession("form2")
+    const form3 = loadFromSession("form3")
+    const form41 = loadFromSession("form41")
+    const form42 = loadFromSession("form42")
+
     const getWordCount = (str) => 
         str.trim().split(/\s+/).filter((word) => word.length > 0).length;
 
@@ -127,15 +133,35 @@ const Lease5 = () => {
             photos.forEach((photo, index) => {
                 form.append("photos", photo.file)
             });
+            form.append("type", form1.type)
+            form.append("space", form1.space)
+            form.append("bathrooms", form1.bathrooms)
+            form.append("bedrooms", form1.bedrooms)
+            form.append("beds", form1.beds)
+            form.append("guests", form1.guests)
+            form.append("amenities", form2.amenities)
+            form.append("safeties", form2.safeties)
+            form.append("city", form3.city)
+            form.append("country", form3.country)
+            form.append("state", form3.state)
+            form.append("streetAddress", form3.streetAddress)
+            form.append("zipCode", form3.zipCode)
+            form.append("baseRent", form41.baseRent)
+            form.append("electricity", form41.electricity)
+            form.append("rent", form41.rent)
+            form.append("water", form41.water)
+            form.append("utilities", form41.utilities)
+            form.append("dateRanges", form42.dateRanges) 
+            {/* change date ranges here to .toISOString().split("T")[0] */}
 
             {/* to check form info */}
             for (const [key, value] of form.entries()) {
                 console.log(`${key}:`, value);
             }
 
-            const response = await fetch("/api/lease-4", {
-                //"/api/lease-4"
-                //"http://localhost:4000/api/lease-4"
+            const response = await fetch("http://localhost:4000/api/lease-5", {
+                //"/api/lease-5"
+                //"http://localhost:4000/api/lease-5"
                 method: "POST",
                 body: form
             });
@@ -156,6 +182,18 @@ const Lease5 = () => {
             console.error(error);
         }
     }
+
+    useEffect(() => {
+        const stored = loadFromSession('form5');
+        if (stored) setTitle(stored.title);
+        if (stored) setDescription(stored.description);
+        console.log(stored)
+    }, []);
+    
+    const handleBack = (e) => {
+        e.preventDefault();
+        saveToSession('form5', {title, description});
+    };
 
     return (
         <div className="flex justify-center font-nunito font-semibold text-slate-700 bg-lease-bg bg-cover bg-opacity-25">
@@ -259,12 +297,13 @@ const Lease5 = () => {
 
             <div className='flex justify-between'>
                 <button
-                    className="text-white text-opacity-70 bg-[rgb(232,240,232)] bg-opacity-30 font-bold rounded-full w-1/4"
+                    className="text-white bg-[rgb(232,240,232)] bg-opacity-50 font-bold rounded-full w-1/4"
+                    onClick={handleBack}
                 >
                     <NavLink to="/lease-4">Back</NavLink>
                 </button> 
                 <button
-                    className="text-white bg-[rgb(232,240,232)] bg-opacity-50 font-bold rounded-full w-1/4"
+                    className="text-[rgb(42,98,112)] bg-[rgb(232,240,232)] bg-opacity-50 font-bold rounded-full w-1/4"
                     type="submit"
                 >
                 {/* <NavLink to="/lease-5">Next</NavLink> */}

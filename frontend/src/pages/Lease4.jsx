@@ -73,17 +73,25 @@ const Lease4 = () => {
 
         event.preventDefault();
         
+        const formattedDateRange = dateRanges.map(range => ({
+            start_date: range.startDate
+              ? range.startDate.toISOString().split("T")[0]
+              : null,
+            end_date: range.endDate
+              ? range.endDate.toISOString().split("T")[0]
+              : null
+          }));
 
         const payload = {
             ...formData,
-            availability: dateRanges, // Use the up-to-date value directly here
+            availability: formattedDateRange,
         };
         console.log(payload)
 
         try {
-            const response = await fetch("/api/lease-5", {
-                //"/api/lease-5"
-                //"http://localhost:4000/api/lease-5"
+            const response = await fetch("http://localhost:4000/api/lease-4", {
+                //"/api/lease-4"
+                //"http://localhost:4000/api/lease-4"
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -105,28 +113,28 @@ const Lease4 = () => {
     }
 
     useEffect(() => {
-        const stored = loadFromSession('form4');
+        const stored = loadFromSession('form41');
         if (stored) {
-          if (stored.formData) {
-            setFormData(stored.formData);
-          }
-      
-          // Set dateRanges and ensure correct formatting
-          if (stored.dateRanges) {
-            const converted = stored.dateRanges.map((range) => ({
-                ...range,
-                id: range.id || uuidv4(),
-                startDate: range.startDate ? new Date(range.startDate) : null,
-                endDate: range.endDate ? new Date(range.endDate) : null,
-            }));
-            setDateRanges(converted);
-          }
+            setFormData(stored);
         }
+        const stored2 = loadFromSession('form42');
+        // Set dateRanges and ensure correct formatting
+        if (stored2) {
+        const converted = stored2.map((range) => ({
+            ...range,
+            id: range.id || uuidv4(),
+            startDate: range.startDate ? new Date(range.startDate) : null,
+            endDate: range.endDate ? new Date(range.endDate) : null,
+        }));
+        setDateRanges(converted);
+        }
+        console.log(stored2)
     }, []);
     
     const handleNext = (e) => {
         e.preventDefault();
-        saveToSession('form4', {formData, dateRanges});
+        saveToSession('form41', formData);
+        saveToSession('form42', dateRanges)
         navigate('/lease-5');
     };
 
@@ -308,6 +316,7 @@ const Lease4 = () => {
                         <button
                             onClick={() => handleDeleteRange(range.id)}
                             className="text-xs text-red-400 "
+                            type="button"
                             >
                             Delete
                         </button>
@@ -318,6 +327,7 @@ const Lease4 = () => {
                     <button 
                         onClick={handleAddRange}
                         className='border text-sm text-white bg-red-400 p-1.5 rounded-md mb-6 mt-4'
+                        type="button"
                     >
                         Add another window
                     </button>
@@ -326,12 +336,12 @@ const Lease4 = () => {
 
             <div className='flex justify-between'>
                 <button
-                    className="text-white text-opacity-70 bg-[rgb(232,240,232)] bg-opacity-30 font-bold rounded-full w-1/4"
+                    className="text-white bg-[rgb(232,240,232)] bg-opacity-50 font-bold rounded-full w-1/4"
                 >
                     <NavLink to="/lease-3">Back</NavLink>
                 </button> 
                 <button
-                    className="text-white bg-[rgb(232,240,232)] bg-opacity-50 font-bold rounded-full w-1/4"
+                    className="text-[rgb(42,98,112)] bg-[rgb(232,240,232)] bg-opacity-50 font-bold rounded-full w-1/4"
                     type="submit"
                 >
                 {/* <NavLink to="/lease-4">Submit</NavLink> */}

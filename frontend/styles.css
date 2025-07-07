@@ -151,4 +151,29 @@
     padding: 0.5rem;
     z-index: 1;
 }
-  
+
+
+/* Google Autocomplete */
+.pac-container {
+    border-radius: 0.5rem;
+    padding: 0.875rem;
+    margin-top: 1.5rem;
+    width: 300px !important;
+}
+
+.pac-item {
+    font-family: Nunito;
+    font-size: small;
+    font-weight: 600;
+    padding: 0.3rem;
+    color: #2a6270;
+}
+
+.pac-item-query {
+    color: #2a6270;
+}
+
+.pac-item:hover {
+    background-color: #e8f0e8 !important;
+}
+

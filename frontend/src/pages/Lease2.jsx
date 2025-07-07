@@ -55,7 +55,7 @@ const Lease2 = () => {
         console.log(formData)
 
         try {
-            const response = await fetch("/api/lease-2", {
+            const response = await fetch("http://localhost:4000/api/lease-2", {
                 //"/api/lease-2"
                 //"http://localhost:4000/api/lease-2"
                 method: "POST",
@@ -95,8 +95,8 @@ const Lease2 = () => {
         <div className="flex min-h-screen">
         {/* Sidebar */}
         <div className="relative w-10 flex flex-col items-center overflow-hidden">
-            <div className={`absolute top-10 w-3 bg-white bg-opacity-70 rounded-md ${kitchen ? "bottom-24" : "bottom-40"} 
-                ${furniture ? "bottom-24" : "bottom-40"} ${kitchen && furniture ? "bottom-[58rem]" : "bottom-40"}`}/>
+            <div className={`absolute top-10 w-3 bg-white bg-opacity-70 rounded-md ${kitchen ? "bottom-36" : "bottom-40"} 
+                ${furniture ? "bottom-36" : "bottom-40"} ${kitchen && furniture ? "bottom-28" : "bottom-40"}`}/>
             {slides.map((_, index) => (
                 <div key={index} className={`relative z-10 flex items-center justify-center w-10 h-10 mt-9 bg-red-400 text-white text-xl rounded-full`}>
                     {index + 4}
@@ -224,12 +224,12 @@ const Lease2 = () => {
    
             <div className='flex justify-between'>
                 <button
-                    className="text-white text-opacity-70 bg-[rgb(232,240,232)] bg-opacity-30 font-bold rounded-full w-1/4"
+                    className="text-white bg-[rgb(232,240,232)] bg-opacity-50 font-bold rounded-full w-1/4"
                 >
                     <NavLink to="/lease-1">Back</NavLink>
                 </button> 
                 <button
-                    className="text-white bg-[rgb(232,240,232)] bg-opacity-50 font-bold rounded-full w-1/4"
+                    className="text-[rgb(42,98,112)] bg-[rgb(232,240,232)] bg-opacity-50 font-bold rounded-full w-1/4"
                     type="submit"
                 >
                     {/* <NavLink to="/lease-3">Next</NavLink> */}

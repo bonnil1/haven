@@ -17,7 +17,7 @@ def send_verification_email(Email: str, FirstName: str, token: str):
 
     verification_url = f"http://localhost:3000/signup/pw?token={token}"
     #http://localhost:3000/api/signup/pw?token={token}
-    #http://localhost:3000/signup/pw?token={token}
+    #http://localhost:3000/signup/pw?token={token} use this one for production
 
     body = f"""
     Hello {FirstName},

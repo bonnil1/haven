@@ -45,7 +45,7 @@ const Contact = () => {
         
 
         try {
-            const response = await fetch("/api/contactus", {
+            const response = await fetch("http://localhost:4000/api/contactus", {
                 //"http://192.168.49.2:31560/api/contactus"
                 //"/api/contactus"
                 //"http://localhost:4000/api/contactus"

@@ -1,0 +1,88 @@
+from fastapi import APIRouter, Depends, Request
+from sqlalchemy.orm import Session
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy import and_
+from fastapi.responses import JSONResponse
+from models import Property, Availability
+from database import get_db
+from datetime import date as dt_date
+
+router = APIRouter(
+    prefix="/search",
+    tags=["search"]
+)
+
+@router.post("/results")
+async def search_request(request: Request, db: Session = Depends(get_db)):
+    print("reached backend search request")
+
+    data = await request.json()
+    print(data)
+    destination = data.get("destination", {})
+    city = destination.get("city")
+    state = destination.get("state")
+    country = destination.get("country")
+
+    adults = int(data.get("adults", 0))
+    children = int(data.get("children", 0))
+    pets = int(data.get("pets", 0))
+    date = data.get("date", [])
+    guests_allowed = sum([adults, children])
+
+    try:
+        query = db.query(Property)
+
+        filters = [
+            Property.city == city,
+            Property.state == state,
+            Property.country == country,
+            Property.guests_allowed >= guests_allowed
+        ]
+
+        if pets > 0:
+            filters.append(Property.pets == True)
+
+        query = query.filter(*filters)
+
+        if len(date) == 2:
+            checkin = dt_date.fromisoformat(date[0])
+            checkout = dt_date.fromisoformat(date[1])
+            print(f"Checkin: {checkin} ({type(checkin)})")
+            print(f"Checkout: {checkout} ({type(checkout)})")
+
+            query = query.join(Property.availability).filter(
+                and_(
+                    Availability.start_date <= checkin,
+                    Availability.end_date >= checkout
+                )
+            )
+
+        results = query.all()
+
+        print(results)
+
+        properties = []
+        for property in results:
+            properties.append({
+                "property_id": property.property_id,
+                "title": property.title,
+                "description": property.description,
+                "fee": property.fee,
+                "street_address": property.street_address,
+                "city": property.city,
+                "state": property.state,
+                "postal_code": property.postal_code,
+                "country": property.country,
+                "guests_allowed": property.guests_allowed,
+                "pets_allowed": property.pet_friendly,
+                "bedrooms": property.bedrooms,
+                "bathrooms": property.bathrooms,
+                "property_type": property.property_type,
+            })
+
+        return {"results": properties, "message": "Search results returned successfully!",}
+
+
+    except SQLAlchemyError as e:
+            db.rollback()
+            print(f"A SQLAlchemy error occurred: {e}")

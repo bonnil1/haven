@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: havenb
-        image: bonnil1/haven-backend:2.2
+        image: bonnil1/haven-backend:3.1
         resources:
           limits:
             memory: "256Mi"

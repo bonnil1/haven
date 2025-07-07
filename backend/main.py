@@ -1,8 +1,8 @@
-from fastapi import FastAPI, Depends, HTTPException, Request, status, UploadFile, File, Form
+from fastapi import FastAPI, APIRouter, Depends, HTTPException, Request, status, UploadFile, File, Form
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
-from sqlalchemy.exc import IntegrityError, SQLAlchemyError
+from sqlalchemy.exc import SQLAlchemyError
 import uvicorn
 from database import get_db
 from models import User, Profile
@@ -10,20 +10,14 @@ from tokens import create_email_token, verify_token
 from email_func import send_verification_email
 from password import hash_password, verify_password
 from contact_func import send_contactus_email
+from search_routes import router as search_router
 
 app = FastAPI()
 
-# CORS set up
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+api_router = APIRouter(prefix="/api")
 
 # New user sign up
-@app.post("/api/new-user")
+@api_router.post("/new-user")
 async def create_user(request: Request, db: Session = Depends(get_db)):
     print("in new user sign up in backend")
     # Retrieve data from frontend
@@ -62,7 +56,7 @@ async def create_user(request: Request, db: Session = Depends(get_db)):
     return JSONResponse(status_code=200, content={"message": "User created successfully!"})
 
 # Resend email verification
-@app.post("/api/new-user-resend")
+@api_router.post("/new-user-resend")
 async def resend_email(request: Request, db: Session = Depends(get_db)):
     data = await request.json()
     FirstName = data["FirstName"]
@@ -75,7 +69,7 @@ async def resend_email(request: Request, db: Session = Depends(get_db)):
     return JSONResponse(status_code=200, content={"message": "Email resent successfully!"})
 
 # Verification Email Clicked
-@app.get("/api/signup/pw")
+@api_router.get("/signup/pw")
 async def verify_email(token: str, db: Session = Depends(get_db)):
 
     try:
@@ -106,7 +100,7 @@ async def verify_email(token: str, db: Session = Depends(get_db)):
         db.rollback()
         print(f"A SQLAlchemy error occurred: {e}")
 
-@app.post("/api/signup/pw")
+@api_router.post("/signup/pw")
 async def set_password(request: Request, token: str, db: Session = Depends(get_db)):
 
     # Retrieve data from frontend
@@ -139,7 +133,7 @@ async def set_password(request: Request, token: str, db: Session = Depends(get_d
         db.rollback()
         print(f"A SQLAlchemy error occurred: {e}")
     
-@app.post("/api/login")
+@api_router.post("/login")
 async def log_in(request: Request, db: Session = Depends(get_db)):
 
     data = await request.json()
@@ -172,7 +166,7 @@ async def log_in(request: Request, db: Session = Depends(get_db)):
         db.rollback()
         print(f"A SQLAlchemy error occurred: {e}")
 
-@app.post('/api/googleuser')
+@api_router.post('/googleuser')
 async def google_user(request: Request, db: Session = Depends(get_db)):
     print("in checking google user")
 
@@ -201,7 +195,7 @@ async def google_user(request: Request, db: Session = Depends(get_db)):
     return JSONResponse(status_code=200, content={"message": "New google user created."})
 
 
-@app.get('/api/id') #grabbing id to create user profile.
+@api_router.get('/id') #grabbing id to create user profile.
 async def get_id(email: str, db: Session = Depends(get_db)):
 
     try:
@@ -221,7 +215,7 @@ async def get_id(email: str, db: Session = Depends(get_db)):
         db.rollback()
         print(f"A SQLAlchemy error occurred: {e}")
 
-@app.post("/api/new-profile")
+@api_router.post("/new-profile")
 async def new_profile(request: Request, db: Session = Depends(get_db)):
     print("in new user profile")
 
@@ -258,7 +252,7 @@ async def new_profile(request: Request, db: Session = Depends(get_db)):
     
     return JSONResponse(status_code=200, content={"message": "New user profile created."})
 
-@app.get("/api/profile")
+@api_router.get("/profile")
 async def get_profile(email: str, db: Session = Depends(get_db)):
     try:
         user = db.query(User).filter(User.Email == email).first()
@@ -294,7 +288,7 @@ async def get_profile(email: str, db: Session = Depends(get_db)):
         db.rollback()
         print(f"A SQLAlchemy error occurred: {e}")
 
-@app.post("/api/contactus")
+@api_router.post("/contactus")
 async def contactus(
     FirstName: str = Form(...),
     LastName: str = Form(...),
@@ -314,6 +308,20 @@ async def contactus(
 
     return JSONResponse(status_code=200, content={"message": "Customer support email sent successfully!"})
 
+api_router.include_router(search_router)
+app.include_router(api_router)
+for route in app.routes:
+    print(route.path, route.methods)
+
+
+# CORS set up
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=4000)

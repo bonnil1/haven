@@ -26,7 +26,7 @@ const Profile = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch(`/api/id?email=${encodeURIComponent(email)}`)
+        fetch(`http://localhost:4000/api/id?email=${encodeURIComponent(email)}`)
         //http://192.168.49.2:31560/api/id?email=${encodeURIComponent(email)}
         ///api/id?email=${encodeURIComponent(email)}
         //http://localhost:4000/api/id?email=${encodeURIComponent(email)}

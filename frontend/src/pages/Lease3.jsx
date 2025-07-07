@@ -92,7 +92,7 @@ const Lease3 = () => {
         console.log(address)
 
         try {
-            const response = await fetch("/api/lease-3", {
+            const response = await fetch("http://localhost:4000/api/lease-3", {
                 //"/api/lease-3"
                 //"http://localhost:4000/api/lease-3"
                 method: "POST",
@@ -118,7 +118,7 @@ const Lease3 = () => {
     useEffect(() => {
         const stored = loadFromSession('form3');
         if (stored) setAddress(stored);
-        console.log(stored)
+        //console.log(stored)
     }, []);
     
     const handleNext = (e) => {
@@ -167,7 +167,7 @@ const Lease3 = () => {
                             position: 'absolute',
                             left: '66%',
                             marginLeft: '-120px',
-                            top: '10px',
+                            top: '15px',
                             zIndex: 5,
                         }}
                     />
@@ -267,12 +267,12 @@ const Lease3 = () => {
 
             <div className='flex justify-between'>
                 <button
-                    className="text-white text-opacity-70 bg-[rgb(232,240,232)] bg-opacity-30 font-bold rounded-full w-1/4"
+                    className="text-white bg-[rgb(232,240,232)] bg-opacity-50 font-bold rounded-full w-1/4"
                 >
                     <NavLink to="/lease-2">Back</NavLink>
                 </button> 
                 <button
-                    className="text-white bg-[rgb(232,240,232)] bg-opacity-50 font-bold rounded-full w-1/4"
+                    className="text-[rgb(42,98,112)] bg-[rgb(232,240,232)] bg-opacity-50 font-bold rounded-full w-1/4"
                     type="submit"
                 >
                 {/* <NavLink to="/lease-4">Next</NavLink> */}

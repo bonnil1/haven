@@ -37,3 +37,41 @@ class Profile(Base):
 
     def __repr__(self):
         return f"<Profile(user_id={self.user_id}, PhoneNumber={self.PhoneNumber})>"
+    
+class Property(Base):
+    __tablename__ = "properties"
+    property_id = Column(Integer, primary_key=True, autoincrement=True)
+    # owner_id = Column(Integer, ForeignKey('userImportant.user_id'), nullable=False)
+    property_type = Column(String(20), nullable=True)
+    title = Column(String(255), nullable=True)
+    description = Column(String(1000), nullable=True)
+    fee = Column(String(10), nullable=True)
+    street_address = Column(String(255), nullable=True)
+    city = Column(String(100), nullable=False)
+    state = Column(String(2), nullable=False)
+    postal_code = Column(String(10), nullable=True)
+    country = Column(String(100), nullable=False)
+    bedrooms = Column(Integer, nullable=False)
+    bathrooms = Column(Integer, nullable=False)
+    pets = Column(Integer, nullable=False)
+    guests_allowed = Column(Integer, nullable=True)
+    pet_friendly = Column(Boolean, default=False)
+    created_at = Column(TIMESTAMP, default=func.now())
+    updated_at = Column(TIMESTAMP, default=func.now(), onupdate=func.now())
+
+    availability = relationship("Availability", back_populates="property")
+
+    def __repr__(self):
+        return f"<Property(id={self.property_id})>"
+    
+class Availability(Base):
+    __tablename__ = "availability"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    property_id = Column(Integer, ForeignKey('properties.property_id'))
+    start_date = Column(Date)
+    end_date = Column(Date)
+
+    property = relationship("Property", back_populates="availability")
+
+    def __repr__(self):
+        return f"<Availability(id={self.id}, property_id={self.property_id})>"

@@ -1,8 +1,9 @@
 import React from 'react'
 import Search from '../components/Search'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import { useState, useRef, useEffect } from "react";
-import { GoogleMap, Autocomplete, Marker } from '@react-google-maps/api';
+import { GoogleMap, Marker } from '@react-google-maps/api';
+import { loadFromSession } from '../utils/sessionStorage';
 
 const containerStyle = {
     width: '90%',
@@ -10,13 +11,14 @@ const containerStyle = {
     borderRadius: '15px',
 };
 
-{/* derive user entered value from previous search page */}
-const center = {
-    lat: 37.7749,
-    lng: -122.4194,
-};
-
 const Rentals = () => {
+
+    const location = useLocation();
+    const results = location.state?.results;
+
+    if (!results) {
+        return <p>No results loaded. Please search again.</p>;
+    }
 
     const [search, setSearch] = useState({
             streetAddress: '',
@@ -27,8 +29,11 @@ const Rentals = () => {
             country: '',
     });
 
+    {/* derive user entered destination from previous search page */}
+    const destination = loadFromSession('search_dest');
+    const center = destination
     const [mapCenter, setMapCenter] = useState(center);
-    const [markerPosition, setMarkerPosition] = useState(center);
+    const [markerPosition, setMarkerPosition] = useState("");
     const autoCompleteRef = useRef(null);
 
     const onPlaceChanged = () => {
@@ -60,8 +65,8 @@ const Rentals = () => {
             lng: location.lng(),
         };
     
-            setMapCenter(newCenter);
-            setMarkerPosition(newCenter);
+        setMapCenter(newCenter);
+        setMarkerPosition(newCenter);
     };
 
     /*seed data*/
@@ -76,7 +81,7 @@ const Rentals = () => {
     }
 
     var rentals = [
-        new Property("Waikiki beach view", 2, 1, 2500, "2490 Kalakaua Avenua Honolulu, HI 96815"),
+        new Property("Waikiki beach view", 2, 1, 2500, "2490 Kalakaua Avenue Honolulu, HI 96815"),
         new Property("Downtown central location", 1, 1, 2000, "2500 Kuhio Avenue Honolulu, HI 96815"),
         new Property("10 min walk from Waikiki beach", 1, 1, 2100, "400 Royal Hawaiian Avenue Honolulu, HI 96815"),
         new Property("Newly renovated 1 br", 1, 1, 2000, "2454 S Beretania St Honolulu, HI 96826"),
@@ -88,16 +93,20 @@ const Rentals = () => {
 
     useEffect(() => {
         const geocoder = new window.google.maps.Geocoder();
-    
+      
         Promise.all(
           rentals.map((rental) => {
             return new Promise((resolve, reject) => {
               geocoder.geocode({ address: rental.address }, (results, status) => {
                 if (status === "OK" && results[0]) {
+                  const location = results[0].geometry.location;
                   resolve({
-                    position: results[0].geometry.location,
+                    position: {
+                      lat: location.lat(),
+                      lng: location.lng(),
+                    },
                     address: rental.address,
-                    price: rental.price
+                    price: rental.price,
                   });
                 } else {
                   console.error("Geocode error for", rental.address, status);
@@ -111,7 +120,7 @@ const Rentals = () => {
             setLocations(results);
           })
           .catch((err) => console.error("Geocoding failed:", err));
-      }, []);
+    }, []);
 
     return (
         <div className='bg-lease-bg bg-cover bg-opacity-25'>
@@ -127,15 +136,17 @@ const Rentals = () => {
                 <div className='flex justify-center mb-6'>
                     {/* fixes re-rendering problem from type=submit */}
                     {typeof window !== 'undefined' && window.google && ( 
+
                         <GoogleMap mapContainerStyle={containerStyle} center={mapCenter} zoom={14}>
                             {locations.map((loc, index) => (
                                 <Marker
-                                key={index}
-                                position={loc.position}
-                                title={`$${loc.price}`}
+                                    key={index}
+                                    position={loc.position}
+                                    title={`$${loc.price}`}
                                 />
                             ))}
                         </GoogleMap>
+
                     )}
                 </div>
                 <h1 className='ml-14 text-xl my-2 text-slate-700 font-bold'>Search Results</h1>
