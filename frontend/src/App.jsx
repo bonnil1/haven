@@ -66,7 +66,7 @@ return (
         <Route path='/' element={<Prelanding closeMenu={closeMenu} />}/>
         <Route path='/home' element={<Landing closeMenu={closeMenu}/>} />
         <Route path='/home/rentals' element={<Rentals />}/>
-        <Route path='/home/rentals/show' element={<Show />}/>
+        <Route path='/home/rentals/show/:id' element={<Show />}/>
         <Route path='/housing-request' element={<HousingRequest />}/>
         <Route path='/lease-1' element={<Lease1 />}/>
         <Route path='/lease-2' element={<Lease2 />}/>

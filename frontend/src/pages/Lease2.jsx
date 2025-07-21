@@ -33,7 +33,7 @@ const Lease2 = () => {
             const savedForm = sessionStorage.getItem('form2');
             const safeties = savedForm ? JSON.parse(savedForm).safeties : [];
             return safeties
-        });
+    });
     const [kitchen, setKitchen] = useState(false);
     const [furniture, setFurniture] = useState(false);
     const navigate = useNavigate();

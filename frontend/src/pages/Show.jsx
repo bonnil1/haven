@@ -1,37 +1,76 @@
 import React from 'react'
 import Search from '../components/Search'
-import { APIProvider, Map } from '@vis.gl/react-google-maps';
+import { GoogleMap, Marker } from '@react-google-maps/api';
+import { useState, useEffect } from "react";
+import { useParams } from 'react-router-dom';
+
+const containerStyle = {
+    width: '80%',
+    height: '400px',
+    borderRadius: '15px',
+};
 
 const Show = () => {
 
-  /*seed data*/
-  class Rental {
-    constructor(caption, bedrooms, bathrooms, price, image) {
-        this.caption = caption
-        this.bedrooms = bedrooms
-        this.bathrooms = bathrooms
-        this.price = price
-        this.image = image
-    }
-  }
+  const { id } = useParams();
+  const [results, setResults] = useState("")
+  const [locations, setLocations] = useState("")
 
-  var rentals = [
-    new Rental("Waikiki beach view", 2, 1, 2500),
-  ]  
+  useEffect(() => {
+      const fetchListing = async () => {
+          try {
+              const response = await fetch(`http://localhost:4000/api/search/show/${id}`, {
+                  //`/api/search/show/${id}`
+                  //`http://localhost:4000/api/search/show/${id}`
+                  method: "GET",
+              });
 
-  const API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
+              const data = await response.json();
+              console.log(data);
 
-  const handleCameraChange = (ev) => {
-    const center = ev.center;  
-    const zoom = ev.zoom;     
-  };
+              if (data.message === "Listing returned successfully!") {
+                  setResults(data.results)
+              } 
+
+          } catch (error) {
+              console.error(error);
+          }
+      };
+
+      fetchListing();
+  }, [id])
+
+  useEffect(() => {
+      if (!results) return;
+    
+      const geocoder = new window.google.maps.Geocoder();
+      const address = `${results.street_address}, ${results.city}, ${results.state} ${results.postal_code}`;
+    
+      geocoder.geocode({ address }, (results, status) => {
+          if (status === "OK" && results[0]) {
+              const location = results[0].geometry.location;
+              setLocations({
+                lat: location.lat(),
+                lng: location.lng(),
+              });
+          } else {
+              console.error("Geocode error:", status, results);
+          }
+      });
+  }, [results]);
 
   return (
-    <div>
-      <Search />
+    <div className="bg-lease-bg bg-cover bg-opacity-25">
+        {/*Search Bar*/}
+        <div className='flex justify-center'>
+            <div className='my-5'>
+                <Search />
+            </div>
+        </div>
+
       {/*Laptop View*/}
       <div className="hidden md:block">
-      <div className="grid grid-cols-2 grid-rows-1 gap-4 ml-20 mr-20">
+      <div className="grid grid-cols-2 grid-rows-1 gap-4 ml-20 mr-20 mt-5">
         <div className="h-full">
             <img className="h-full w-full object-cover rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-8.jpg" alt=""></img>
         </div>
@@ -54,26 +93,25 @@ const Show = () => {
         <div>
           <div>
             {/*rental information */}
-            <h2 className="text-2xl text-bold">{rentals[0].caption}</h2>
-            <h3 className="text-lg">1000 sq. ft. | {rentals[0].bedrooms} bedrooms | {rentals[0].bathrooms} bathrooms </h3>
+            <h2 className="text-2xl text-bold">{results.title}</h2>
+            <h3 className="text-lg">{results.bedrooms} bedrooms | {results.bathrooms} bathrooms </h3>
           </div>
           <div className="mt-5">
             {/*pull in detailed rental schema */}
             <h2 className="text-xl">Property Information</h2>
+            <h3 className="text-md">{results.description}</h3>
           </div>
           <div className="mt-5">
             {/*map section for general location */}
             <h2 className="text-xl">Where you'll be</h2>
             <div className="ml-5 mt-5">
-              <APIProvider apiKey={API_KEY}>
-                <Map
-                  defaultZoom={13}
-                  defaultCenter={ { lat: 37.70415364969486, lng: -122.07800056215052 } }
-                  onCameraChanged={handleCameraChange}
-                  style={{ width: '80%', height: '400px' }}
-                >
-                </Map>
-            </APIProvider>
+              {window.google && locations && (
+                  <GoogleMap mapContainerStyle={containerStyle} center={locations} zoom={14}>
+                      <Marker
+                        position={locations}
+                      />
+                  </GoogleMap>
+              )}
             </div>
           </div>
           <div className="mt-5">
@@ -83,7 +121,7 @@ const Show = () => {
         </div>
         {/*price information */}
         <div className="items-center p-5 border rounded-lg shadow-md bg-gray-50 mr-28 h-80">
-          <h2 className="text-xl"><strong>${rentals[0].price}</strong> / month</h2>
+          <h2 className="text-xl"><strong>${results.fee}</strong> / month</h2>
           <h3>Utilities: included</h3>
           <h3>Minimum stay: 1 month</h3>
           <h3>Available: December 1, 2024</h3>
@@ -105,8 +143,8 @@ const Show = () => {
         <div>
           <div>
             {/*rental information */}
-            <h2 className="text-xl text-bold">{rentals[0].caption}</h2>
-            <h3 className="text-md">1000 sq. ft. | {rentals[0].bedrooms} bedrooms | {rentals[0].bathrooms} bathrooms </h3>
+            <h2 className="text-xl text-bold">{results.title}</h2>
+            <h3 className="text-md">1000 sq. ft. | {results.bedrooms} bedrooms | {results.bathrooms} bathrooms </h3>
           </div>
           <div className="mt-5">
             {/*pull in detailed rental schema */}
@@ -116,15 +154,7 @@ const Show = () => {
             {/*map section for general location */}
             <h2 className="text-lg">Where you'll be</h2>
             <div className="ml-5 mr-5 mt-5">
-              <APIProvider apiKey={API_KEY}>
-                <Map
-                  defaultZoom={13}
-                  defaultCenter={ { lat: 37.70415364969486, lng: -122.07800056215052 } }
-                  onCameraChanged={handleCameraChange}
-                  style={{ width: '100%', height: '300px' }}
-                >
-                </Map>
-            </APIProvider>
+
             </div>
           </div>
           <div className="mt-5">
@@ -133,7 +163,7 @@ const Show = () => {
           </div>
           {/*price information */}
           <div className="items-center border rounded-lg shadow-md bg-gray-50 p-5 ml-5 mr-5 mb-5 h-80">
-            <h2 className="text-xl"><strong>${rentals[0].price}</strong> / month</h2>
+            <h2 className="text-xl"><strong>${results.fee}</strong> / month</h2>
             <h3>Utilities: included</h3>
             <h3>Minimum stay: 1 month</h3>
             <h3>Available: December 1, 2024</h3>

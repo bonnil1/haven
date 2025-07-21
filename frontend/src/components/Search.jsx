@@ -119,35 +119,20 @@ const Search = ({closeMenu}) => {
             endDate ? endDate.toISOString().split("T")[0] : null
         ];
         
-        const payload = {
-            ...formData,
-            date: formattedDateRange,
-        };
+        const queryParams = new URLSearchParams({
+            city: destination.city,
+            state: destination.state,
+            country: destination.country,
+            adults: formData.adults,
+            children: formData.children,
+            pets: formData.pets,
+            startDate: formattedDateRange[0],
+            endDate: formattedDateRange[1]
+        }).toString()
 
-        console.log(payload)
+        console.log(queryParams)
 
-        try {
-            const response = await fetch("http://localhost:4000/api/search/results", {
-                //"/api/search_results"
-                //"http://localhost:4000/api/search/results"
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(payload)
-            });
-
-            const data = await response.json();
-            console.log(data);
-
-            if (data.message === "Search results returned successfully!") {
-                setResults(data.results)
-                navigate('/home/rentals', {state: {results: results}})
-            } 
-
-        } catch (error) {
-            console.error(error);
-        }
+        navigate(`/home/rentals?${queryParams}`)
     }
 
     return (
