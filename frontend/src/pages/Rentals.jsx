@@ -96,7 +96,7 @@ const Rentals = () => {
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
-/*
+
     useEffect(() => {
         const fetchResults = async () => {
 
@@ -171,9 +171,9 @@ const Rentals = () => {
           })
           .catch((err) => console.error("Geocoding failed:", err));
     }, [results]);
-*/
+
     return (
-        <div className='bg-lease-bg bg-cover bg-opacity-25'>
+        <div className='bg-lease-bg bg-cover bg-opacity-25 font-nunito'>
             <div className='flex justify-center'>
             {/*Search Bar*/}
             <div className='my-5 mr-5'>
@@ -486,22 +486,30 @@ const Rentals = () => {
                         </GoogleMap>
                     )}
                 </div>
-                <h1 className='ml-14 text-xl my-2 text-slate-700 font-bold'>Search Results</h1>
+                <h1 className='ml-14 text-xl my-2 text-slate-700 font-bold mt-2'>Search Results</h1>
                 <div className="grid grid-cols-3 gap-x-4 mx-14">
                     {results.map((rental, index) => (
                         <NavLink to={`show/${rental.property_id}`} key={rental.property_id}>
-                        <div key={index} className="flex flex-col items-center p-2 border rounded-xl bg-white shadow-md mb-4 text-slate-700">
+                        <div key={index} className="flex flex-col items-center rounded-xl shadow-md mb-4 text-slate-700">
                             <div className='relative w-full'>
-                                <img className="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-3.jpg" alt=""></img>
+                                <img className="h-auto max-w-full rounded-xl" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-3.jpg" alt=""></img>
                                 <div className="absolute top-4 left-4 bg-[rgb(250,112,99)] text-white text-sm font-semibold rounded-full px-3 py-1 shadow">
                                     ${rental.fee}
                                 </div>
-                                <div className='bg-gray-400 bg-opacity-80'>
-                                    <h1 className="lg:text-xl md:text-sm font-bold mt-3 flex justify-center">{rental.title}</h1>
-                                    <ul className="lg:text-lg md:text-sm list-none flex items-center">
-                                        <li>{rental.bedrooms} bedrooms</li>
-                                        <li>{rental.bathrooms} bathrooms</li>
-                                    </ul>
+                                <div className='absolute bottom-0 w-full flex justify-between px-4 py-3 items-center bg-white bg-opacity-80 rounded-xl'>
+                                    <div className='flex flex-col'>
+                                        <h1 className="text-sm text-gray-700 font-bold flex justify-center">{rental.title}</h1>
+                                        <ul className="text-sm text-gray-500 list-none flex">
+                                            <li>{rental.bedrooms} bedrooms</li>
+                                            <div className="w-px h-4 bg-gray-600 opacity-30 mx-2" />
+                                            <li>{rental.bathrooms} bathrooms</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <button className='px-2 py-1 text-sm text-white bg-[rgb(42,98,112)] rounded-lg'>
+                                            Inquire
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

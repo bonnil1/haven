@@ -60,6 +60,7 @@ class Property(Base):
     updated_at = Column(TIMESTAMP, default=func.now(), onupdate=func.now())
 
     availability = relationship("Availability", back_populates="property")
+    amenities = relationship("Amenities", back_populates="property")
 
     def __repr__(self):
         return f"<Property(id={self.property_id})>"
@@ -75,3 +76,14 @@ class Availability(Base):
 
     def __repr__(self):
         return f"<Availability(id={self.id}, property_id={self.property_id})>"
+    
+class Amenities(Base):
+    __tablename__ = "amenities"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    property_id = Column(Integer, ForeignKey('properties.property_id'))
+    type = Column(String(100), nullable=True)
+
+    property = relationship("Property", back_populates="amenities")
+
+    def __repr__(self):
+        return f"<Amenities(id={self.id}, property_id={self.property_id})>"

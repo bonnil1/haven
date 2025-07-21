@@ -14,15 +14,11 @@ router = APIRouter(
 
 @router.post("/results")
 async def search_request(request: Request, db: Session = Depends(get_db)):
-    print("reached backend search request")
 
     data = await request.json()
     print(data)
-    destination = data.get("destination", {})
-    city = destination.get("city")
-    state = destination.get("state")
-    country = destination.get("country")
-
+    city = data.get("city")
+    state = data.get("state")
     adults = int(data.get("adults", 0))
     children = int(data.get("children", 0))
     pets = int(data.get("pets", 0))
@@ -35,7 +31,6 @@ async def search_request(request: Request, db: Session = Depends(get_db)):
         filters = [
             Property.city == city,
             Property.state == state,
-            Property.country == country,
             Property.guests_allowed >= guests_allowed
         ]
 
@@ -47,8 +42,8 @@ async def search_request(request: Request, db: Session = Depends(get_db)):
         if len(date) == 2:
             checkin = dt_date.fromisoformat(date[0])
             checkout = dt_date.fromisoformat(date[1])
-            print(f"Checkin: {checkin} ({type(checkin)})")
-            print(f"Checkout: {checkout} ({type(checkout)})")
+            #print(f"Checkin: {checkin} ({type(checkin)})")
+            #print(f"Checkout: {checkout} ({type(checkout)})")
 
             query = query.join(Property.availability).filter(
                 and_(
@@ -59,7 +54,7 @@ async def search_request(request: Request, db: Session = Depends(get_db)):
 
         results = query.all()
 
-        print(results)
+        print(f"Results: {results}")
 
         properties = []
         for property in results:
@@ -82,7 +77,20 @@ async def search_request(request: Request, db: Session = Depends(get_db)):
 
         return {"results": properties, "message": "Search results returned successfully!",}
 
-
     except SQLAlchemyError as e:
             db.rollback()
             print(f"A SQLAlchemy error occurred: {e}")
+
+@router.get("/show/{id}")
+async def get_listing(id: int, db: Session = Depends(get_db)):
+     
+    try:
+        property = db.query(Property).filter(Property.property_id == id).first()
+
+        print(property)
+
+        return {"results": property, "message": "Listing returned successfully!"}
+
+    except SQLAlchemyError as e:
+        db.rollback()
+        print(f"A SQLAlchemy error occurred: {e}")

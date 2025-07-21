@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { FaSearch } from "react-icons/fa";
 import { Autocomplete } from '@react-google-maps/api';
-import { saveToSession } from '../utils/sessionStorage';
+import { saveToSession, loadFromSession } from '../utils/sessionStorage';
 
 function getAddressComponent(components, type) {
     const comp = components.find((c) => c.types.includes(type));
@@ -26,8 +26,8 @@ const Search = ({closeMenu}) => {
         state: '',
         country: ''
     });
+    const [searchInput, setSearchInput] = useState('');
     const autoCompleteRef = useRef(null);
-
     const [dateRange, setDateRange] = useState([null, null]);
     const [startDate, endDate] = dateRange;
     const [activeInput, setActiveInput] = useState('start');
@@ -56,6 +56,8 @@ const Search = ({closeMenu}) => {
             state,
             country
         });
+
+        setSearchInput([city, state, country].filter(Boolean).join(', '));
 
         const location = place.geometry.location;
         const newCenter = {
@@ -118,6 +120,14 @@ const Search = ({closeMenu}) => {
             startDate ? startDate.toISOString().split("T")[0] : null,
             endDate ? endDate.toISOString().split("T")[0] : null
         ];
+
+        saveToSession('search', {
+            formData, 
+            dateRange: {
+                startDate: startDate ? startDate.toISOString() : null,
+                endDate: endDate ? endDate.toISOString() : null,
+            }
+        });
         
         const queryParams = new URLSearchParams({
             city: destination.city,
@@ -135,6 +145,32 @@ const Search = ({closeMenu}) => {
         navigate(`/home/rentals?${queryParams}`)
     }
 
+    useEffect(() => {
+        const stored = loadFromSession('search');
+        if (stored) {
+            const { destination, adults, children, pets } = stored.formData;
+            const { startDate, endDate } = stored.dateRange || {};
+    
+            setFormData(prev => ({
+                ...prev,
+                destination,
+                adults,
+                children,
+                pets
+            }));
+
+            setDestination(stored.formData.destination)
+    
+            if (startDate && endDate) {
+                setDateRange([new Date(startDate), new Date(endDate)]);
+            }
+
+            const { city, state, country } = stored.formData.destination || {};
+            const formatted = [city, state, country].filter(Boolean).join(', ');
+            setSearchInput(formatted);
+        }
+    }, []);
+
     return (
         <div>
             <form onSubmit={handleSubmit} className="p-3 bg-white rounded-full shadow-md">
@@ -145,7 +181,8 @@ const Search = ({closeMenu}) => {
                             <input
                                 type="text"
                                 placeholder="Search Destination"
-                                value-={formData.destination}
+                                value={searchInput}
+                                onChange={(e) => setSearchInput(e.target.value)}
                                 className="appearance-none block w-4/5 bg-white text-gray-700 leading-tight focus:outline-none ml-10" 
                                 required
                             />
