@@ -42,8 +42,8 @@ async def search_request(request: Request, db: Session = Depends(get_db)):
         if len(date) == 2:
             checkin = dt_date.fromisoformat(date[0])
             checkout = dt_date.fromisoformat(date[1])
-            #print(f"Checkin: {checkin} ({type(checkin)})")
-            #print(f"Checkout: {checkout} ({type(checkout)})")
+            print(f"Checkin: {checkin} ({type(checkin)})")
+            print(f"Checkout: {checkout} ({type(checkout)})")
 
             query = query.join(Property.availability).filter(
                 and_(
@@ -62,7 +62,7 @@ async def search_request(request: Request, db: Session = Depends(get_db)):
                 "property_id": property.property_id,
                 "title": property.title,
                 "description": property.description,
-                "fee": property.fee,
+                "fee": property.rent,
                 "street_address": property.street_address,
                 "city": property.city,
                 "state": property.state,

@@ -1,5 +1,6 @@
 import React from 'react'
 import Search from '../components/Search'
+import Inquiry from '../components/Inquiry';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom'
 import { useState, useEffect, useRef } from "react";
 import { GoogleMap, OverlayView } from '@react-google-maps/api';
@@ -36,9 +37,11 @@ const Rentals = () => {
     const [hoverID, setHoverID] = useState(null)
     const navigate = useNavigate();
 
-    const [showPopup, setShowPopup] = useState(false);
-    const popupRef = useRef(null);
     const inputRef = useRef(null);
+    const [showPopup, setShowPopup] = useState(false);
+    const [activeInquiryIndex, setActiveInquiryIndex] = useState(null);
+    const popupRef = useRef(null);
+    const inquiryRef = useRef(null);
 
     const slides = {
         property_types: ["House", "Apartment", "Condo", "Cottage", "Guesthouse", "Hotel"],
@@ -89,6 +92,13 @@ const Rentals = () => {
             !inputRef.current.contains(event.target)
         ) {
             setShowPopup(false);
+        }
+        if (
+            inquiryRef.current && 
+            !inquiryRef.current.contains(event.target) &&  
+            !inputRef.current.contains(event.target) 
+        ) {
+            setActiveInquiryIndex(null);
         }
     };
         
@@ -186,7 +196,7 @@ const Rentals = () => {
                 ref={inputRef}
                 onClick={() => setShowPopup(!showPopup)}
             >
-                <div className='flex bg-white px-3 py-2 rounded-full text-sm text-slate-700'><FaFilter className='size-3 mr-1.5 mt-1'/> Filters</div>
+                <div className='flex bg-white px-3 py-2 rounded-full text-sm text-slate-700 hover:bg-gray-100'><FaFilter className='size-3 mr-1.5 mt-1'/> Filters</div>
             </button>
             {showPopup && (
                 <div
@@ -486,17 +496,18 @@ const Rentals = () => {
                         </GoogleMap>
                     )}
                 </div>
-                <h1 className='ml-14 text-xl my-2 text-slate-700 font-bold mt-2'>Search Results</h1>
+                <h1 className='ml-14 text-xl my-2 text-slate-600 font-semibold mt-5'>Search Results</h1>
                 <div className="grid grid-cols-3 gap-x-4 mx-14">
                     {results.map((rental, index) => (
-                        <NavLink to={`show/${rental.property_id}`} key={rental.property_id}>
                         <div key={index} className="flex flex-col items-center rounded-xl shadow-md mb-4 text-slate-700">
                             <div className='relative w-full'>
+                                <NavLink to={`show/${rental.property_id}`} key={rental.property_id}>
                                 <img className="h-auto max-w-full rounded-xl" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-3.jpg" alt=""></img>
+                                </NavLink>
                                 <div className="absolute top-4 left-4 bg-[rgb(250,112,99)] text-white text-sm font-semibold rounded-full px-3 py-1 shadow">
                                     ${rental.fee}
                                 </div>
-                                <div className='absolute bottom-0 w-full flex justify-between px-4 py-3 items-center bg-white bg-opacity-80 rounded-xl'>
+                                <div className='absolute bottom-0 w-full flex justify-between px-4 py-3 items-center bg-white bg-opacity-60 rounded-xl'>
                                     <div className='flex flex-col'>
                                         <h1 className="text-sm text-gray-700 font-bold flex justify-center">{rental.title}</h1>
                                         <ul className="text-sm text-gray-500 list-none flex">
@@ -506,14 +517,25 @@ const Rentals = () => {
                                         </ul>
                                     </div>
                                     <div>
-                                        <button className='px-2 py-1 text-sm text-white bg-[rgb(42,98,112)] rounded-lg'>
+                                        <button 
+                                            ref={inputRef}
+                                            onClick={() => setActiveInquiryIndex(activeInquiryIndex === index ? null : index)}
+                                            className='px-2 py-1 text-sm text-white bg-[rgb(42,98,112)] hover:bg-gray-800 border-[rgb(42,98,112)] rounded-lg'
+                                        >
                                             Inquire
                                         </button>
+                                        {activeInquiryIndex === index && (
+                                        <div
+                                            ref={inquiryRef}
+                                            className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-1/2 h-1/2"
+                                        >
+                                            <Inquiry />
+                                        </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        </NavLink>
                     ))}
                 </div>
             </div>

@@ -212,7 +212,7 @@ const Search = ({closeMenu}) => {
                             onChange={(update) => {
                                 setDateRange(update);
                                 if (update[0] && update[1]) {
-                                datepickerRef.current.setOpen(false); // Close after both dates are selected
+                                    datepickerRef.current.setOpen(false); // Close after both dates are selected
                                 }
                             }}
                             startDate={startDate}

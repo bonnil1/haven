@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, Date, TIMESTAMP, func, ForeignKey
+from sqlalchemy import Boolean, Column, Date, Enum, ForeignKey, Integer, SmallInteger, String, DECIMAL, TIMESTAMP, func
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
@@ -40,27 +40,86 @@ class Profile(Base):
     
 class Property(Base):
     __tablename__ = "properties"
-    property_id = Column(Integer, primary_key=True, autoincrement=True)
-    # owner_id = Column(Integer, ForeignKey('userImportant.user_id'), nullable=False)
-    property_type = Column(String(20), nullable=True)
-    title = Column(String(255), nullable=True)
-    description = Column(String(1000), nullable=True)
-    fee = Column(String(10), nullable=True)
-    street_address = Column(String(255), nullable=True)
+    property_id = Column(Integer, primary_key=True, autoincrement=True) # change from Integer to String(24)
+    # owner_id = Column(String(22), ForeignKey('userImportant.user_id'), nullable=False)
+    property_type = Column(
+        Enum(
+            "House",
+            "Apartment",
+            "Condo",
+            "Cottage",
+            "Guesthouse",
+            "Hotel",
+            name="property_type_enum",
+        ),
+        nullable=False,
+        default="House",
+    )
+    type = Column(
+        Enum(
+            "Entire-Place",
+            "Private-Room",
+            "Shared-Room",
+            name="property_rental_type_enum",
+        ),
+        nullable=False,
+        default="Entire-Place",
+    )
+    guests_allowed = Column(Integer)
+    bedrooms = Column(SmallInteger, nullable=True)
+    beds = Column(SmallInteger, nullable=True)
+    bathrooms = Column(SmallInteger, nullable=True)
+
+    IU_laundry = Column(Boolean)
+    B_laundry = Column(Boolean)
+    wifi = Column(Boolean)
+    heater = Column(Boolean)
+    ac = Column(Boolean)
+    parking = Column(Boolean)
+    tv = Column(Boolean)
+    kitchen = Column(Boolean)
+    furnished = Column(Boolean)
+    gym = Column(Boolean)
+    pool = Column(Boolean)
+    pet_friendly = Column(Boolean)
+
+    stove = Column(Boolean)
+    utensils = Column(Boolean)
+    dishwasher = Column(Boolean)
+    fridge = Column(Boolean)
+    oven = Column(Boolean)
+    microwave = Column(Boolean)
+    potpans = Column(Boolean)
+    coffee = Column(Boolean)
+    toaster = Column(Boolean)
+    bed = Column(Boolean)
+    workspace = Column(Boolean)
+
+    D_table = Column(Boolean)
+    B_table = Column(Boolean)
+    C_table = Column(Boolean)
+    FL_mirror = Column(Boolean)
+    S_detector = Column(Boolean)
+    CO_detector = Column(Boolean)
+    F_extinguisher = Column(Boolean)
+
+    street_address = Column(String(255))
     city = Column(String(100), nullable=False)
-    state = Column(String(2), nullable=False)
-    postal_code = Column(String(10), nullable=True)
+    state = Column(String(100), nullable=False)
+    postal_code = Column(String(10))
     country = Column(String(100), nullable=False)
-    bedrooms = Column(Integer, nullable=False)
-    bathrooms = Column(Integer, nullable=False)
-    pets = Column(Integer, nullable=False)
-    guests_allowed = Column(Integer, nullable=True)
-    pet_friendly = Column(Boolean, default=False)
+    extra_info = Column(String(100))
+
+    title = Column(String(255))
+    description = Column(String)  # TEXT in SQL maps to String/Text
+    rent = Column(DECIMAL(10, 2))
+    water_fee = Column(DECIMAL(10, 2))
+    electric_fee = Column(DECIMAL(10, 2))
+
     created_at = Column(TIMESTAMP, default=func.now())
     updated_at = Column(TIMESTAMP, default=func.now(), onupdate=func.now())
 
     availability = relationship("Availability", back_populates="property")
-    amenities = relationship("Amenities", back_populates="property")
 
     def __repr__(self):
         return f"<Property(id={self.property_id})>"
@@ -77,13 +136,3 @@ class Availability(Base):
     def __repr__(self):
         return f"<Availability(id={self.id}, property_id={self.property_id})>"
     
-class Amenities(Base):
-    __tablename__ = "amenities"
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    property_id = Column(Integer, ForeignKey('properties.property_id'))
-    type = Column(String(100), nullable=True)
-
-    property = relationship("Property", back_populates="amenities")
-
-    def __repr__(self):
-        return f"<Amenities(id={self.id}, property_id={self.property_id})>"
