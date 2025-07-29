@@ -92,13 +92,14 @@ class Property(Base):
     potpans = Column(Boolean)
     coffee = Column(Boolean)
     toaster = Column(Boolean)
+
     bed = Column(Boolean)
     workspace = Column(Boolean)
-
+    FL_mirror = Column(Boolean) #changed to couch, rip needs to change in db 7/28/25
     D_table = Column(Boolean)
     B_table = Column(Boolean)
     C_table = Column(Boolean)
-    FL_mirror = Column(Boolean)
+ 
     S_detector = Column(Boolean)
     CO_detector = Column(Boolean)
     F_extinguisher = Column(Boolean)

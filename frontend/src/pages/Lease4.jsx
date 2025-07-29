@@ -12,28 +12,28 @@ const Lease4 = () => {
     const [activeInput, setActiveInput] = useState({ index: null, type: null });
     const datepickerRef = useRef([]);
     const [formData, setFormData] = useState({
+        totalRent: "",
         rent: "",
-        baseRent: "",
         utilities: "",
-        water: "",
-        electricity: "",
+        water_fee: "",
+        electric_fee: "",
     });
     const navigate = useNavigate();
 
     useEffect(() => {
-        const { baseRent, water, electricity } = formData;
+        const { rent, water_fee, electric_fee } = formData;
 
-        if (baseRent && water && electricity) {
-            const totalUtilities = Number(water) + Number(electricity);
-            const total = totalUtilities + Number(baseRent);
+        if (rent && water_fee && electric_fee) {
+            const totalUtilities = Number(water_fee) + Number(electric_fee);
+            const total = totalUtilities + Number(rent);
 
             setFormData(prev => ({
                 ...prev,
-                rent: total,
+                totalRent: total,
                 utilities: totalUtilities
             }));
         }
-    }, [formData.baseRent, formData.water, formData.electricity]);
+    }, [formData.rent, formData.water_fee, formData.electric_fee]);
 
     const handleChange = (event) => {
         setFormData(prevState => {
@@ -162,7 +162,7 @@ const Lease4 = () => {
                         type="number" 
                         name="rent"
                         rows='1'
-                        value={formData.rent}
+                        value={formData.totalRent}
                         pattern="^[0-9 ]+$"
                         readOnly
 
@@ -179,10 +179,10 @@ const Lease4 = () => {
                             <textarea
                                 className='bg-[rgb(232,240,232)] bg-opacity-70 focus:outline-none rounded-md w-1/2 font-thin text-sm'
                                 type="number" 
-                                name="baseRent"
+                                name="rent"
                                 rows='1'
                                 onChange={handleChange}
-                                value={formData.baseRent}
+                                value={formData.rent}
                                 pattern="^[0-9 ]+$"
                                 required
                             >
@@ -212,10 +212,10 @@ const Lease4 = () => {
                             <textarea
                                 className='bg-[rgb(232,240,232)] bg-opacity-70 focus:outline-none rounded-md w-1/2 font-thin text-sm'
                                 type="number" 
-                                name="water"
+                                name="water_fee"
                                 rows='1'
                                 onChange={handleChange}
-                                value={formData.water}
+                                value={formData.water_fee}
                                 pattern="^[0-9 ]+$"
                                 required
                             >
@@ -229,10 +229,10 @@ const Lease4 = () => {
                             <textarea
                                 className='bg-[rgb(232,240,232)] bg-opacity-70 focus:outline-none rounded-md w-1/2 font-thin text-sm'
                                 type="number" 
-                                name="electricity"
+                                name="electric_fee"
                                 rows='1'
                                 onChange={handleChange}
-                                value={formData.electricity}
+                                value={formData.electric_fee}
                                 pattern="^[0-9 ]+$"
                                 required
                             >
@@ -247,9 +247,9 @@ const Lease4 = () => {
                             <textarea
                                 className='bg-[rgb(232,240,232)] bg-opacity-70 focus:outline-none rounded-md w-1/2 font-thin text-sm'
                                 type="number" 
-                                name="rent"
+                                name="totalRent"
                                 rows='1'
-                                value={formData.rent}
+                                value={formData.totalRent}
                                 pattern="^[0-9 ]+$"
                                 readOnly
                             >

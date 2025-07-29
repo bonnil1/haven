@@ -55,7 +55,11 @@ const Lease1 = () => {
         },
         {
             title: "What type of place will your guest stay?",
-            options: ["An entire place", "A private room", "A shared room"],
+            options: [
+                { label: "An entire place", value: 'Entire-Place' },
+                { label: "A private room", value: 'Private-Room' },
+                { label: "A shared room", value: 'Shared-Room' } 
+            ],
             icon: [
                 "Guests will have the entire place to themselves.",
                 "Guests will have a private room to themselves in a shared home.",
@@ -154,13 +158,13 @@ const Lease1 = () => {
                     <div
                         key={index}
                         onClick={() => {
-                            setSelectedSpace(item);
-                            setFormData(prev => ({ ...prev, space: item }));
+                            setSelectedSpace(item.value);
+                            setFormData(prev => ({ ...prev, space: item.value }));
                         }}
                         className={`border border-[rgb(232,240,232)] border-2 p-4 rounded-lg hover:shadow-lg cursor-pointer text-xl flex flex-col
-                        ${selectedSpace === item ? "border-teal-700 shadow-md" : "border-[rgb(232,240,232)]"}`}
+                        ${selectedSpace === item.value ? "border-teal-700 shadow-md" : "border-[rgb(232,240,232)]"}`}
                     >
-                        <span className="text-xl">{item}</span>
+                        <span className="text-xl">{item.label}</span>
                         <span className="text-sm text-slate-500 font-normal">
                             {slide.icon?.[index]}
                         </span>

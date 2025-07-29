@@ -19,13 +19,13 @@ const Inquiry = () => {
   return (
     <div className='font-nunito'>
         <form
-            className='bg-white rounded-lg p-12 w-full'
+            className='bg-white rounded-lg p-8 w-full'
             //onSubmit={handleSubmit}
         >
             <div className='flex flex-col'>
                 <h1 className='text-2xl text-[rgb(42,98,112)] font-bold mb-5'>Send Inquiry Request</h1>
                 <div className='flex justify-between mb-4'>
-                    <div className='flex flex-col mr-5'>
+                    <div className='flex flex-col mr-5 w-full'>
                         <label className='text-md font-semibold'>Move-in</label>
                         <input 
                             type="text"
@@ -58,7 +58,7 @@ const Inquiry = () => {
                             className="hidden"
                         />
                     </div>
-                    <div className='flex flex-col'>
+                    <div className='flex flex-col w-full'>
                         <label className='text-md font-semibold'>Move-out</label>
                         <input
                             type="text"
@@ -73,7 +73,7 @@ const Inquiry = () => {
                     </div>
                 </div>
                 <div className='flex flex-col mb-4'>
-                    <label className='text-md font-semibold'>Message</label>
+                    <label className='text-md font-semibold'>Introduction Message</label>
                     <textarea
                         type='text'
                         rows='4'

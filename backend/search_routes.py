@@ -35,7 +35,7 @@ async def search_request(request: Request, db: Session = Depends(get_db)):
         ]
 
         if pets > 0:
-            filters.append(Property.pets == True)
+            filters.append(Property.pet_friendly == True)
 
         query = query.filter(*filters)
 
@@ -62,14 +62,14 @@ async def search_request(request: Request, db: Session = Depends(get_db)):
                 "property_id": property.property_id,
                 "title": property.title,
                 "description": property.description,
-                "fee": property.rent,
+                "rent": property.rent,
                 "street_address": property.street_address,
                 "city": property.city,
                 "state": property.state,
                 "postal_code": property.postal_code,
                 "country": property.country,
                 "guests_allowed": property.guests_allowed,
-                "pets_allowed": property.pet_friendly,
+                "pets_friendly": property.pet_friendly,
                 "bedrooms": property.bedrooms,
                 "bathrooms": property.bathrooms,
                 "property_type": property.property_type,

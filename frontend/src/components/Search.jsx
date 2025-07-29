@@ -2,7 +2,7 @@ import React from 'react'
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css"
 import { useState, useRef, useEffect } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { FaSearch } from "react-icons/fa";
 import { Autocomplete } from '@react-google-maps/api';
 import { saveToSession, loadFromSession } from '../utils/sessionStorage';
