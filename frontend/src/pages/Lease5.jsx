@@ -6,6 +6,7 @@ import { saveToSession, loadFromSession } from '../utils/sessionStorage';
 
 const Lease5 = () => {
 
+    const user_id = localStorage.getItem("user_id")
     const [photos, setPhotos] = useState([])
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("")
@@ -17,7 +18,22 @@ const Lease5 = () => {
     const form2 = loadFromSession("form2")
     const form3 = loadFromSession("form3")
     const form41 = loadFromSession("form41")
-    const form42 = loadFromSession("form42")
+    const [dateRanges, setDateRanges] = useState([{ id: uuidv4(), startDate: null, endDate: null }]);
+
+    useEffect(() => {
+        const stored2 = loadFromSession('form42');
+        // Set dateRanges and ensure correct formatting
+        if (stored2) {
+        const converted = stored2.map((range) => ({
+            ...range,
+            id: range.id || uuidv4(),
+            startDate: range.startDate ? new Date(range.startDate).toISOString().split("T")[0] : null,
+            endDate: range.endDate ? new Date(range.endDate).toISOString().split("T")[0] : null,
+        }));
+        setDateRanges(converted);
+        }
+        console.log(stored2)
+    }, []);
 
     const getWordCount = (str) => 
         str.trim().split(/\s+/).filter((word) => word.length > 0).length;
@@ -139,29 +155,30 @@ const Lease5 = () => {
             form.append("bedrooms", form1.bedrooms)
             form.append("beds", form1.beds)
             form.append("guests", form1.guests)
-            form.append("amenities", form2.amenities)
-            form.append("safeties", form2.safeties)
+            form.append("amenities", JSON.stringify(form2.amenities));
+            form.append("furniture", JSON.stringify(form2.furniture));
+            form.append("kitchen", JSON.stringify(form2.kitchen));
+            form.append("safeties", JSON.stringify(form2.safeties));
             form.append("city", form3.city)
             form.append("country", form3.country)
             form.append("state", form3.state)
-            form.append("streetAddress", form3.streetAddress)
-            form.append("zipCode", form3.zipCode)
-            form.append("baseRent", form41.baseRent)
-            form.append("electricity", form41.electricity)
+            form.append("street_address", form3.street_address)
+            form.append("extra_info", form3.extra_info)
+            form.append("postal_code", form3.postal_code)
+            form.append("electric_fee", form41.electric_fee)
             form.append("rent", form41.rent)
-            form.append("water", form41.water)
-            form.append("utilities", form41.utilities)
-            form.append("dateRanges", form42.dateRanges) 
-            {/* change date ranges here to .toISOString().split("T")[0] */}
+            form.append("water_fee", form41.water_fee)
+            form.append("dateRanges", JSON.stringify(dateRanges));
+            form.append("user_id", user_id)
 
             {/* to check form info */}
             for (const [key, value] of form.entries()) {
                 console.log(`${key}:`, value);
             }
 
-            const response = await fetch("http://localhost:4000/api/lease-5", {
-                //"/api/lease-5"
-                //"http://localhost:4000/api/lease-5"
+            const response = await fetch("http://localhost:4000/api/property/submit", {
+                //"/api/property/submit"
+                //"http://localhost:4000/api/property/submit"
                 method: "POST",
                 body: form
             });
@@ -173,9 +190,8 @@ const Lease5 = () => {
             const data = await response.json();
             console.log(data.message);
 
-            if (data.message === "Lease 4 submitted successfully.") {
-                setMessage(data.message);
-                navigate('/lease-5')
+            if (data.message === "Property listing data saved.") {
+                navigate('/lease-6')
             } 
 
         } catch (error) {

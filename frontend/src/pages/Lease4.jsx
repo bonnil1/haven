@@ -8,6 +8,7 @@ import { saveToSession, loadFromSession } from '../utils/sessionStorage';
 
 const Lease4 = () => {
 
+    const property_id = sessionStorage.getItem('form1.property_id')
     const [dateRanges, setDateRanges] = useState([{ id: uuidv4(), startDate: null, endDate: null }]);
     const [activeInput, setActiveInput] = useState({ index: null, type: null });
     const datepickerRef = useRef([]);
@@ -72,7 +73,9 @@ const Lease4 = () => {
     const handleSubmit = async (event) => {
 
         event.preventDefault();
-        
+        saveToSession('form41', formData);
+        saveToSession('form42', dateRanges)
+        /*
         const formattedDateRange = dateRanges.map(range => ({
             start_date: range.startDate
               ? range.startDate.toISOString().split("T")[0]
@@ -81,30 +84,30 @@ const Lease4 = () => {
               ? range.endDate.toISOString().split("T")[0]
               : null
           }));
-
+        */
         const payload = {
             ...formData,
-            availability: formattedDateRange,
+            availability: dateRanges,
         };
         console.log(payload)
 
         try {
-            const response = await fetch("http://localhost:4000/api/lease-4", {
-                //"/api/lease-4"
-                //"http://localhost:4000/api/lease-4"
+            const response = await fetch("http://localhost:4000/api/property/page4", {
+                //"/api/property/page4"
+                //"http://localhost:4000/api/property/page4"
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({payload, property_id})
             });
 
             const data = await response.json();
             console.log(data);
 
-            if (data.message === "Lease 5 created successfully!") {
+            if (data.message === "Page 4 rent and dates saved.") {
                 setMessage(data.message);
-                //navigate('/')
+                navigate('/lease-5')
             } 
 
         } catch (error) {
@@ -135,6 +138,7 @@ const Lease4 = () => {
         e.preventDefault();
         saveToSession('form41', formData);
         saveToSession('form42', dateRanges)
+        console.log(dateRanges)
         navigate('/lease-5');
     };
 
@@ -143,7 +147,7 @@ const Lease4 = () => {
         <div className="flex min-h-screen">
         {/* Sidebar */}
         <div className="relative w-10 flex flex-col items-center">
-            <div className="absolute top-12 bottom-44 w-3 bg-white bg-opacity-70 rounded-md"/>
+            <div className="absolute top-12 bottom-48 w-3 bg-white bg-opacity-70 rounded-md"/>
             {slides.map((_, index) => (
             <div key={index} className="relative z-10 flex items-center justify-center w-10 h-10 mt-10 mb-96 bg-red-400 text-white text-xl rounded-full">
                 {index + 7}

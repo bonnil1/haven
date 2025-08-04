@@ -32,7 +32,7 @@ const Password = ({setIsLoggedIn}) => {
         const params = new URLSearchParams(window.location.search);
         const tokenFromUrl = params.get('token');
 
-        fetch(`/api/signup/pw?token=${tokenFromUrl}`)
+        fetch(`http://localhost:4000/api/signup/pw?token=${tokenFromUrl}`)
         //`http://192.168.49.2:31560/api/signup/pw?token=${tokenFromUrl}`
         ///api/signup/pw?token=${tokenFromUrl}
         //http://localhost:4000/api/signup/pw?token=${tokenFromUrl}

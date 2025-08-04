@@ -16,6 +16,7 @@ import Lease2 from './pages/Lease2'
 import Lease3 from './pages/Lease3';
 import Lease4 from './pages/Lease4';
 import Lease5 from './pages/Lease5';
+import Lease6 from './pages/Lease6';
 import ListProperty from './pages/ListProperty';
 import UserProfile from './pages/UserProfile';
 import Contact from './pages/Contact';
@@ -63,7 +64,7 @@ return (
         <Route path='/signup/pw' element={<Password setIsLoggedIn={setIsLoggedIn} />}/>
         <Route path='/signup/pw/profile' element={<Profile />}/>
         <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} />}/>
-        <Route path='/' element={<Prelanding closeMenu={closeMenu} />}/>
+        <Route path='/' element={<Prelanding closeMenu={closeMenu} isLoggedIn={isLoggedIn}/>}/>
         <Route path='/home' element={<Landing closeMenu={closeMenu}/>} />
         <Route path='/home/rentals' element={<Rentals />}/>
         <Route path='/home/rentals/show/:id' element={<Show />}/>
@@ -73,6 +74,7 @@ return (
         <Route path='/lease-3' element={<Lease3 />}/>
         <Route path='/lease-4' element={<Lease4 />}/>
         <Route path='/lease-5' element={<Lease5 />}/>
+        <Route path='/lease-6' element={<Lease6 />}/>
         <Route path='/list-your-property' element={<ListProperty />}/>
         <Route path='/profile' element={<UserProfile />}/>
         <Route path='/contact' element={<Contact />}/>

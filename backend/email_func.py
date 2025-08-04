@@ -25,7 +25,7 @@ def send_verification_email(Email: str, FirstName: str, token: str):
     Welcome to Haven!
 
     Please verify your email by clicking the following link: 
-    {verification_url}.
+    {verification_url}
 
     We look forward to working with you.
 

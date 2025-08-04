@@ -51,6 +51,7 @@ const Login = ({setIsLoggedIn}) => {
             if (data.message === "Log in successful.") {
                 setIsLoggedIn(true)
                 localStorage.setItem("email", data.email)
+                localStorage.setItem("user_id", data.user_id)
                 navigate('/')
             } else if (data.message === "Please verify your email address to activate account.") {
                 setMessage(data.message)

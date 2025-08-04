@@ -37,8 +37,7 @@ const Profile = () => {
                 return response.json();
             })
             .then(data => {
-                //console.log(data);
-                setuserid(data.user_id)
+                localStorage.setItem("user_id", data.user_id)
             })
             .catch(error => {
                 console.error("Error fetching id:", error);
@@ -83,7 +82,7 @@ const Profile = () => {
         event.preventDefault();
 
         try {
-            const response = await fetch("/api/new-profile", {
+            const response = await fetch("http://localhost:4000/api/new-profile", {
                 //http://192.168.49.2:31560/api/new-profile
                 //"/api/new-profile"
                 //"http://localhost:4000/api/new-profile"

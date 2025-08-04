@@ -11,8 +11,18 @@ from email_func import send_verification_email
 from password import hash_password, verify_password
 from contact_func import send_contactus_email
 from search_routes import router as search_router
+from listing import router as listing_router
 
 app = FastAPI()
+
+# CORS set up
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 api_router = APIRouter(prefix="/api")
 
@@ -150,6 +160,7 @@ async def log_in(request: Request, db: Session = Depends(get_db)):
         if user:
             storedpw = user.Password
             userverified = user.EmailVerified
+            user_id = user.user_id
 
             if not userverified: 
                 return JSONResponse(status_code=401, content={"message": "Please verify your email address to activate account."})
@@ -158,7 +169,7 @@ async def log_in(request: Request, db: Session = Depends(get_db)):
             if not verify_password(Password, storedpw):
                 return(JSONResponse(status_code=401, content={"message": "Invalid credentials."}))
             else:
-                return JSONResponse(status_code=200, content={"message": "Log in successful.", "email": Email})
+                return JSONResponse(status_code=200, content={"message": "Log in successful.", "email": Email, "user_id": user_id})
         
                 # jwt token function here
 
@@ -309,19 +320,13 @@ async def contactus(
     return JSONResponse(status_code=200, content={"message": "Customer support email sent successfully!"})
 
 api_router.include_router(search_router)
+api_router.include_router(listing_router)
 app.include_router(api_router)
-for route in app.routes:
-    print(route.path, route.methods)
 
 
-# CORS set up
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+#for route in app.routes:
+#    print(route.path, route.methods)
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=4000)

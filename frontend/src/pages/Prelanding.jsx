@@ -4,7 +4,7 @@ import ListProperty from './ListProperty'
 import { NavLink } from 'react-router-dom'
 import { FaArrowRight } from "react-icons/fa6";
 
-const Prelanding = ({closeMenu}) => {
+const Prelanding = ({closeMenu, isLoggedIn}) => {
   return (
     <div>
     <div className='bg-custom-image-3 bg-cover bg-center h-screen'>
@@ -20,9 +20,15 @@ const Prelanding = ({closeMenu}) => {
                   <button className='text-md sm:text-lg text-white hover:bg-white bg-slate-50 px-6 py-2 rounded-full mr-10 ml-10 sm:ml-0'>
                     <NavLink to="home" onClick={closeMenu} className="flex flex-row text-stone-700">I'm looking for a place <FaArrowRight className='mt-1 ml-5 text-[rgb(250,112,99)]'/></NavLink>
                   </button>
-                  <button className='text-md sm:text-lg text-white hover:bg-white bg-slate-50 px-6 py-2 rounded-full mr-10'>
-                    <NavLink to="lease-1" onClick={closeMenu} className="flex flex-row text-stone-700">I'm listing my place <FaArrowRight className='mt-1 ml-5 text-[rgb(250,112,99)]'/></NavLink>
-                  </button>
+                  {isLoggedIn ? (
+                    <button className='text-md sm:text-lg text-white hover:bg-white bg-slate-50 px-6 py-2 rounded-full mr-10'>
+                      <NavLink to="lease-1" onClick={closeMenu} className="flex flex-row text-stone-700">I'm listing my place <FaArrowRight className='mt-1 ml-5 text-[rgb(250,112,99)]'/></NavLink>
+                    </button>
+                  ) : (
+                    <button className='text-md sm:text-lg text-white hover:bg-white bg-slate-50 px-6 py-2 rounded-full mr-10'>
+                      <NavLink to="login" onClick={closeMenu} className="flex flex-row text-stone-700">I'm listing my place <FaArrowRight className='mt-1 ml-5 text-[rgb(250,112,99)]'/></NavLink>
+                    </button>
+                  )}
               </div>
               </div>
           </div>

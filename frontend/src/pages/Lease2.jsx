@@ -78,62 +78,40 @@ const Lease2 = () => {
         return acc;
     }, {});
 
+    const property_id = sessionStorage.getItem('form1.property_id')
     const savedForm = sessionStorage.getItem('form2');
     const parsedForm = savedForm ? JSON.parse(savedForm) : null;
 
     const [formData, setFormData] = useState({
-    amenities: parsedForm?.amenities || initializeCategoryState(slides.amenities),
-    furniture: parsedForm?.furniture || initializeCategoryState(slides.furniture),
-    kitchen: parsedForm?.kitchen || initializeCategoryState(slides.kitchen),
-    safeties: parsedForm?.safeties || initializeCategoryState(slides.safeties),
-    });
-    /*
-    const [selectedAmenities, setSelectedAmenities] = useState(() => {
-        const savedForm = sessionStorage.getItem('form2');
-        const amenities = savedForm ? JSON.parse(savedForm).amenities : [];
-        return amenities
+        amenities: parsedForm?.amenities || initializeCategoryState(slides.amenities),
+        furniture: parsedForm?.furniture || initializeCategoryState(slides.furniture),
+        kitchen: parsedForm?.kitchen || initializeCategoryState(slides.kitchen),
+        safeties: parsedForm?.safeties || initializeCategoryState(slides.safeties),
     });
 
-    const [selectedKitchen, setSelectedKitchen] = useState(() => {
-        const savedForm = sessionStorage.getItem('form2');
-        const kitchen = savedForm ? JSON.parse(savedForm).kitchen : [];
-        return kitchen
-    })
-
-    const [selectedFurniture, setSelectedFurniture] = useState(() => {
-        const savedForm = sessionStorage.getItem('form2');
-        const furniture = savedForm ? JSON.parse(savedForm).furniture : [];
-        return furniture
-    })
-
-    const [selectedSafeties, setSelectedSafeties] = useState(() => {
-        const savedForm = sessionStorage.getItem('form2');
-        const safeties = savedForm ? JSON.parse(savedForm).safeties : [];
-        return safeties
-    });
-    */
     const navigate = useNavigate();
     
     const handleSubmit = async (event) => {
         
         event.preventDefault();
+        saveToSession('form2', formData);
         console.log(formData)
 
         try {
-            const response = await fetch("http://localhost:4000/api/lease-2", {
-                //"/api/lease-2"
-                //"http://localhost:4000/api/lease-2"
+            const response = await fetch("http://localhost:4000/api/property/page2", {
+                //"/api/property/page2"
+                //"http://localhost:4000/api/property/page2"
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify({formData, property_id})
             });
 
             const data = await response.json();
             console.log(data);
 
-            if (data.message === "Lease 2 created successfully!") {
+            if (data.message === "Page 2 data saved.") {
                 setMessage(data.message);
                 navigate('/lease-3')
             } 
@@ -152,6 +130,7 @@ const Lease2 = () => {
     const handleNext = (e) => {
         e.preventDefault();
         saveToSession('form2', formData);
+        console.log(formData)
         navigate('/lease-3');
     };
 
@@ -191,7 +170,7 @@ const Lease2 = () => {
         {/* Sidebar */}
         <div className="relative w-10 flex flex-col items-center overflow-hidden">
             <div className={`absolute top-10 w-3 bg-white bg-opacity-70 rounded-md ${formData.amenities.kitchen ? "mb-[29rem]" : "bottom-80"}
-            ${formData.amenities.furnished ? "mb-[23rem]" : "bottom-80"} ${formData.amenities.kitchen && formData.amenities.furnished ? "bottom-[50rem]" : "bottom-80"}`}/>
+            ${formData.amenities.furnished ? "mb-[23rem]" : "bottom-80"} ${formData.amenities.kitchen && formData.amenities.furnished ? "bottom-[44rem]" : "bottom-80"}`}/>
                 {Array.from({ length: 2 }).map((_, index) => (
                     <div key={index} className={`relative z-10 flex items-center justify-center w-10 h-10 mt-9 bg-red-400 text-white text-xl rounded-full
                     ${formData.amenities.kitchen ? "mb-[61rem]" : "mb-[32rem]"} ${formData.amenities.furnished ? "mb-[55rem]" : "mb-[32rem]"}

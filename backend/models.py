@@ -40,8 +40,8 @@ class Profile(Base):
     
 class Property(Base):
     __tablename__ = "properties"
-    property_id = Column(Integer, primary_key=True, autoincrement=True) # change from Integer to String(24)
-    # owner_id = Column(String(22), ForeignKey('userImportant.user_id'), nullable=False)
+    property_id = Column(Integer, primary_key=True, autoincrement=True) #integer
+    owner_id = Column(Integer, ForeignKey('userImportant.user_id'), nullable=False) #integer
     property_type = Column(
         Enum(
             "House",
@@ -95,7 +95,7 @@ class Property(Base):
 
     bed = Column(Boolean)
     workspace = Column(Boolean)
-    FL_mirror = Column(Boolean) #changed to couch, rip needs to change in db 7/28/25
+    couch = Column(Boolean)
     D_table = Column(Boolean)
     B_table = Column(Boolean)
     C_table = Column(Boolean)

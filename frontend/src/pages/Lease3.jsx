@@ -22,12 +22,13 @@ function getAddressComponent(components, type) {
 
 const Lease3 = () => {
 
+    const property_id = sessionStorage.getItem('form1.property_id')
     const [address, setAddress] = useState({
-        streetAddress: '',
-        unit: '',
+        street_address: '',
+        extra_info: '',
         city: '',
         state: '',
-        zipCode: '',
+        postal_code: '',
         country: '',
       });
     const [mapCenter, setMapCenter] = useState(center);
@@ -43,18 +44,18 @@ const Lease3 = () => {
 
         const streetNumber = getAddressComponent(components, 'street_number');
         const route = getAddressComponent(components, 'route');
-        const streetAddress = [streetNumber, route].filter(Boolean).join(' ');
+        const street_address = [streetNumber, route].filter(Boolean).join(' ');
 
         const city = getAddressComponent(components, 'locality') || getAddressComponent(components, 'sublocality');
         const state = getAddressComponent(components, 'administrative_area_level_1');
-        const zipCode = getAddressComponent(components, 'postal_code');
+        const postal_code = getAddressComponent(components, 'postal_code');
         const country = getAddressComponent(components, 'country');
 
         setAddress({
-            streetAddress,
+            street_address,
             city,
             state,
-            zipCode,
+            postal_code,
             country,
         });
 
@@ -89,23 +90,24 @@ const Lease3 = () => {
     const handleSubmit = async (event) => {
 
         event.preventDefault();
+        saveToSession('form3', address);
         console.log(address)
 
         try {
-            const response = await fetch("http://localhost:4000/api/lease-3", {
-                //"/api/lease-3"
-                //"http://localhost:4000/api/lease-3"
+            const response = await fetch("http://localhost:4000/api/property/page3", {
+                //"/api/property/page3"
+                //"http://localhost:4000/api/property/page3"
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(address)
+                body: JSON.stringify({address, property_id})
             });
 
             const data = await response.json();
             console.log(data);
 
-            if (data.message === "Lease 3 created successfully!") {
+            if (data.message === "Page 3 location details saved.") {
                 setMessage(data.message);
                 navigate('/lease-4')
             } 
@@ -189,8 +191,8 @@ const Lease3 = () => {
                             <input
                                 className="bg-transparent focus:outline-none p-1 text-xs font-normal w-2/3" 
                                 type="text" 
-                                name="streetAddress"
-                                value={address.streetAddress}
+                                name="street_address"
+                                value={address.street_address}
                                 onChange={handleChange}
                                 pattern="^[A-Za-z0-9 ]+$"
                             >
@@ -202,8 +204,8 @@ const Lease3 = () => {
                             <input
                                 className="bg-transparent focus:outline-none p-1 text-xs font-normal w-2/3" 
                                 type="text" 
-                                name="unit"
-                                value={address.unit || ""}
+                                name="extra_info"
+                                value={address.extra_info || ""}
                                 onChange={handleChange}
                                 pattern="^[A-Za-z0-9 ]+$"
                             >
@@ -241,8 +243,8 @@ const Lease3 = () => {
                             <input
                                 className="bg-transparent focus:outline-none p-1 text-xs font-normal w-2/3" 
                                 type="text" 
-                                name="zipCode"
-                                value={address.zipCode}
+                                name="postal_code"
+                                value={address.postal_code}
                                 onChange={handleChange}
                                 pattern="^[0-9 ]+$"
                             >

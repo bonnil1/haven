@@ -13,6 +13,7 @@ const Navigation = ({toggleMenu, isMenuOpen, closeMenu, isLoggedIn, setIsLoggedI
         localStorage.removeItem("firstname")
         localStorage.removeItem("lastname")
         localStorage.removeItem("email")
+        localStorage.removeItem("user_id")
         // think of a better approach than localstorage > jwt
     }
 

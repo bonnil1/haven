@@ -75,12 +75,13 @@ const Lease1 = () => {
     const handleSubmit = async (event) => {
 
         event.preventDefault();
+        saveToSession('form1', formData);
         console.log(formData)
 
         try {
-            const response = await fetch("http://localhost:4000/api/lease-1", {
-                //"/api/lease-1"
-                //"http://localhost:4000/api/lease-1"
+            const response = await fetch("http://localhost:4000/api/property/page1", {
+                //"/api/property/page1"
+                //"http://localhost:4000/api/property/page1"
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -91,8 +92,8 @@ const Lease1 = () => {
             const data = await response.json();
             console.log(data);
 
-            if (data.message === "Lease 1 created successfully!") {
-                setMessage(data.message);
+            if (data.message === "Page 1 data saved.") {
+                saveToSession('form1', data.property_id);
                 navigate('/lease-2')
             } 
 
