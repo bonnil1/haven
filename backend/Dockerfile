@@ -22,7 +22,7 @@ COPY . .
 EXPOSE 4000
 
 # For development
-CMD ["sh", "-c", "until nc -z mysql 3306; do echo 'Waiting for mysql...'; sleep 1; done; uvicorn main:app --host 0.0.0.0 --port 4000"]
+#CMD ["sh", "-c", "until nc -z mysql 3306; do echo 'Waiting for mysql...'; sleep 1; done; uvicorn main:app --host 0.0.0.0 --port 4000"]
 
 # For production
-# CMD ["gunicorn", "-w", "3", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:4000", "main:app"]
+CMD ["gunicorn", "-w", "3", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:4000", "main:app"]

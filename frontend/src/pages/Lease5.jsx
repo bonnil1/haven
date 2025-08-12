@@ -176,7 +176,7 @@ const Lease5 = () => {
                 console.log(`${key}:`, value);
             }
 
-            const response = await fetch("http://localhost:4000/api/property/submit", {
+            const response = await fetch("/api/property/submit", {
                 //"/api/property/submit"
                 //"http://localhost:4000/api/property/submit"
                 method: "POST",

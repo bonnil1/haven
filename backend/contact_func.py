@@ -2,18 +2,17 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
 from dotenv import load_dotenv
+from typing import List, Dict
 import textwrap
 import smtplib
 import os
 
 load_dotenv()
 
-# need to figure out what format attachment would be
-# include date, time, ticket # ? > timestamped when email is sent ... 
-def send_contactus_email(Email: str, FirstName: str, LastName: str, Issue: str, Description: str, Attachment_filename: str = None, Attachment_data: bytes = None):
-    sender_email = os.getenv("GMAIL_UN")
+def send_contactus_email(Email: str, FirstName: str, LastName: str, Issue: str, Description: str, attachments: List[Dict[str, any]] = []):
+    sender_email = os.getenv("GMAIL_UN") #replace with official Haven email 
     sender_password = os.getenv("GMAIL_PW")
-    support_email = "bonnieliu759@yahoo.com"
+    support_email = "bonnieliu759@yahoo.com" #replace with official Haven support email
 
     msg = MIMEMultipart()
     msg['From'] = sender_email
@@ -32,9 +31,9 @@ def send_contactus_email(Email: str, FirstName: str, LastName: str, Issue: str, 
     """)
     msg.attach(MIMEText(body, 'plain'))
 
-    if Attachment_data and Attachment_filename:
-        part = MIMEApplication(Attachment_data, Name=Attachment_filename)
-        part['Content-Disposition'] = f'attachment; filename="{Attachment_filename}"'
+    for file in attachments: 
+        part = MIMEApplication(file["content"], Name=file["filename"])
+        part['Content-Disposition'] = f'attachment; filename="{file["filename"]}"'
         msg.attach(part)
 
     try:
@@ -44,3 +43,5 @@ def send_contactus_email(Email: str, FirstName: str, LastName: str, Issue: str, 
             server.sendmail(sender_email, support_email, msg.as_string())
     except smtplib.SMTPException as e:
         raise Exception(f"Failed to send email: {e}")
+    
+    #MIMEApplication wraps binary content into email attachment 

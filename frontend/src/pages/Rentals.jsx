@@ -79,7 +79,7 @@ const Rentals = () => {
             };
 
             try {
-                const response = await fetch("http://localhost:4000/api/search/results", {
+                const response = await fetch("/api/search/results", {
                     //"/api/search_results"
                     //"http://localhost:4000/api/search/results"
                     method: "POST",

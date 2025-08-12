@@ -32,9 +32,10 @@ const Login = ({setIsLoggedIn}) => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        console.log("hitting handle submit in log in flow")
 
         try {
-            const response = await fetch("http://localhost:4000/api/login", {
+            const response = await fetch("/api/login", {
                 //"http://192.168.49.2:31560/api/login"
                 //"/api/login"
                 //"http://localhost:4000/api/login"
@@ -120,10 +121,10 @@ const Login = ({setIsLoggedIn}) => {
     });
 
     return (
-        <div>
-            <div className='flex justify-center items-center mt-20'>
+        <div className='bg-gray-100 bg-opacity-60 min-h-screen'>
+            <div className='flex justify-center items-center py-20'>
                 {/* Laptop View */}
-                <form onSubmit={handleSubmit} className='flex flex-col rounded-3xl shadow-xl font-roboto bg-[rgb(248,251,248)]  w-5/6 sm:w-1/2 p-6 sm:p-16 sm:px-20'>
+                <form onSubmit={handleSubmit} className='flex flex-col rounded-3xl shadow-lg font-roboto bg-[rgb(248,251,248)] w-5/6 sm:w-1/2 p-6 sm:p-16 sm:px-20'>
                     <h3 className='text-3xl text-[rgb(48,92,112)] mb-5'>Welcome Back  👋🏼</h3>
                     <div>
                         <div className='flex flex-col mb-5'>

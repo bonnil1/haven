@@ -28,7 +28,7 @@ const Show = () => {
   useEffect(() => {
       const fetchListing = async () => {
           try {
-              const response = await fetch(`http://localhost:4000/api/search/show/${id}`, {
+              const response = await fetch(`/api/search/show/${id}`, {
                   //`/api/search/show/${id}`
                   //`http://localhost:4000/api/search/show/${id}`
                   method: "GET",

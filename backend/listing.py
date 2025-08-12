@@ -62,6 +62,8 @@ async def property_page_submit(request: Request, db: Session = Depends(get_db)):
             street_address=data.get("street_address"),
             extra_info=data.get("extra_info"),
             postal_code=data.get("postal_code"),
+            title=data.get("title"),
+            description=data.get("description"),
             electric_fee=data.get("electric_fee"),
             water_fee=data.get("water_fee"),
             rent=data.get("rent"),
@@ -108,6 +110,20 @@ async def property_page_submit(request: Request, db: Session = Depends(get_db)):
         db.add(new_property)
         db.commit()
         db.refresh(new_property)
+
+        property_id = new_property.property_id
+
+        availabilities = [
+            Availability(
+                property_id=property_id,
+                start_date=date_range["startDate"],
+                end_date=date_range["endDate"]
+            )
+            for date_range in date_ranges
+        ]
+
+        db.add_all(availabilities)
+        db.commit()
 
         return {
             "message": "Property listing data saved.",

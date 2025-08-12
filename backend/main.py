@@ -12,6 +12,7 @@ from password import hash_password, verify_password
 from contact_func import send_contactus_email
 from search_routes import router as search_router
 from listing import router as listing_router
+from typing import List
 
 app = FastAPI()
 
@@ -29,6 +30,10 @@ api_router = APIRouter(prefix="/api")
 # New user sign up
 @api_router.post("/new-user")
 async def create_user(request: Request, db: Session = Depends(get_db)):
+    file1 = open("./applicationLog.txt", "w+")
+    file1.write("Request sent... ")
+    file1.close()
+
     print("in new user sign up in backend")
     # Retrieve data from frontend
     data = await request.json()
@@ -42,6 +47,10 @@ async def create_user(request: Request, db: Session = Depends(get_db)):
         existing_user = db.query(User).filter(User.Email == Email).first()
         print(existing_user)
 
+        file1 = open("./applicationLog.txt", "w+")
+        file1.write("Checked for existing user. ")
+        file1.close()
+
         if existing_user:
             return JSONResponse(status_code=400, content={"message": "Email already exists."})
 
@@ -53,6 +62,9 @@ async def create_user(request: Request, db: Session = Depends(get_db)):
         db.refresh(new_user)
     
     except SQLAlchemyError as e:
+        file1 = open("./applicationLog.txt", "w+")
+        file1.write("Db error in creating new user")
+        file1.close()
         db.rollback()
         print(f"A SQLAlchemy error occurred: {e}")
 
@@ -145,7 +157,7 @@ async def set_password(request: Request, token: str, db: Session = Depends(get_d
     
 @api_router.post("/login")
 async def log_in(request: Request, db: Session = Depends(get_db)):
-
+    print("hitting log in in backend")
     data = await request.json()
     print(data)
     Email = data["Email"]
@@ -306,16 +318,22 @@ async def contactus(
     Email: str = Form(...),
     Issue: str = Form(...),
     Description: str = Form(...),
-    Attachment: UploadFile = File(None)
+    attachments: List[UploadFile] = File([])
 ):
     print("in contact us in backend")
+    print(f"Received {len(attachments)} attachments")
 
-    file_data = None
+    files_data = []
 
-    if Attachment: 
-        file_data = await Attachment.read()
+    for file in attachments:
+        contents = await file.read()
+        files_data.append({
+            "filename": file.filename,
+            "content": contents,
+            "content_type": file.content_type
+    })
 
-    send_contactus_email(Email, FirstName, LastName, Issue, Description, Attachment.filename if Attachment else None, file_data)
+    send_contactus_email(Email, FirstName, LastName, Issue, Description, files_data)
 
     return JSONResponse(status_code=200, content={"message": "Customer support email sent successfully!"})
 

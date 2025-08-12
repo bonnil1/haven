@@ -3,6 +3,8 @@ services:
     build: 
       context: ./frontend
       dockerfile: Dockerfile
+    #env_files: (prod)
+    #  - ./frontend/.env
     ports: 
       - "3000:3000" #3000:80 (prod) or 3000:3000 (dev)
     networks:

@@ -1,23 +1,25 @@
-import React from 'react'
+import React from 'react';
 import { useState, useRef, useEffect } from 'react';
 import Navigation from './components/Navigation';
 import Signup from './pages/Signup';
-import Email from './pages/Email'
+import Email from './pages/Email';
 import Password from './pages/Password';
 import Profile from './pages/Profile';
 import Login from './pages/Login';
 import Prelanding from './pages/Prelanding';
-import Landing from './pages/Landing'
+import Landing from './pages/Landing';
 import Rentals from './pages/Rentals';
+import AllRentals from './pages/AllRentals';
 import Show from './pages/Show';
 import HousingRequest from './pages/HousingRequest';
 import Lease1 from './pages/Lease1';
-import Lease2 from './pages/Lease2'
+import Lease2 from './pages/Lease2';
 import Lease3 from './pages/Lease3';
 import Lease4 from './pages/Lease4';
 import Lease5 from './pages/Lease5';
 import Lease6 from './pages/Lease6';
 import ListProperty from './pages/ListProperty';
+import AllListings from './pages/AllListings';
 import UserProfile from './pages/UserProfile';
 import Contact from './pages/Contact';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -68,6 +70,7 @@ return (
         <Route path='/home' element={<Landing closeMenu={closeMenu}/>} />
         <Route path='/home/rentals' element={<Rentals />}/>
         <Route path='/home/rentals/show/:id' element={<Show />}/>
+        <Route path='/all-rentals' element={<AllRentals />}/>
         <Route path='/housing-request' element={<HousingRequest />}/>
         <Route path='/lease-1' element={<Lease1 />}/>
         <Route path='/lease-2' element={<Lease2 />}/>
@@ -76,6 +79,7 @@ return (
         <Route path='/lease-5' element={<Lease5 />}/>
         <Route path='/lease-6' element={<Lease6 />}/>
         <Route path='/list-your-property' element={<ListProperty />}/>
+        <Route path='/all-listings' element={<AllListings />}/>
         <Route path='/profile' element={<UserProfile />}/>
         <Route path='/contact' element={<Contact />}/>
       </Routes>

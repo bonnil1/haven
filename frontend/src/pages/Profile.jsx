@@ -26,7 +26,7 @@ const Profile = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch(`http://localhost:4000/api/id?email=${encodeURIComponent(email)}`)
+        fetch(`/api/id?email=${encodeURIComponent(email)}`)
         //http://192.168.49.2:31560/api/id?email=${encodeURIComponent(email)}
         ///api/id?email=${encodeURIComponent(email)}
         //http://localhost:4000/api/id?email=${encodeURIComponent(email)}
@@ -82,7 +82,7 @@ const Profile = () => {
         event.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:4000/api/new-profile", {
+            const response = await fetch("/api/new-profile", {
                 //http://192.168.49.2:31560/api/new-profile
                 //"/api/new-profile"
                 //"http://localhost:4000/api/new-profile"

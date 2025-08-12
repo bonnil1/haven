@@ -37,11 +37,11 @@ const Signup = () => {
     }
 
     const handleSubmit = async (event) => {
-        console.log("hitting handle submit");
+        console.log("hitting handle submit in new user sign up");
         event.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:4000/api/new-user", {
+            const response = await fetch("/api/new-user", {
                 //"http://192.168.49.2:31560/api/new-user"
                 //"/api/new-user"
                 //"http://localhost:4000/api/new-user"

@@ -1,9 +1,16 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { useState, useEffect, useRef  } from 'react';
-import { PiWarehouseFill } from "react-icons/pi";
-import { BiSolidUserRectangle } from "react-icons/bi";
 import logo from '../assets/images/haven_logo_2.png';
+import { BiSolidUserRectangle } from "react-icons/bi";
+import { IoIosSearch } from "react-icons/io";
+import { AiOutlineHome } from "react-icons/ai";
+import { CgProfile } from "react-icons/cg";
+import { FiMessageSquare } from "react-icons/fi";
+import { CiViewList } from "react-icons/ci";
+import { IoSettingsOutline } from "react-icons/io5";
+import { MdOutlineContactSupport } from "react-icons/md";
+import { MdOutlineLogin } from "react-icons/md";
+
 
 const Navigation = ({toggleMenu, isMenuOpen, closeMenu, isLoggedIn, setIsLoggedIn, menuRef}) => {
 
@@ -45,43 +52,57 @@ const Navigation = ({toggleMenu, isMenuOpen, closeMenu, isLoggedIn, setIsLoggedI
                         </button>
                     </div>
                     <div className={`${isMenuOpen ? 'block' : 'hidden'}`} ref={menuRef}>
-                        <div className="absolute right-0 w-20 sm:w-56 p-2 mt-20 mr-3 bg-white shadow-xl rounded-xl">
+                        <div className="absolute right-0 w-20 sm:w-56 p-2 mt-20 mr-3 bg-white shadow-xl rounded-xl font-roboto">
                         {isLoggedIn ? (
-                            <>
-                                <NavLink to="profile" onClick={closeMenu} className="block text-black font-semibold hover:bg-[rgb(232,240,232)] px-3 py-2">
-                                    Profile
+                            <> 
+                                <NavLink to="home" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-1.5">
+                                    <div className='flex'><IoIosSearch className='mt-1 mr-2'/>Find your home</div>
                                 </NavLink>
-                                <NavLink to="home" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-2">
-                                    Find your home
+                                <NavLink to="all-rentals" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-1.5">
+                                    <div className='flex'><AiOutlineHome className='mt-1 mr-2'/>View rentals</div>
                                 </NavLink>
-                                <NavLink to="list-your-property" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-2">
-                                    List your home
+                                <NavLink to="profile" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-1.5">
+                                    <div className='flex'><CgProfile className='mt-1 mr-2'/>Profile</div>
                                 </NavLink>
-                                <NavLink to="contact" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-2">
-                                    Contact Us
+                                <NavLink to="messages" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-1.5">
+                                    <div className='flex'><FiMessageSquare className='mt-1 mr-2'/>Messages</div>
                                 </NavLink>
-                                <NavLink to="/" onClick={logout}  className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-2">
-                                    Log Out
+                                <hr className="my-2 border-green-700 border-opacity-30"/>
+                                <NavLink to="lease-1" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-1.5">
+                                    <div className='flex'><CiViewList className='mt-1 mr-2'/>List your home</div>
+                                </NavLink>
+                                <NavLink to="all-listings" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-1.5">
+                                    <div className='flex'><AiOutlineHome className='mt-1 mr-2'/>View listings</div>
+                                </NavLink>
+                                <hr className="my-2 border-green-700 border-opacity-30"/>
+                                <NavLink to="account" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-1.5">
+                                    <div className='flex'><IoSettingsOutline className='mt-1 mr-2'/>Account Settings</div>
+                                </NavLink>
+                                <NavLink to="contact" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-1.5">
+                                    <div className='flex'><MdOutlineContactSupport className='mt-1 mr-2'/>Contact Us</div>
+                                </NavLink>
+                                <NavLink to="/" onClick={logout}  className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-1.5">
+                                    <div className='flex'><MdOutlineLogin className='mt-1 mr-2'/>Log Out</div>
                                 </NavLink>
                             </>
                         ) : (
                             <>
-                                <NavLink to="signup" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-2">
-                                    Sign up
+                                <NavLink to="signup" onClick={closeMenu} className="block text-[rgb(250,112,99)] font-semibold hover:bg-[rgb(232,240,232)] px-3 py-1.5">
+                                    <div className='flex'><CgProfile className='mt-1 mr-2'/>Sign up</div>
                                 </NavLink>
-                                <NavLink to="login" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-2">
-                                    Log in
-                                </NavLink>
-                                <hr className="my-2 border-green-700 border-opacity-30"/>
-                                <NavLink to="home" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-2">
-                                    Find your home
-                                </NavLink>
-                                <NavLink to="lease-1" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-2">
-                                    List your home
+                                <NavLink to="login" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-1.5">
+                                    <div className='flex'><MdOutlineLogin className='mt-1 mr-2'/>Log In</div>
                                 </NavLink>
                                 <hr className="my-2 border-green-700 border-opacity-30"/>
-                                <NavLink to="contact" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-2">
-                                    Contact Us
+                                <NavLink to="home" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-1.5">
+                                    <div className='flex'><IoIosSearch className='mt-1 mr-2'/>Find your home</div>
+                                </NavLink>
+                                <NavLink to="lease-1" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-1.5">
+                                    <div className='flex'><CiViewList className='mt-1 mr-2'/>List your home</div>
+                                </NavLink>
+                                <hr className="my-2 border-green-700 border-opacity-30"/>
+                                <NavLink to="contact" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-1.5">
+                                    <div className='flex'><MdOutlineContactSupport className='mt-1 mr-2'/>Contact Us</div>
                                 </NavLink>
                             </>
                         )}
