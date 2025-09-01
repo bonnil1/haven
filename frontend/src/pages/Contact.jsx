@@ -133,7 +133,7 @@ const Contact = () => {
   return (
     <div className='flex flex-col justify-center items-center bg-gray-100 bg-opacity-70'>
         <div className='w-full sm:w-2/5 py-10'>
-        <form onSubmit={handleSubmit} className='bg-[rgb(248,251,248)] border shadow-lg rounded-xl px-20 pt-14 pb-8'>
+        <form onSubmit={handleSubmit} className='bg-white border shadow-lg rounded-xl px-20 pt-14 pb-8'>
             <h1 className='font-nunito font-bold text-teal-800 text-4xl mb-10'>Contact Haven Support</h1>
             <div className='flex flex-col mb-5'>
                 <label className='text-xs text-slate-700 font-bold'>First Name <span className='text-red-500'>*</span></label>

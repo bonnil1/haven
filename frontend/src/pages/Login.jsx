@@ -51,9 +51,12 @@ const Login = ({setIsLoggedIn}) => {
 
             if (data.message === "Log in successful.") {
                 setIsLoggedIn(true)
+                localStorage.setItem("isLoggedIn", "true");
                 localStorage.setItem("email", data.email)
                 localStorage.setItem("user_id", data.user_id)
-                navigate('/')
+                localStorage.setItem("firstname", data.FirstName)
+                localStorage.setItem("lastname", data.LastName)
+                navigate('/dashboard')
             } else if (data.message === "Please verify your email address to activate account.") {
                 setMessage(data.message)
             } else if (data.message === "Invalid credentials.") {

@@ -173,6 +173,8 @@ async def log_in(request: Request, db: Session = Depends(get_db)):
             storedpw = user.Password
             userverified = user.EmailVerified
             user_id = user.user_id
+            FirstName = user.FirstName
+            LastName = user.LastName
 
             if not userverified: 
                 return JSONResponse(status_code=401, content={"message": "Please verify your email address to activate account."})
@@ -181,7 +183,7 @@ async def log_in(request: Request, db: Session = Depends(get_db)):
             if not verify_password(Password, storedpw):
                 return(JSONResponse(status_code=401, content={"message": "Invalid credentials."}))
             else:
-                return JSONResponse(status_code=200, content={"message": "Log in successful.", "email": Email, "user_id": user_id})
+                return JSONResponse(status_code=200, content={"message": "Log in successful.", "email": Email, "user_id": user_id, "FirstName": FirstName, "LastName": LastName})
         
                 # jwt token function here
 
@@ -254,9 +256,9 @@ async def new_profile(request: Request, db: Session = Depends(get_db)):
 
     try:
         # Check if user id exists
-        existing_userid = db.query(Profile).filter(Profile.user_id == user_id).first()
+        existing_user = db.query(Profile).filter(Profile.user_id == user_id).first()
 
-        if existing_userid:
+        if existing_user:
             return JSONResponse(status_code=400, content={"message": "User id already exists."})
 
         # Create the new user profile
@@ -274,6 +276,43 @@ async def new_profile(request: Request, db: Session = Depends(get_db)):
     print(new_user_profile)
     
     return JSONResponse(status_code=200, content={"message": "New user profile created."})
+
+@api_router.post("/update-profile")
+async def new_profile(request: Request, db: Session = Depends(get_db)):
+    print("in update user profile")
+
+    data = await request.json()
+    print(data)
+    user_id = data["user_id"]
+    PhoneNumber = data["phone"]
+    Gender = data["gender"]
+    DateOfBirth = data["birthday"]
+    Occupation = data["occupation"]
+
+    try:
+        # Check if user id exists
+        existing_user = db.query(Profile).filter(Profile.user_id == user_id).first()
+
+        if existing_user:
+            # Update fields
+            existing_user.PhoneNumber = PhoneNumber
+            existing_user.Gender = Gender
+            existing_user.DateOfBirth = DateOfBirth
+            existing_user.Occupation = Occupation
+
+            db.commit()
+            db.refresh(existing_user)
+            print(existing_user)
+
+            return JSONResponse(status_code=200, content={"message": "User profile updated."})
+        
+        else:
+            return JSONResponse(status_code=404, content={"message": "User not found."})
+
+    except SQLAlchemyError as e:
+        db.rollback()
+        print(f"A SQLAlchemy error occurred: {e}")
+        return JSONResponse(status_code=500, content={"message": "Database error."})
 
 @api_router.get("/profile")
 async def get_profile(email: str, db: Session = Depends(get_db)):

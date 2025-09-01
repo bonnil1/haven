@@ -10,22 +10,29 @@ import { FaFacebook } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { useState, useEffect } from 'react';
 
-const UserProfile = () => {
+const ProfileEdit = () => {
 
     const email = localStorage.getItem("email")
+    const user_id = localStorage.getItem("user_id")
 
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    // const [photo, setPhoto] = useState('');
-    const [phone, setPhone] = useState('');
-    const [gender, setGender] = useState('');
-    const [birthday, setBirthday] = useState('');
-    const [occupation, setOccupation] = useState('');
+    const [userData, setUserData] = useState({
+        user_id: '',
+        firstName: '',
+        lastName: '',
+        phone: '',
+        gender: '',
+        birthday: '',
+        occupation: '',
+    })
+
+    const [message, setMessage] = useState('');
 
     const currentYear = new Date().getFullYear();
     const [month, setMonth] = useState('');
     const [date, setDate] = useState('');
     const [year, setYear] = useState('');
+
+
 
     useEffect(() => {
         fetch(`/api/profile?email=${encodeURIComponent(email)}`)
@@ -40,12 +47,17 @@ const UserProfile = () => {
             })
             .then(data => {
                 console.log(data);
-                setFirstName(data.FirstName)
-                setLastName(data.LastName)
-                setPhone(data.PhoneNumber)
-                setGender(data.Gender)
-                setBirthday(data.DateOfBirth)
-                setOccupation(data.Occupation)
+
+                setUserData({
+                    user_id: user_id,
+                    firstName: data.FirstName,
+                    lastName: data.LastName,
+                    phone: data.PhoneNumber,
+                    gender: data.Gender,
+                    birthday: data.DateOfBirth,
+                    occupation: data.Occupation,
+                })
+
             })
             .catch(error => {
                 console.error("Error fetching id:", error);
@@ -53,15 +65,28 @@ const UserProfile = () => {
     }, []);
 
     useEffect(() => {
-        if (birthday) {
-            //console.log(birthday)
-            const [year, month, date] = birthday.split('-');
+        if (userData.birthday) {
+            //console.log(userData.birthday)
+            const [year, month, date] = userData.birthday.split('-');
             
             setYear(year);
             setMonth(months[parseInt(month, 10) - 1]);
             setDate(parseInt(date, 10));
         }
-    }, [birthday]);
+    }, [userData.birthday]);
+
+    useEffect(() => {
+        if (month && date && year) {
+            const monthIndex = months.indexOf(month) + 1; // +1 to get month in MM format (1-based index)
+            const formattedBirthday = `${year}-${monthIndex.toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}`;
+            if (formattedBirthday !== userData.birthday) {
+                setUserData(prevData => ({
+                    ...prevData,
+                    birthday: formattedBirthday
+                }));
+            }
+        }
+    }, [month, date, year]);
 
     const months = [
         'January', 'February', 'March', 'April', 'May', 'June',
@@ -71,6 +96,14 @@ const UserProfile = () => {
     const days = Array.from({ length: 31 }, (_, i) => i + 1);
 
     const years = Array.from({ length: currentYear - 1900 + 1 }, (_, i) => currentYear - i);
+
+    const handleChange = (event) => {
+        setUserData(prevState => {
+            const updatedUserData = {...prevState,[event.target.name]: event.target.value};
+
+            return updatedUserData;
+        })
+    };
 
     {/* 
     //conflicting with other code
@@ -84,7 +117,29 @@ const UserProfile = () => {
     */}
     
     const handleSubmit = async (event) => {
-        //code for handle submit
+        event.preventDefault()
+
+        try {
+            const response = await fetch("/api/update-profile", {
+                //"/api/update-profile"
+                //"http://localhost:4000/api/update-profile"
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(userData) 
+            })
+            
+            const data = await response.json()
+            console.log(data)
+
+            if (data.message === "User profile updated.") {
+                setMessage("User profile updated.")
+            }
+
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     return (
@@ -130,8 +185,9 @@ const UserProfile = () => {
                             <input
                                 className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2" 
                                 type="text" 
-                                name="FirstName"
-                                value={firstName}
+                                name="firstName"
+                                value={userData.firstName}
+                                onChange={handleChange}
                                 pattern="^[A-Za-z ]+$"
                                 required
                             >
@@ -142,8 +198,9 @@ const UserProfile = () => {
                                 <input
                                 className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2" 
                                 type="text" 
-                                name="LastName"
-                                value={lastName}
+                                name="lastName"
+                                value={userData.lastName}
+                                onChange={handleChange}
                                 pattern="^[A-Za-z ]+$"
                                 required
                             >
@@ -155,8 +212,9 @@ const UserProfile = () => {
                                 <input
                                 className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2" 
                                 type="text" 
-                                name="PhoneNumber"
-                                value={phone}
+                                name="phone"
+                                value={userData.phone}
+                                onChange={handleChange}
                                 pattern="^\d{3}-\d{3}-\d{4}$"
                                 required
                             >
@@ -168,9 +226,10 @@ const UserProfile = () => {
                                 <div className='flex text-sm'>
                                     <input
                                         type="radio"
+                                        name="gender"
                                         value="Female"
-                                        checked={gender === "Female"}
-                                        //onChange={handleGenderChange}
+                                        checked={userData.gender === "Female"}
+                                        onChange={handleChange}
                                         className="w-4 h-4 mr-1 mt-0.5 text-blue-600 border-gray-300 focus:ring-slate-500"
                                     />
                                     <span>Female</span>
@@ -178,9 +237,10 @@ const UserProfile = () => {
                                 <div className='flex text-sm'>
                                     <input
                                         type="radio"
+                                        name="gender"
                                         value="Male"
-                                        checked={gender === "Male"}
-                                        //onChange={handleGenderChange}
+                                        checked={userData.gender === "Male"}
+                                        onChange={handleChange}
                                         className="w-4 h-4 mr-1 mt-0.5 text-blue-600 border-gray-300 focus:ring-slate-500"
                                     />
                                     <span>Male</span>
@@ -188,9 +248,10 @@ const UserProfile = () => {
                                 <div className='flex text-sm'>
                                     <input
                                         type="radio"
+                                        name="gender"
                                         value="Non-Binary"
-                                        checked={gender === "Non-Binary"}
-                                        //onChange={handleGenderChange}
+                                        checked={userData.gender === "Non-Binary"}
+                                        onChange={handleChange}
                                         className="w-4 h-4 mr-1 mt-0.5 text-blue-600 border-gray-300 focus:ring-slate-500"
                                     />
                                     <span>Non-binary</span>
@@ -198,9 +259,10 @@ const UserProfile = () => {
                                 <div className='flex text-sm'>
                                     <input
                                         type="radio"
+                                        name="gender"
                                         value="Prefer Not To Respond"
-                                        checked={gender === "Prefer Not To Respond"}
-                                        //onChange={handleGenderChange}
+                                        checked={userData.gender === "Prefer Not To Respond"}
+                                        onChange={handleChange}
                                         className="w-4 h-4 mr-1 mt-0.5 text-blue-600 border-gray-300 focus:ring-slate-500"
                                     />
                                     <span>Prefer Not To Respond</span>
@@ -261,24 +323,28 @@ const UserProfile = () => {
                             <label>Occupation</label>
                             <select
                                 className='border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2'
-                                name='Occupation'
-                                value={occupation}
-                                //onChange={handleOccupationChange}
+                                name='occupation'
+                                value={userData.occupation}
+                                onChange={handleChange}
                                 required
                             >
-                                <option value='' disabled selected>Select Occupation</option>
+                                <option value='' disabled>Select Occupation</option>
                                 <option value='Not'>Prefer not to say</option>
                                 <option value='Nurse'>Nurse</option>
                                 <option value='Student'>Student</option>
                             </select>
                         </div>
                         <button
-                            className="bg-[rgb(209,224,205)] hover:bg-slate-500 text-white py-2 border rounded-xl w-full mt-1"
+                            className="bg-[rgb(209,224,205)] hover:bg-gray-300 text-white py-2 border rounded-xl w-full mt-1"
                             type="submit"
                         >
                             Save Changes
                         </button>
-                    </div>    
+                        
+                        {message === "User profile updated." && (
+                            <h4 className='flex justify-center text-xs text-emerald-600'>User profile updated successfully.</h4>
+                        )}
+                    </div>   
                 </form>
             </div>
         </div>
@@ -286,4 +352,4 @@ const UserProfile = () => {
     )
 }
 
-export default UserProfile
+export default ProfileEdit

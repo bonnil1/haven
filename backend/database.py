@@ -2,11 +2,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 #Docker route
-#DATABASE_URL = "mysql://root:liupassword@mysql:3306/userdb"
+DATABASE_URL = "mysql://root:liupassword@mysql:3306/userdb"
 
 #EC2 route
 #DATABASE_URL = "mysql+pymysql://root@localhost:3306/User"
-DATABASE_URL = "mysql+pymysql://root@localhost:3306/Haven" #new
+#DATABASE_URL = "mysql+pymysql://root@localhost:3306/Haven" #new
 
 # SQLAlchemy engine that connects to MySQL db
 engine = create_engine(DATABASE_URL)

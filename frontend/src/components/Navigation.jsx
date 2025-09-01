@@ -1,5 +1,6 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
+import { useState } from "react";
 import logo from '../assets/images/haven_logo_2.png';
 import { BiSolidUserRectangle } from "react-icons/bi";
 import { IoIosSearch } from "react-icons/io";
@@ -12,16 +13,23 @@ import { MdOutlineContactSupport } from "react-icons/md";
 import { MdOutlineLogin } from "react-icons/md";
 
 
-const Navigation = ({toggleMenu, isMenuOpen, closeMenu, isLoggedIn, setIsLoggedIn, menuRef}) => {
+const Navigation = ({toggleMenu, isMenuOpen, closeMenu, isLoggedIn, setIsLoggedIn, menuRef, onToggle}) => {
+
+    const [isHost, setIsHost] = useState(false)
+
+    const toggleRole = () => {
+        setIsHost(prev => {
+            const switchRole = !prev;
+            onToggle(switchRole ? 'host' : 'renter');
+            return switchRole
+        })
+    }
 
     const logout = () => {
         closeMenu(); 
         setIsLoggedIn(false);
-        localStorage.removeItem("firstname")
-        localStorage.removeItem("lastname")
-        localStorage.removeItem("email")
-        localStorage.removeItem("user_id")
-        // think of a better approach than localstorage > jwt
+        localStorage.clear();
+        // change from localstorage > jwt eventually ... 
     }
 
     return (
@@ -40,21 +48,43 @@ const Navigation = ({toggleMenu, isMenuOpen, closeMenu, isLoggedIn, setIsLoggedI
                 <div className="md:ml-auto">
                     <div className="flex mt-1">
 
+                    {/* Toggle Button */}
+                    <div className="flex items-center space-x-4 mr-8 font-nunito">
+                    <span className="text-sm text-white">{isHost ? 'Host' : 'Renter'}</span>
+                    <button
+                        onClick={toggleRole}
+                        className={`relative inline-flex h-12 w-40 items-center rounded-full transition bg-gray-300`}
+                    >
+                        <div className="flex justify-between items-center w-full px-3 text-md text-white z-10">
+                            <span className='ml-1 font-bold'>Renter</span>
+                            <span className='mr-2.5 font-bold'>Host</span>
+                        </div>
+                        <span
+                        className={`absolute h-8 w-16 m-2 rounded-full bg-[rgb(250,112,99)] transition-transform duration-300 ${
+                            isHost ? 'translate-x-20' : 'translate-x-0'
+                        }`}
+                        />
+                    </button>
+                    </div>
+
                     {/* Hamburger Icon */}
                     <div>
-                        <button onClick={toggleMenu} className="flex text-[rgb(250,112,99)] focus:outline-none hover:bg-gray-200 rounded-md p-2">
+                        <button onClick={toggleMenu} className="flex text-[rgb(250,112,99)] focus:outline-none hover:bg-gray-200 rounded-md p-1">
                             {/* 
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 28 24" stroke="currentColor" className="w-8 h-10">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
                             */}
-                            <BiSolidUserRectangle className='size-10'/>
+                            <BiSolidUserRectangle className='size-12'/>
                         </button>
                     </div>
                     <div className={`${isMenuOpen ? 'block' : 'hidden'}`} ref={menuRef}>
-                        <div className="absolute right-0 w-20 sm:w-56 p-2 mt-20 mr-3 bg-white shadow-xl rounded-xl font-roboto">
+                        <div className="absolute right-0 w-20 sm:w-56 p-2 mt-20 mr-3 bg-white shadow-xl rounded-xl font-roboto z-50">
                         {isLoggedIn ? (
                             <> 
+                                <NavLink to="dashboard" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-1.5">
+                                    <div className='flex'><IoIosSearch className='mt-1 mr-2'/>Dashboard</div>
+                                </NavLink>
                                 <NavLink to="home" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-1.5">
                                     <div className='flex'><IoIosSearch className='mt-1 mr-2'/>Find your home</div>
                                 </NavLink>

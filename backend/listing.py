@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Request
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 from fastapi.responses import JSONResponse
@@ -137,6 +138,39 @@ async def property_page_submit(request: Request, db: Session = Depends(get_db)):
             status_code=500, content={"message": "Failed to save property listing."}
         )
     
+@router.post("/all_listings")
+async def search_request(request: Request, db: Session = Depends(get_db)):
+    print("hitting backend all listings")
+    data = await request.json()
+    print(data)
+    owner_id = data.get("user_id")
+
+    try:
+        query = db.query(Property).filter(Property.owner_id == owner_id)
+
+        results = query.all()
+
+        if not results:
+            raise HTTPException(status_code=404, detail="No listings found for the given user.")
+
+        print(f"Results: {results}")
+
+        properties = []
+
+        for property in results:
+            properties.append({
+                "property_id": property.property_id,
+                "title": property.title,
+                "rent": property.rent,
+                "bedrooms": property.bedrooms,
+                "bathrooms": property.bathrooms,
+            })
+
+        return {"results": properties, "message": "All listings returned successfully!",}
+
+    except SQLAlchemyError as e:
+            db.rollback()
+            print(f"A SQLAlchemy error occurred: {e}")
 
 @router.post("/page1")
 async def property_page1(request: Request, db: Session = Depends(get_db)):

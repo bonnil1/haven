@@ -8,6 +8,7 @@ import Profile from './pages/Profile';
 import Login from './pages/Login';
 import Prelanding from './pages/Prelanding';
 import Landing from './pages/Landing';
+import RenterDashboard from './pages/RenterDashboard';
 import Rentals from './pages/Rentals';
 import AllRentals from './pages/AllRentals';
 import Show from './pages/Show';
@@ -20,7 +21,7 @@ import Lease5 from './pages/Lease5';
 import Lease6 from './pages/Lease6';
 import ListProperty from './pages/ListProperty';
 import AllListings from './pages/AllListings';
-import UserProfile from './pages/UserProfile';
+import ProfileEdit from './pages/ProfileEdit';
 import Contact from './pages/Contact';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import '../styles.css';
@@ -28,7 +29,9 @@ import '../styles.css';
 
 const App = () => {
   
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+      return localStorage.getItem("isLoggedIn") === "true";
+  });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
 
@@ -40,6 +43,10 @@ const App = () => {
   const closeMenu = () => {
     setIsMenuOpen(false);
   };
+
+  const handleUserToggle = (role) => {
+    console.log('Switched to:', role)
+  }
 
   useEffect(() => {
       const handleClickOutside = (event) => {
@@ -59,7 +66,7 @@ const App = () => {
 return (
   <Router>
     <div>
-      <Navigation toggleMenu={toggleMenu} isMenuOpen={isMenuOpen} closeMenu={closeMenu} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} menuRef={menuRef}/>
+      <Navigation toggleMenu={toggleMenu} isMenuOpen={isMenuOpen} closeMenu={closeMenu} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} menuRef={menuRef} onToggle={handleUserToggle}/>
       <Routes>
         <Route path='/signup' element={<Signup />}/>
         <Route path='/verification' element={<Email />}/>
@@ -68,6 +75,7 @@ return (
         <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} />}/>
         <Route path='/' element={<Prelanding closeMenu={closeMenu} isLoggedIn={isLoggedIn}/>}/>
         <Route path='/home' element={<Landing closeMenu={closeMenu}/>} />
+        <Route path='/dashboard' element={<RenterDashboard closeMenu={closeMenu}/>} />
         <Route path='/home/rentals' element={<Rentals />}/>
         <Route path='/home/rentals/show/:id' element={<Show />}/>
         <Route path='/all-rentals' element={<AllRentals />}/>
@@ -80,7 +88,7 @@ return (
         <Route path='/lease-6' element={<Lease6 />}/>
         <Route path='/list-your-property' element={<ListProperty />}/>
         <Route path='/all-listings' element={<AllListings />}/>
-        <Route path='/profile' element={<UserProfile />}/>
+        <Route path='/profile' element={<ProfileEdit />}/>
         <Route path='/contact' element={<Contact />}/>
       </Routes>
     </div>
