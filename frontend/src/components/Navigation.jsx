@@ -104,7 +104,7 @@ const Navigation = ({toggleMenu, isMenuOpen, closeMenu, isLoggedIn, setIsLoggedI
                                     <div className='flex'><AiOutlineHome className='mt-1 mr-2'/>View listings</div>
                                 </NavLink>
                                 <hr className="my-2 border-green-700 border-opacity-30"/>
-                                <NavLink to="account" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-1.5">
+                                <NavLink to="settings" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-1.5">
                                     <div className='flex'><IoSettingsOutline className='mt-1 mr-2'/>Account Settings</div>
                                 </NavLink>
                                 <NavLink to="contact" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-1.5">

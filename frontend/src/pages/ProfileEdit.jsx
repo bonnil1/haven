@@ -12,6 +12,7 @@ import { useState, useEffect } from 'react';
 
 const ProfileEdit = () => {
 
+    const firstname = localStorage.getItem("firstname")
     const email = localStorage.getItem("email")
     const user_id = localStorage.getItem("user_id")
 
@@ -148,13 +149,13 @@ const ProfileEdit = () => {
             <div className='rounded-xl bg-[rgb(248,251,248)] shadow-md px-6 py-12'>
                 <div className='flex flex-col'>
                     <div className='flex'>
-                        <CgProfile className='size-24 text-teal-800'/>
-                        <h1 className='text-xl font-bold mt-5 ml-5 text-slate-700'>
-                            Welcome Back, User! 👋🏼
+                        <img className='w-1/4 rounded-full' src="https://t3.ftcdn.net/jpg/10/24/11/58/360_F_1024115848_VTfuHjHj9UVVvrUOaDQqm2clMspgRnGs.jpg" alt="profile image"></img>
+                        <h1 className='text-xl font-bold mt-5 ml-5 text-slate-700 capitalize'>
+                            Welcome Back, {firstname}! 👋🏼
                         </h1>
                     </div>
                     <div>
-                        <h1 className='bg-[rgb(250,112,99)] rounded-full text-white font-bold text-sm px-3 py-0.5 w-16 ml-3 mt-3'>Guest</h1>
+                        <h1 className='bg-[rgb(250,112,99)] rounded-full text-white font-bold text-sm px-3 py-0.5 w-16 ml-3 mt-3'>Renter</h1>
                         <h1 className='text-slate-700 font-semibold mt-7'>Verified Information</h1>
                         <h1 className='text-slate-700 mt-5 flex'> <AiOutlineSmile className='size-5 text-teal-800 ml-3 mr-3'/> Identity</h1>
                         <h1 className='text-slate-700 mt-5 flex'> <MdOutlineMedicalInformation className='size-5 text-teal-800 ml-3 mr-3'/>Medical Professional</h1>

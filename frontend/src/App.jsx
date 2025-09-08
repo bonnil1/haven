@@ -24,6 +24,7 @@ import ListingDashboard from './pages/ListingDashboard';
 import AllListings from './pages/AllListings';
 import ProfileEdit from './pages/ProfileEdit';
 import Contact from './pages/Contact';
+import Settings from './pages/Settings';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import '../styles.css';
 
@@ -92,6 +93,7 @@ return (
         <Route path='/all-listings' element={<AllListings />}/>
         <Route path='/profile' element={<ProfileEdit />}/>
         <Route path='/contact' element={<Contact />}/>
+        <Route path='/settings' element={<Settings />}/>
       </Routes>
     </div>
   </Router>
