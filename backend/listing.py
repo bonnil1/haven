@@ -166,7 +166,7 @@ async def search_request(request: Request, db: Session = Depends(get_db)):
                 "bathrooms": property.bathrooms,
             })
 
-        return {"results": properties, "message": "All listings returned successfully!",}
+        return {"results": properties, "message": "All listings for user returned successfully!",}
 
     except SQLAlchemyError as e:
             db.rollback()

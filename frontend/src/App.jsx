@@ -20,6 +20,7 @@ import Lease4 from './pages/Lease4';
 import Lease5 from './pages/Lease5';
 import Lease6 from './pages/Lease6';
 import ListProperty from './pages/ListProperty';
+import ListingDashboard from './pages/ListingDashboard';
 import AllListings from './pages/AllListings';
 import ProfileEdit from './pages/ProfileEdit';
 import Contact from './pages/Contact';
@@ -75,7 +76,7 @@ return (
         <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} />}/>
         <Route path='/' element={<Prelanding closeMenu={closeMenu} isLoggedIn={isLoggedIn}/>}/>
         <Route path='/home' element={<Landing closeMenu={closeMenu}/>} />
-        <Route path='/dashboard' element={<RenterDashboard closeMenu={closeMenu}/>} />
+        <Route path='/renter-dashboard' element={<RenterDashboard closeMenu={closeMenu}/>} />
         <Route path='/home/rentals' element={<Rentals />}/>
         <Route path='/home/rentals/show/:id' element={<Show />}/>
         <Route path='/all-rentals' element={<AllRentals />}/>
@@ -87,6 +88,7 @@ return (
         <Route path='/lease-5' element={<Lease5 />}/>
         <Route path='/lease-6' element={<Lease6 />}/>
         <Route path='/list-your-property' element={<ListProperty />}/>
+        <Route path='/listing-dashboard' element={<ListingDashboard />}/>
         <Route path='/all-listings' element={<AllListings />}/>
         <Route path='/profile' element={<ProfileEdit />}/>
         <Route path='/contact' element={<Contact />}/>

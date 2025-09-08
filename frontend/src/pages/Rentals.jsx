@@ -241,7 +241,7 @@ const Rentals = () => {
                         <div key={index} className="flex flex-col items-center rounded-xl shadow-md mb-4 text-slate-700">
                             <div className='relative w-full'>
                                 <NavLink to={`show/${rental.property_id}`} key={rental.property_id}>
-                                <img className="h-auto max-w-full rounded-xl" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-3.jpg" alt=""></img>
+                                <img className="h-auto max-w-full rounded-xl" src="https://www.avail.co/wp-content/uploads/2021/03/where-to-post-rental-listing-online-for-free.jpg" alt=""></img>
                                 </NavLink>
                                 <div className="absolute top-4 left-4 bg-[rgb(250,112,99)] text-white text-sm font-semibold rounded-full px-3 py-1 shadow">
                                     ${rental.rent}

@@ -4,10 +4,12 @@ import { v4 as uuidv4 } from 'uuid';
 
 const Contact = () => {
 
+    const user_id = localStorage.getItem("user_id")
+
     const [formData, setFormData] = useState({
-        FirstName: '',
-        LastName: '',
-        Email: '',
+        FirstName: localStorage.getItem("firstname") || "",
+        LastName: localStorage.getItem("lastname") || "",
+        Email: localStorage.getItem("email") || "",
         Issue: '',
         Description: '',
         attachments: []
@@ -41,10 +43,11 @@ const Contact = () => {
                 }
             })
         } else {
-            setFormData(prevFormData => ({
-                ...prevFormData,
-                [name]: value
-            }))
+            setFormData(prevState => {
+                const updatedForm = {...prevState, [event.target.name]: event.target.value}
+
+                return updatedForm
+            })
         }
     }
 
@@ -131,130 +134,156 @@ const Contact = () => {
     }
 
   return (
-    <div className='flex flex-col justify-center items-center bg-gray-100 bg-opacity-70'>
-        <div className='w-full sm:w-2/5 py-10'>
-        <form onSubmit={handleSubmit} className='bg-white border shadow-lg rounded-xl px-20 pt-14 pb-8'>
-            <h1 className='font-nunito font-bold text-teal-800 text-4xl mb-10'>Contact Haven Support</h1>
-            <div className='flex flex-col mb-5'>
-                <label className='text-xs text-slate-700 font-bold'>First Name <span className='text-red-500'>*</span></label>
-                <input
-                    className="border border-green-700 border-opacity-30 focus:outline-slate-500 rounded-md p-1 mt-2 bg-[rgb(248,251,248)]" 
-                    type="text" 
-                    name="FirstName"
-                    onChange={handleChange}
-                    pattern="^[A-Za-z ]+$"
-                    required
-                >
-                </input>
-            </div>
-            <div className='flex flex-col mb-5'>
-                <label className='text-xs text-slate-700 font-bold'>Last Name <span className='text-red-500'>*</span></label>
-                <input
-                    className="border border-green-700 border-opacity-30 focus:outline-slate-500 rounded-md p-1 mt-2 bg-[rgb(248,251,248)]" 
-                    type="text" 
-                    name="LastName"
-                    onChange={handleChange}
-                    pattern="^[A-Za-z ]+$"
-                    required
-                >
-                </input>
-            </div>
-            <div className='flex flex-col mb-5'>
-                <label className='text-xs text-slate-700 font-bold'>Email Address <span className='text-red-500'>*</span></label>
-                <input
-                    className='border border-green-700 border-opacity-30 focus:outline-slate-500 rounded-md p-1 mt-2 bg-[rgb(248,251,248)]'
-                    type="text" 
-                    name="Email"
-                    onChange={handleChange}
-                    pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z]{2,}$"
-                    required
-                >
-                </input>
-            </div>
-            <div className='flex flex-col mb-5'>
-                <label className='text-xs text-slate-700 font-bold'>Please choose your issue below <span className='text-red-500'>*</span></label>
-                <select
-                    className='border border-green-700 border-opacity-30 focus:outline-slate-500 rounded-md p-1.5 mt-2 bg-[rgb(248,251,248)] text-xs'
-                    name='Issue'
-                    onChange={handleChange}
-                    required
-                >
-                    <option value=''>-- Please select an issue --</option>
-                    <option value='Issue1'>I have an account issue.</option>
-                    <option value='Issue1'>I have a payment issue.</option>
-                    <option value='Issue2'>I am a host with a listing issue.</option>
-                    <option value='Issue3'>I am a guest with a rental issue.</option>
-                </select>
-                </div>
-            <div className='flex flex-col mb-5'>
-                <label className='text-xs text-slate-700 font-bold'>Description <span className='text-red-500'>*</span></label>
-                <textarea
-                    className='border border-green-700 border-opacity-30 focus:outline-slate-500 rounded-md p-1 mt-2 text-xs bg-[rgb(248,251,248)]'
-                    type="text" 
-                    name="Description"
-                    rows='3'
-                    onChange={handleChange}
-                    pattern="^[A-Za-z0-9 ]+$"
-                    required
-                >
-                </textarea>
-            </div>
-            <div className='flex flex-col mb-7'>
-                <label className='text-xs text-slate-700 font-bold'>Attachments (optional)</label>
-                <div className='flex flex-col items-center justify-center border border-green-700 border-opacity-30 rounded-md py-4 mt-2 text-center bg-[rgb(248,251,248)]'
-                    onDrop={handleDrop} onDragOver={handleDragOver}
-                >
-                    <label 
-                        htmlFor="file-upload"
-                        className="cursor-pointer text-sm text-gray-700 font-semibold"
-                        >
-                        <span className='text-teal-700'>Add file</span> or drop file here
-                    </label>
-                    <input
-                        id="file-upload"
-                        className="hidden"
-                        type="file"
-                        name="attachments"
-                        accept=".png,.jpg,.jpeg,.pdf,.docx"
-                        onChange={handleChange}
-                        multiple
-                    />
-                </div>
-
-                {formData.attachments.length > 0 && (
-                    <div className="grid grid-cols-3 gap-4 mt-3">
-                    {formData.attachments.map((photo) => (
-                        <div key={photo.id} className="relative group">
-                            <img
-                                src={photo.preview}
-                                alt="Preview"
-                                className="w-full h-40 object-cover rounded border"
-                            />
-                            <button
-                                onClick={() => handleRemovePhoto(photo.id)}
-                                className="absolute top-2 right-2 bg-gray-400 text-white rounded-full py-1 px-2 text-xs opacity-0 group-hover:opacity-100 transition"
-                            >
-                                ✕
-                            </button>
-                        </div>
-                    ))}
+    <div className='font-nunito text-slate-700'>
+        <div className='grid grid-cols-[25%_75%]'>
+            <div className='flex flex-col bg-gray-100 min-h-screen'>
+                <div className='mx-8'>
+                    <h1 className='text-2xl font-medium mt-6 mb-5'>Contact Haven Support</h1>
+                    <div className='flex flex-col bg-white rounded-lg shadow-md my-8 p-5'>
+                        <h3>A Haven representative will get back to you in 24 hours. In the meantime, please visit our FAQs page.</h3>
                     </div>
+            
+                    <div className='flex flex-col bg-white rounded-lg shadow-md my-8 p-5'>
+                        <h1 className='text-lg'> Safe and Secure subleasing starts here!</h1>
+                        <hr className="my-2 border-green-700 border-opacity-30"/>
+                        <h3 className='text-sm'>Haven is a mid-term rental platform designed for travel nurses, nomads, and professionals on assignment who need trusted housing for weeks to months at a time. Every listing is verified, payments are protected, and subleases are managed through the app-giving both renters and hosts peace of mind. With secure booking, transparent communication, and flexible options, Haven makes finding safe, reliable housing simple, so you can focus on work and feel at home wherever you go.</h3>
+                    </div>
+                </div>
+            </div>  
+            <div className='flex flex-col bg-gray-100 min-h-screen'>
+                <form onSubmit={handleSubmit} className='bg-white border shadow-lg rounded-xl px-10 lg:px-24 py-8 mx-8 my-20'>
+                    <h1 className='text-md font-bold mb-5'>We're here to help! Let us know what your issue.</h1>
+                    <div className='flex flex-col md:flex-row justify-between gap-4 mb-5'>
+                        <div className='flex flex-col flex-1'>
+                            <label className='text-xs text-slate-700 font-bold'>First Name <span className='text-red-500'>*</span></label>
+                            <input
+                                className="border border-opacity-30 focus:outline-slate-500 rounded-md p-1 mt-2 bg-gray-100 w-full" 
+                                type="text" 
+                                name="FirstName"
+                                value={formData.FirstName}
+                                onChange={handleChange}
+                                pattern="^[A-Za-z ]+$"
+                                required
+                            >
+                            </input>
+                        </div>
+                        <div className='flex flex-col flex-1'>
+                            <label className='text-xs text-slate-700 font-bold'>Last Name <span className='text-red-500'>*</span></label>
+                            <input
+                                className="border border-opacity-30 focus:outline-slate-500 rounded-md p-1 mt-2 bg-gray-100 w-full" 
+                                type="text" 
+                                name="LastName"
+                                value={formData.LastName}
+                                onChange={handleChange}
+                                pattern="^[A-Za-z ]+$"
+                                required
+                            >
+                            </input>
+                        </div>
+                        <div className='flex flex-col flex-1'>
+                            <label className='text-xs text-slate-700 font-bold'>Email Address <span className='text-red-500'>*</span></label>
+                            <input
+                                className='border border-opacity-30 focus:outline-slate-500 rounded-md p-1 mt-2 bg-gray-100 w-full'
+                                type="text" 
+                                name="Email"
+                                value={formData.Email}
+                                onChange={handleChange}
+                                pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z]{2,}$"
+                                required
+                            >
+                            </input>
+                        </div>
+                    </div>
+                <div className='flex flex-col mb-5'>
+                    <label className='text-xs text-slate-700 font-bold'>Please choose your issue below <span className='text-red-500'>*</span></label>
+                    <select
+                        className='border border-opacity-30 focus:outline-slate-500 rounded-md p-1.5 mt-2 bg-gray-100 text-xs'
+                        name='Issue'
+                        onChange={handleChange}
+                        required
+                    >
+                        <option value=''>-- Please select an issue --</option>
+                        <option value='Fraud'>Fraud & Scam Concerns.</option>
+                        <option value='Listing'>Listing Issues.</option>
+                        <option value='Payment'>Payment Issues.</option>
+                        <option value='Policy'>Platform Policy Disputes.</option>
+                        <option value='Safety'>Safety & Security Concerns.</option>
+                        <option value='Technical'>Technical Issues.</option>
+                        <option value='Other'>Other.</option>
+                    </select>
+                </div>
+                <div className='flex flex-col mb-5'>
+                    <label className='text-xs text-slate-700 font-bold'>Description <span className='text-red-500'>*</span></label>
+                    <textarea
+                        className='border border-opacity-30 focus:outline-slate-500 rounded-md p-1 mt-2 bg-gray-100 text-xs'
+                        type="text" 
+                        name="Description"
+                        rows='3'
+                        onChange={handleChange}
+                        pattern="^[A-Za-z0-9 ]+$"
+                        required
+                    >
+                    </textarea>
+                </div>
+                <div className='flex flex-col mb-7'>
+                    <label className='text-xs text-slate-700 font-bold'>Attachments (optional)</label>
+                    <div className='flex flex-col items-center justify-center border border-opacity-30 rounded-md py-4 mt-2 text-center bg-gray-100'
+                        onDrop={handleDrop} onDragOver={handleDragOver}
+                    >
+                        <label 
+                            htmlFor="file-upload"
+                            className="cursor-pointer text-sm text-gray-700 font-semibold"
+                            >
+                            <span className='text-teal-700'>Add file</span> or drop file here
+                        </label>
+                        <input
+                            id="file-upload"
+                            className="hidden"
+                            type="file"
+                            name="attachments"
+                            accept=".png,.jpg,.jpeg,.pdf,.docx"
+                            onChange={handleChange}
+                            multiple
+                        />
+                    </div>
+
+                    {formData.attachments.length > 0 && (
+                        <div className="grid grid-cols-3 gap-4 mt-3">
+                        {formData.attachments.map((photo) => (
+                            <div key={photo.id} className="relative group">
+                                <img
+                                    src={photo.preview}
+                                    alt="Preview"
+                                    className="w-full h-40 object-cover rounded border"
+                                />
+                                <button
+                                    onClick={() => handleRemovePhoto(photo.id)}
+                                    className="absolute top-2 right-2 bg-gray-400 text-white rounded-full py-1 px-2 text-xs opacity-0 group-hover:opacity-100 transition"
+                                >
+                                    ✕
+                                </button>
+                            </div>
+                        ))}
+                        </div>
+                    )}
+                </div>
+                <div className='flex justify-center'>
+                    <button 
+                    className='bg-[rgb(250,112,99)] rounded-xl text-white font-bold text-sm px-14 py-1'
+                    type="submit"
+                    >
+                        Send
+                    </button>
+                </div>
+                {message === "Customer support email sent successfully!" && (
+                    <h4 className='flex justify-center text-xs text-teal-800 font-bold mt-5'>Support is on the way! Someone will reach out within 24 hours.</h4>
                 )}
-            </div>
-            <div className='flex justify-center'>
-                <button 
-                className='bg-[rgb(250,112,99)] rounded-xl text-white font-bold text-sm px-14 py-1'
-                type="submit"
-            >
-                Send
-            </button>
-            </div>
-            {message === "Customer support email sent successfully!" && (
-                <h4 className='flex justify-center text-xs text-teal-800 font-bold mt-5'>Support is on the way! Someone will reach out within 24 hours.</h4>
-            )}
-        </form>
+            </form>
+
+            </div>  
         </div>
     </div>
+
   )
 }
 

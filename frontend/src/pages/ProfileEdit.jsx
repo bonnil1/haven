@@ -160,11 +160,19 @@ const ProfileEdit = () => {
                         <h1 className='text-slate-700 mt-5 flex'> <MdOutlineMedicalInformation className='size-5 text-teal-800 ml-3 mr-3'/>Medical Professional</h1>
                         <h1 className='text-slate-700 mt-5 flex'> <GiGraduateCap className='size-5 text-teal-800 ml-3 mr-3'/>University of California, Davis</h1>
                         <h1 className='text-slate-700 font-semibold mt-7'>About you</h1>
+                        <div className='flex flex-col md:flex-row mt-3'>
+                            <h1 className='border border-teal-800 rounded-full text-teal-800 font-bold text-sm px-2 py-0.5 ml-3 mr-3 flex items-center whitespace-nowrap w-auto'>
+                                <PiHouseThin className='size-5 text-teal-800 font-bold mr-1 shrink-0' />
+                                Lives in Davis, CA
+                            </h1>
+
+                            <h1 className='bg-teal-800 rounded-full text-white font-bold text-sm px-4 py-0.5 flex items-center whitespace-nowrap w-auto'>
+                                <FaPaw className='size-3.5 text-white font-bold mr-1.5 mt-0.5 shrink-0' />
+                                Pet Parent
+                            </h1>
+                        </div>
                     </div>
-                    <div className='flex flex-col sm:flex-row mt-3'>
-                        <h1 className='bg-teal-800 rounded-full text-white font-bold text-sm px-2 py-0.5 w-42 ml-3 mr-3 flex'> <PiHouseThin className='size-5 text-white font-bold mr-1'/>Lives in Davis, CA</h1>
-                        <h1 className='bg-teal-800 rounded-full text-white font-bold text-sm px-2 py-0.5 w-30 flex'> <FaPaw className='size-3.5 text-white font-bold mr-1 mt-0.5'/>Pet Parent</h1>
-                    </div>
+                    
                     <div>
                         <h1 className='text-slate-700 font-semibold mt-7'>Socials</h1>
                     </div>

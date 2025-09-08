@@ -47,25 +47,27 @@ const Navigation = ({toggleMenu, isMenuOpen, closeMenu, isLoggedIn, setIsLoggedI
                 </div>
                 <div className="md:ml-auto">
                     <div className="flex mt-1">
-
+                        
                     {/* Toggle Button */}
+                    {isLoggedIn ? (
                     <div className="flex items-center space-x-4 mr-8 font-nunito">
-                    <span className="text-sm text-white">{isHost ? 'Host' : 'Renter'}</span>
-                    <button
-                        onClick={toggleRole}
-                        className={`relative inline-flex h-12 w-40 items-center rounded-full transition bg-gray-300`}
-                    >
-                        <div className="flex justify-between items-center w-full px-3 text-md text-white z-10">
-                            <span className='ml-1 font-bold'>Renter</span>
-                            <span className='mr-2.5 font-bold'>Host</span>
-                        </div>
-                        <span
-                        className={`absolute h-8 w-16 m-2 rounded-full bg-[rgb(250,112,99)] transition-transform duration-300 ${
-                            isHost ? 'translate-x-20' : 'translate-x-0'
-                        }`}
-                        />
-                    </button>
+                        <span className="text-sm text-white">{isHost ? 'Host' : 'Renter'}</span>
+                        <button
+                            onClick={toggleRole}
+                            className={`relative inline-flex h-12 w-40 items-center rounded-full transition bg-gray-300`}
+                        >
+                            <div className="flex justify-between items-center w-full px-3 text-md text-white z-10">
+                                <span className='ml-1 font-bold'>Renter</span>
+                                <span className='mr-2.5 font-bold'>Host</span>
+                            </div>
+                            <span
+                            className={`absolute h-8 w-16 m-2 rounded-full bg-[rgb(250,112,99)] transition-transform duration-300 ${
+                                isHost ? 'translate-x-20' : 'translate-x-0'
+                            }`}
+                            />
+                        </button>
                     </div>
+                    ) : null}
 
                     {/* Hamburger Icon */}
                     <div>
@@ -82,13 +84,10 @@ const Navigation = ({toggleMenu, isMenuOpen, closeMenu, isLoggedIn, setIsLoggedI
                         <div className="absolute right-0 w-20 sm:w-56 p-2 mt-20 mr-3 bg-white shadow-xl rounded-xl font-roboto z-50">
                         {isLoggedIn ? (
                             <> 
-                                <NavLink to="dashboard" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-1.5">
-                                    <div className='flex'><IoIosSearch className='mt-1 mr-2'/>Dashboard</div>
-                                </NavLink>
                                 <NavLink to="home" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-1.5">
                                     <div className='flex'><IoIosSearch className='mt-1 mr-2'/>Find your home</div>
                                 </NavLink>
-                                <NavLink to="all-rentals" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-1.5">
+                                <NavLink to="renter-dashboard" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-1.5">
                                     <div className='flex'><AiOutlineHome className='mt-1 mr-2'/>View rentals</div>
                                 </NavLink>
                                 <NavLink to="profile" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-1.5">
@@ -101,7 +100,7 @@ const Navigation = ({toggleMenu, isMenuOpen, closeMenu, isLoggedIn, setIsLoggedI
                                 <NavLink to="lease-1" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-1.5">
                                     <div className='flex'><CiViewList className='mt-1 mr-2'/>List your home</div>
                                 </NavLink>
-                                <NavLink to="all-listings" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-1.5">
+                                <NavLink to="listing-dashboard" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-1.5">
                                     <div className='flex'><AiOutlineHome className='mt-1 mr-2'/>View listings</div>
                                 </NavLink>
                                 <hr className="my-2 border-green-700 border-opacity-30"/>
