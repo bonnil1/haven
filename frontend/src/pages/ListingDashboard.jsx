@@ -50,8 +50,12 @@ const ListingDashboard = () => {
                     <h1 className='text-xl font-bold'>{firstname} {lastname}</h1>
                     <h1 className='text-xl text-[rgb(42,98,112)]'>Renter Profile</h1>
                     <div className='flex'>
-                    <IoMdSettings className='size-5 mr-8'/>
-                    <IoEnterOutline className='size-5'/>
+                        <NavLink to="">
+                            <IoMdSettings className='size-5 mr-8'/>
+                        </NavLink>
+                        <NavLink to="">
+                            <IoEnterOutline className='size-5'/>
+                        </NavLink>
                     </div>
                 </div>
                 <div className='flex flex-col bg-white rounded-lg shadow-md my-8 p-5'>

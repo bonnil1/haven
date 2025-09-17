@@ -147,6 +147,7 @@ const Search = ({closeMenu}) => {
 
     useEffect(() => {
         const stored = loadFromSession('search');
+
         if (stored) {
             const { destination, adults, children, pets } = stored.formData;
             const { startDate, endDate } = stored.dateRange || {};
@@ -169,6 +170,7 @@ const Search = ({closeMenu}) => {
             const formatted = [city, state, country].filter(Boolean).join(', ');
             setSearchInput(formatted);
         }
+
     }, []);
 
     return (

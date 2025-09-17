@@ -115,11 +115,13 @@ const Lease1 = () => {
     };
 
     return (
-        <div className="flex justify-center font-nunito font-semibold text-slate-700 bg-lease-bg bg-cover bg-opacity-25">
+        <div className="font-nunito font-semibold text-slate-700 bg-lease-bg bg-cover">
+            <h1 className='px-80 py-6 text-3xl'>Enter Property Details</h1>
+        <div className='flex justify-center'>
         <div className="flex min-h-screen">
         {/* Sidebar */}
-        <div className="relative w-10 flex flex-col items-center pt-10">
-            <div className="absolute top-12 bottom-28 w-3 bg-white bg-opacity-70 rounded-md" />
+        <div className="relative w-10 flex flex-col items-center">
+            <div className="absolute top-8 bottom-16 w-3 bg-white bg-opacity-70 rounded-md" />
             {slides.map((_, index) => (
                 <div
                     key={index}
@@ -130,7 +132,7 @@ const Lease1 = () => {
             ))}
             </div>
         {/* Slides */}
-        <form onSubmit={handleNext} className="flex flex-col gap-12 p-10">
+        <form onSubmit={handleNext} className="flex flex-col gap-12 px-10">
             {slides.map((slide, index) => (
             <section key={index} className="bg-white bg-opacity-70 p-8 pt-6 rounded-lg shadow-md w-[42rem]">
                 <h2 className="text-2xl font-semibold mb-4">{slide.title}</h2>
@@ -221,6 +223,7 @@ const Lease1 = () => {
         </form>
         </div>
         </div>
+    </div>
     );
 
 }

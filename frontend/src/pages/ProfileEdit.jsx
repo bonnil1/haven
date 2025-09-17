@@ -187,7 +187,7 @@ const ProfileEdit = () => {
         </div>
         <div className='col-span-3 flex flex-col font-roboto'>
             <div className='shadow-lg rounded-xl'>
-                <form onSubmit={handleSubmit} className='border border-green-700 border-opacity-20 rounded-xl p-6 sm:p-8'>
+                <form onSubmit={handleSubmit} className='border border-green-700 border-opacity-20 rounded-xl p-5 sm:p-7'>
                     <div>
                         <div className='flex flex-col mb-3'>
                             <label>First Name</label>
@@ -344,7 +344,7 @@ const ProfileEdit = () => {
                             </select>
                         </div>
                         <button
-                            className="bg-[rgb(209,224,205)] hover:bg-gray-300 text-white py-2 border rounded-xl w-full mt-1"
+                            className="bg-[rgb(209,224,205)] hover:bg-gray-300 text-white py-2 border rounded-xl w-full mt-2"
                             type="submit"
                         >
                             Save Changes

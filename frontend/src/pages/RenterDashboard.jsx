@@ -18,10 +18,14 @@ const RenterDashboard = () => {
                     <img className='w-1/2 rounded-md' src="https://t3.ftcdn.net/jpg/10/24/11/58/360_F_1024115848_VTfuHjHj9UVVvrUOaDQqm2clMspgRnGs.jpg" alt="profile image"></img>
                     <h1 className='text-xl font-bold'>{firstname} {lastname}</h1>
                     <h1 className='text-xl text-[rgb(42,98,112)]'>Renter Profile</h1>
-                  <div className='flex'>
-                    <IoMdSettings className='size-5 mr-8'/>
-                    <IoEnterOutline className='size-5'/>
-                  </div>
+                    <div className='flex'>
+                        <NavLink to="">
+                          <IoMdSettings className='size-5 mr-8'/>
+                        </NavLink>
+                        <NavLink to="">
+                          <IoEnterOutline className='size-5'/>
+                        </NavLink>
+                    </div>
                 </div>
                 <div className='flex flex-col bg-white rounded-lg shadow-md my-8 p-5'>
                     <h1 className='text-lg'> Safe and Secure subleasing starts here!</h1>

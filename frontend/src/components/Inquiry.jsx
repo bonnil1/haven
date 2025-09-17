@@ -3,7 +3,7 @@ import { useState, useRef } from 'react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 
-const Inquiry = () => {
+const Inquiry = ({id}) => {
 
     const [dateRange, setDateRange] = useState({ startDate: null, endDate: null });
     const [activeInput, setActiveInput] = useState('start');

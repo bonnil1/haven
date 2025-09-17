@@ -138,8 +138,8 @@ const Contact = () => {
         <div className='grid grid-cols-[25%_75%]'>
             <div className='flex flex-col bg-gray-100 min-h-screen'>
                 <div className='mx-8'>
-                    <h1 className='text-2xl font-medium mt-6 mb-5'>Contact Haven Support</h1>
-                    <div className='flex flex-col bg-white rounded-lg shadow-md my-8 p-5'>
+                    <h1 className='text-2xl font-medium mt-8'>Contact Haven Support</h1>
+                    <div className='flex flex-col bg-white rounded-lg shadow-md my-5 p-5'>
                         <h3>A Haven representative will get back to you in 24 hours. In the meantime, please visit our FAQs page.</h3>
                     </div>
             
