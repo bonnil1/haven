@@ -192,7 +192,7 @@ const ProfileEdit = () => {
                         <div className='flex flex-col mb-3'>
                             <label>First Name</label>
                             <input
-                                className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2" 
+                                className="border border-slate-300 focus:outline-slate-300 rounded-md p-1 mt-2" 
                                 type="text" 
                                 name="firstName"
                                 value={userData.firstName}
@@ -205,7 +205,7 @@ const ProfileEdit = () => {
                         <div className='flex flex-col mb-2'>
                             <label>Last Name</label>
                                 <input
-                                className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2" 
+                                className="border border-slate-300 focus:outline-slate-300 rounded-md p-1 mt-2" 
                                 type="text" 
                                 name="lastName"
                                 value={userData.lastName}
@@ -219,7 +219,7 @@ const ProfileEdit = () => {
                         <div className='flex flex-col mb-3'>
                             <label>Phone Number</label>
                                 <input
-                                className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2" 
+                                className="border border-slate-300 focus:outline-slate-300 rounded-md p-1 mt-2" 
                                 type="text" 
                                 name="phone"
                                 value={userData.phone}
@@ -239,7 +239,7 @@ const ProfileEdit = () => {
                                         value="Female"
                                         checked={userData.gender === "Female"}
                                         onChange={handleChange}
-                                        className="w-4 h-4 mr-1 mt-0.5 text-blue-600 border-gray-300 focus:ring-slate-500"
+                                        className="w-4 h-4 mr-1 mt-0.5 text-blue-600 border-gray-300 focus:ring-slate-300"
                                     />
                                     <span>Female</span>
                                 </div>
@@ -250,7 +250,7 @@ const ProfileEdit = () => {
                                         value="Male"
                                         checked={userData.gender === "Male"}
                                         onChange={handleChange}
-                                        className="w-4 h-4 mr-1 mt-0.5 text-blue-600 border-gray-300 focus:ring-slate-500"
+                                        className="w-4 h-4 mr-1 mt-0.5 text-blue-600 border-gray-300 focus:ring-slate-300"
                                     />
                                     <span>Male</span>
                                 </div>
@@ -261,7 +261,7 @@ const ProfileEdit = () => {
                                         value="Non-Binary"
                                         checked={userData.gender === "Non-Binary"}
                                         onChange={handleChange}
-                                        className="w-4 h-4 mr-1 mt-0.5 text-blue-600 border-gray-300 focus:ring-slate-500"
+                                        className="w-4 h-4 mr-1 mt-0.5 text-blue-600 border-gray-300 focus:ring-slate-300"
                                     />
                                     <span>Non-binary</span>
                                 </div>
@@ -272,7 +272,7 @@ const ProfileEdit = () => {
                                         value="Prefer Not To Respond"
                                         checked={userData.gender === "Prefer Not To Respond"}
                                         onChange={handleChange}
-                                        className="w-4 h-4 mr-1 mt-0.5 text-blue-600 border-gray-300 focus:ring-slate-500"
+                                        className="w-4 h-4 mr-1 mt-0.5 text-blue-600 border-gray-300 focus:ring-slate-300"
                                     />
                                     <span>Prefer Not To Respond</span>
                                 </div>
@@ -285,7 +285,7 @@ const ProfileEdit = () => {
                                     <label className='text-sm'>Month</label>
                                     <select
                                         name="month"
-                                        className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2"
+                                        className="border border-slate-300 focus:outline-slate-300 rounded-md p-1 mt-2"
                                         value={month}
                                         onChange={(e) => setMonth(e.target.value)}
                                         required
@@ -300,7 +300,7 @@ const ProfileEdit = () => {
                                     <label className='text-sm'>Date</label>
                                     <select
                                         name="date"
-                                        className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2"
+                                        className="border border-slate-300 focus:outline-slate-300 rounded-md p-1 mt-2"
                                         value={date}
                                         onChange={(e) => setDate(e.target.value)}
                                         required
@@ -315,7 +315,7 @@ const ProfileEdit = () => {
                                     <label className='text-sm'>Year</label>
                                     <select
                                         name="year"
-                                        className="border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2"
+                                        className="border border-slate-300 focus:outline-slate-300 rounded-md p-1 mt-2"
                                         value={year}
                                         onChange={(e) => setYear(e.target.value)}
                                         required
@@ -331,7 +331,7 @@ const ProfileEdit = () => {
                         <div className='flex flex-col mb-3'>
                             <label>Occupation</label>
                             <select
-                                className='border border-slate-300 focus:outline-slate-500 rounded-md p-1 mt-2'
+                                className='border border-slate-300 focus:outline-slate-300 rounded-md p-1 mt-2'
                                 name='occupation'
                                 value={userData.occupation}
                                 onChange={handleChange}

@@ -27,10 +27,16 @@ const RenterDashboard = () => {
                         </NavLink>
                     </div>
                 </div>
-                <div className='flex flex-col bg-white rounded-lg shadow-md my-8 p-5'>
-                    <h1 className='text-lg'> Safe and Secure subleasing starts here!</h1>
+                <div className='flex flex-col bg-white rounded-lg shadow-md my-8 p-5 space-y-1'>
+                    <h1 className='text-lg'>How to Rent in 7 Easy Steps</h1>
                     <hr className="my-2 border-green-700 border-opacity-30"/>
-                    <h3 className='text-sm'>Haven is a mid-term rental platform designed for travel nurses, nomads, and professionals on assignment who need trusted housing for weeks to months at a time. Every listing is verified, payments are protected, and subleases are managed through the app-giving both renters and hosts peace of mind. With secure booking, transparent communication, and flexible options, Haven makes finding safe, reliable housing simple, so you can focus on work and feel at home wherever you go.</h3>
+                    <h3 className='text-sm'>Step 1) Get Verified</h3>
+                    <h3 className='text-sm'>Step 2) Search for an apartment</h3>
+                    <h3 className='text-sm'>Step 3) Look through details</h3>
+                    <h3 className='text-sm'>Step 4) Send inquiry</h3>
+                    <h3 className='text-sm'>Step 5) Chat with host</h3>
+                    <h3 className='text-sm'>Step 6) Sign contract</h3>
+                    <h3 className='text-sm'>Step 7) Confirm payment</h3>
                 </div>
             </div>    
             </div>

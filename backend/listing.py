@@ -164,10 +164,65 @@ async def search_request(request: Request, db: Session = Depends(get_db)):
                 "rent": property.rent,
                 "bedrooms": property.bedrooms,
                 "bathrooms": property.bathrooms,
+                "street_address": property.street_address,
+                "extra_info": property.extra_info,
+                "city": property.city,
+                "state": property.state,
+                "postal_code": property.postal_code
             })
 
         return {"results": properties, "message": "All listings for user returned successfully!",}
 
+    except SQLAlchemyError as e:
+            db.rollback()
+            print(f"A SQLAlchemy error occurred: {e}")
+
+@router.post("/edit/{id}")
+async def edit_listing(id: int, request: Request, db: Session = Depends(get_db)):
+    print("hitting backend edit listing")
+    data = await request.json()
+
+    try: 
+        property = db.query(Property).filter(Property.property_id == id).first()
+
+        if not property:
+            raise HTTPException(status_code=404, detail="Listing not found.")
+        
+        def flatten_form_data(data: dict) -> dict:
+            flat = {}
+            for key, value in data.items():
+                if isinstance(value, dict):
+                    flat.update(value)  # merge nested booleans into top-level
+                else:
+                    flat[key] = value
+            return flat
+
+        flat_data = flatten_form_data(data)
+        
+        fields_to_update = {}
+
+        for key, value in flat_data.items():
+            if hasattr(property, key):
+                current_value = getattr(property, key)
+
+                if isinstance(current_value, (int, float, bool)):
+                    try:
+                        new_value = type(current_value)(value)
+                    except:
+                        new_value = value
+                else:
+                    new_value = value
+
+                if current_value != new_value:
+                    fields_to_update[key] = new_value
+
+        for field, value in fields_to_update.items():
+            setattr(property, field, value)
+
+        db.commit()
+        
+        return {"message": "Listing updated successfully!", "updated_fields": fields_to_update}
+    
     except SQLAlchemyError as e:
             db.rollback()
             print(f"A SQLAlchemy error occurred: {e}")

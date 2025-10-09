@@ -130,7 +130,7 @@ const Booking = ({id}) => {
             <input 
                 ref={inputRef}
                 onClick={() => setShowPopup(!showPopup)}
-                className="appearance-none block w-full bg-white text-gray-700 leading-tight focus:outline-none" 
+                className="appearance-none block w-full bg-white text-gray-700 leading-tight focus:outline-none border-b border-gray-300 py-1" 
                 type="text" 
                 value={
                     (() => {

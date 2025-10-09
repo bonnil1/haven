@@ -142,7 +142,7 @@ const Search = ({closeMenu}) => {
 
         console.log(queryParams)
 
-        navigate(`/home/rentals?${queryParams}`)
+        navigate(`/rentals?${queryParams}`)
     }
 
     useEffect(() => {
@@ -311,7 +311,7 @@ const Search = ({closeMenu}) => {
                             className="bg-[rgb(250,112,99)] hover:bg-slate-400 text-white py-4 px-4 border rounded-full sm:w-auto mt-1 ml-14"
                             type="submit"
                             >
-                            {/* <NavLink to="/home/rentals" onClick={closeMenu}><FaSearch /></NavLink> */}
+                            {/* <NavLink to="/rentals" onClick={closeMenu}><FaSearch /></NavLink> */}
                             <FaSearch />
                         </button> 
                     </div>

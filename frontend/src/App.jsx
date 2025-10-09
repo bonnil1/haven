@@ -12,6 +12,7 @@ import RenterDashboard from './pages/RenterDashboard';
 import Rentals from './pages/Rentals';
 import AllRentals from './pages/AllRentals';
 import Show from './pages/Show';
+import ShowEdit from './pages/ShowEdit';
 import HousingRequest from './pages/HousingRequest';
 import Lease1 from './pages/Lease1';
 import Lease2 from './pages/Lease2';
@@ -78,8 +79,9 @@ return (
         <Route path='/' element={<Prelanding closeMenu={closeMenu} isLoggedIn={isLoggedIn}/>}/>
         <Route path='/home' element={<Landing closeMenu={closeMenu}/>} />
         <Route path='/renter-dashboard' element={<RenterDashboard closeMenu={closeMenu}/>} />
-        <Route path='/home/rentals' element={<Rentals />}/>
-        <Route path='/home/rentals/show/:id' element={<Show />}/>
+        <Route path='/rentals' element={<Rentals />}/>
+        <Route path='/rentals/show/:id' element={<Show />}/>
+        <Route path='/rentals/show/edit/:id' element={<ShowEdit />}/>
         <Route path='/all-rentals' element={<AllRentals />}/>
         <Route path='/housing-request' element={<HousingRequest />}/>
         <Route path='/lease-1' element={<Lease1 />}/>

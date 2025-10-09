@@ -180,11 +180,11 @@ const Show = () => {
 
   return (
     <div className="bg-lease-bg bg-cover bg-opacity-25 font-roboto">
-      <div className='flex justify-center'>
-      {/*Search Bar*/}
-      <div className='my-5 mr-5'>
-          <Search />
-      </div>
+        <div className='flex justify-center'>
+        {/*Search Bar*/}
+        <div className='my-5 mr-5'>
+            <Search />
+        </div>
 
       {/*Filters */}
       <div className="relative flex items-center">
@@ -205,9 +205,8 @@ const Show = () => {
       </div>
       </div>
 
-      {/*Laptop View*/}
       <div className="hidden md:block">
-      <div className="grid grid-cols-2 grid-rows-1 gap-10 mx-28 mt-2">
+      <div className="grid grid-cols-2 grid-rows-1 gap-8 mx-32 mt-2 w-full">
         <div>
             {/* Current Image */}
             <div className="relative w-full h-96 overflow-hidden rounded-md shadow-md">
@@ -231,7 +230,7 @@ const Show = () => {
             </div>
         </div>
         
-        <div className="">
+        <div >
             <div>
                 {/*rental information */}
                 <h2 className="text-2xl text-bold text-slate-800 mt-5 mb-2">{results.title}</h2>
@@ -248,6 +247,7 @@ const Show = () => {
                     <h3 className='font-bold'>Total Price (pre-tax): ${results.rent + results.electric_fee + results.water_fee}</h3>
                     <div className='flex justify-between w-1/3'>
                         <button 
+                            type="button"
                             ref={inputRef}
                             onClick={() => setActiveInquiryIndex(true)}
                             className='px-2 py-1 text-md text-white bg-[rgb(42,98,112)] hover:bg-gray-800 border-[rgb(42,98,112)] rounded-lg mt-5'
@@ -255,15 +255,16 @@ const Show = () => {
                             Inquire
                         </button>
                         {activeInquiryIndex && (
-                        <div
-                            ref={inquiryRef}
-                            className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-1/2 h-1/2"
-                        >
-                            <Inquiry id={id}/>
-                        </div>
+                            <div
+                                ref={inquiryRef}
+                                className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-1/2 h-1/2"
+                            >
+                                <Inquiry id={id}/>
+                            </div>
                         )}
 
                         <button
+                            type="button"
                             ref={inputRef}
                             onClick={() => setActiveBookingIndex(true)}
                             className='px-4 py-1 text-md text-white bg-[rgb(42,98,112)] hover:bg-gray-800 border-[rgb(42,98,112)] rounded-lg mt-5'
@@ -271,12 +272,12 @@ const Show = () => {
                             Book
                         </button>
                         {activeBookingIndex && (
-                        <div
-                            ref={bookingRef}
-                            className="fixed top-[80%] left-1/2 transform -translate-x-1/5 -translate-y-1/2 z-50 w-1/2 h-1/2"
-                        >
-                            <Booking id={id}/>
-                        </div>
+                            <div
+                                ref={bookingRef}
+                                className="fixed top-[80%] left-1/5 transform -translate-x-1/5 -translate-y-1/2 z-50 w-1/2 h-1/2"
+                            >
+                                <Booking id={id}/>
+                            </div>
                         )}
                     </div>
                 </div>
@@ -284,77 +285,73 @@ const Show = () => {
         </div>
       </div>
 
-      <div className=" grid grid-cols-[6fr_1fr] ml-28 mt-5">
+      <div className=" grid grid-cols-[6fr_1fr] ml-32 mt-5">
         <div>
-          <div className="mt-5 space-y-1">
-            {/* property info */}
-            <h2 className="text-xl text-slate-800">Property Information</h2>
-            <h3 className="text-md text-slate-700">{results.description}</h3>
-          </div>
-          <div className="mt-5 space-y-1">
-            {/* house rules */}
-            <h2 className="text-xl text-slate-800">House Rules</h2>
-            <h3 className="text-md text-slate-700"></h3>
-          </div>
-          <div className="mt-5 space-y-1">
-            {/* amenities info*/}
-            {Object.entries(slides).map(([categoryName, items]) => (
-                <div key={categoryName}>
-                <h3 className="text-xl text-slate-800 capitalize mb-2">{categoryName}</h3>
-                <div className="flex flex-wrap gap-4">
-                    {items
-                    .filter(item => results[item.value])
-                    .map(item => (
-                        <div key={item.value} className="flex flex-col items-center w-20 text-slate-700">
-                        {item.icon}
-                        <span className="text-sm text-slate-800 text-center">{item.label}</span>
-                        </div>
-                    ))}
-                </div>
-                </div>
-            ))}
-          </div>
-          <div className="mt-5">
-            {/*map section for general location */}
-            <h2 className="text-xl text-slate-800">Where you'll be</h2>
-            <div className="ml-5 mt-5">
-              {window.google && locations && (
-                  <GoogleMap mapContainerStyle={containerStyle} center={locations} zoom={14}>
-                      <Marker
-                        position={locations}
-                      />
-                  </GoogleMap>
-              )}
+            <div className="mt-5 space-y-1">
+                {/* property info */}
+                <h2 className="text-xl text-slate-800">Property Information</h2>
+                <h3 className="text-md text-slate-700">{results.description}</h3>
             </div>
-          </div>
-          <div className="mt-5 mb-14">
-            {/*reviews section */}
-            <h2 className="text-xl">Reviews</h2>
-              <div className='grid grid-cols-3 gap-6 text-slate-700 p-5'>
-                  <div className='bg-white rounded-lg shadow-md p-5 space-y-3'>
-                        <img className='w-16 h-16 rounded-full' src="https://previews.123rf.com/images/jemastock/jemastock1712/jemastock171201820/91047468-man-face-smiling-cartoon-icon-vector-illustration-graphic-design.jpg" alt="profile image"></img>
-                        <h1 className='text-md text-slate-700 font-semibold'>Logan Says:</h1>
-                        <h3 className='text-md text-slate-600'>I really enjoyed my stay here! Clean rooms and convenient location!</h3>
-                  </div>
-                  <div className='bg-white rounded-lg shadow-md p-3 space-y-3'>
-                        <img className='w-16 h-16 rounded-full' src="https://t4.ftcdn.net/jpg/13/33/01/65/360_F_1333016517_uLILkC27ci0CM2bnyJr4siUHBeZ8kdQl.jpg" alt="profile image"></img>
-                        <h1 className='text-md text-slate-700 font-semibold'>Amber Says:</h1>
-                        <h3 className='text-md text-slate-600'>I had a wonderful stay! The rooms were comfortable and I felt right at home.</h3>
-                  </div>
-                  <div className='bg-white rounded-lg shadow-md p-3 space-y-3'>
-                        <img className='w-16 h-16 rounded-full' src="https://img.freepik.com/premium-photo/cartoon-girl-with-brown-hair-brown-shirt_731790-16347.jpg" alt="profile image"></img>
-                        <h1 className='text-md text-slate-700 font-semibold'>Megan Says:</h1>
-                        <h3 className='text-md text-slate-600'>I enjoyed my stay here and will be booking again.</h3>
-                  </div>
-              </div>
-          </div>
+            <div className="mt-5 space-y-1">
+                {/* house rules */}
+                <h2 className="text-xl text-slate-800">House Rules</h2>
+                <h3 className="text-md text-slate-700"></h3>
+            </div>
+            <div className="mt-5 space-y-1">
+                {/* amenities info*/}
+                {Object.entries(slides).map(([categoryName, items]) => (
+                    <div key={categoryName}>
+                    <h3 className="text-xl text-slate-800 capitalize mb-2">{categoryName}</h3>
+                    <div className="flex flex-wrap gap-4">
+                        {items
+                        .filter(item => results[item.value])
+                        .map(item => (
+                            <div key={item.value} className="flex flex-col items-center w-20 text-slate-700">
+                            {item.icon}
+                            <span className="text-sm text-slate-800 text-center">{item.label}</span>
+                            </div>
+                        ))}
+                    </div>
+                    </div>
+                ))}
+            </div>
+            <div className="mt-5">
+                {/*map section for general location */}
+                <h2 className="text-xl text-slate-800">Where you'll be</h2>
+                <div className="ml-5 mt-5">
+                {window.google && locations && (
+                    <GoogleMap mapContainerStyle={containerStyle} center={locations} zoom={14}>
+                        <Marker
+                            position={locations}
+                        />
+                    </GoogleMap>
+                )}
+                </div>
+            </div>
+            <div className="mt-5 mb-14">
+                {/*reviews section */}
+                <h2 className="text-xl">Reviews</h2>
+                <div className='grid grid-cols-3 gap-6 text-slate-700 p-5'>
+                    <div className='bg-white rounded-lg shadow-md p-5 space-y-3'>
+                            <img className='w-16 h-16 rounded-full' src="https://previews.123rf.com/images/jemastock/jemastock1712/jemastock171201820/91047468-man-face-smiling-cartoon-icon-vector-illustration-graphic-design.jpg" alt="profile image"></img>
+                            <h1 className='text-md text-slate-700 font-semibold'>Logan Says:</h1>
+                            <h3 className='text-md text-slate-600'>I really enjoyed my stay here! Clean rooms and convenient location!</h3>
+                    </div>
+                    <div className='bg-white rounded-lg shadow-md p-3 space-y-3'>
+                            <img className='w-16 h-16 rounded-full' src="https://t4.ftcdn.net/jpg/13/33/01/65/360_F_1333016517_uLILkC27ci0CM2bnyJr4siUHBeZ8kdQl.jpg" alt="profile image"></img>
+                            <h1 className='text-md text-slate-700 font-semibold'>Amber Says:</h1>
+                            <h3 className='text-md text-slate-600'>I had a wonderful stay! The rooms were comfortable and I felt right at home.</h3>
+                    </div>
+                    <div className='bg-white rounded-lg shadow-md p-3 space-y-3'>
+                            <img className='w-16 h-16 rounded-full' src="https://img.freepik.com/premium-photo/cartoon-girl-with-brown-hair-brown-shirt_731790-16347.jpg" alt="profile image"></img>
+                            <h1 className='text-md text-slate-700 font-semibold'>Megan Says:</h1>
+                            <h3 className='text-md text-slate-600'>I enjoyed my stay here and will be booking again.</h3>
+                    </div>
+                </div>
+            </div>
         </div>
-
       </div>
       </div>
-
-      {/*Mobile View*/}
-      
     </div>
   )
 }

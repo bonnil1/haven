@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import logo from '../assets/images/haven_logo_2.png';
 import { BiSolidUserRectangle } from "react-icons/bi";
 import { IoIosSearch } from "react-icons/io";
@@ -16,6 +16,25 @@ import { MdOutlineLogin } from "react-icons/md";
 const Navigation = ({toggleMenu, isMenuOpen, closeMenu, isLoggedIn, setIsLoggedIn, menuRef, onToggle}) => {
 
     const [isHost, setIsHost] = useState(false)
+
+    const inputRef = useRef(null);
+    const [showLogout, setShowLogout] = useState(false);
+    const logoutRef = useRef(null);
+
+    const handleClickOutside = (event) => {
+        if (
+            logoutRef.current &&
+            !logoutRef.current.contains(event.target) &&
+            !logoutRef.current.contains(event.target)
+        ) {
+            setShowLogout(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
 
     const toggleRole = () => {
         setIsHost(prev => {
@@ -110,9 +129,36 @@ const Navigation = ({toggleMenu, isMenuOpen, closeMenu, isLoggedIn, setIsLoggedI
                                 <NavLink to="contact" onClick={closeMenu} className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-1.5">
                                     <div className='flex'><MdOutlineContactSupport className='mt-1 mr-2'/>Contact Us</div>
                                 </NavLink>
-                                <NavLink to="/" onClick={logout}  className="block text-black hover:bg-[rgb(232,240,232)] px-3 py-1.5">
-                                    <div className='flex'><MdOutlineLogin className='mt-1 mr-2'/>Log Out</div>
-                                </NavLink>
+                                <div className="relative flex items-center w-full">
+                                    <button
+                                        ref={inputRef}
+                                        onClick={() => setShowLogout(!showLogout)}
+                                        className="flex items-center text-black hover:bg-[rgb(232,240,232)] px-3 py-1.5 w-full"
+                                    >
+                                        <MdOutlineLogin className="mt-1 mr-2"/>Logout  
+                                    </button>
+                                    {showLogout && (
+                                        <div
+                                            ref={logoutRef}
+                                            className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-md h-auto"
+                                        >
+                                            <div className='flex flex-col items-center w-full bg-[rgb(232,240,232)] rounded-md py-5 font-nunito'>
+                                                <h1 className='text-2xl text-slate-700 font-bold'>Logout Account</h1>
+                                                <div className='flex space-x-10 mt-8'>
+                                                    <button
+                                                        onClick={() => setShowLogout(false)}
+                                                        className="text-sm text-slate-700 bg-white hover:bg-gray-200 px-4 py-1 rounded-md"
+                                                    >
+                                                        Cancel
+                                                    </button>
+                                                    <NavLink to="/" onClick={logout}  className="block text-sm text-slate-700 hover:text-white bg-[rgb(250,112,99)] px-4 py-1 rounded-md">
+                                                        Yes, Logout!
+                                                    </NavLink>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
                             </>
                         ) : (
                             <>

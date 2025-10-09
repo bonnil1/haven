@@ -120,8 +120,8 @@ const Lease1 = () => {
         <div className='flex justify-center'>
         <div className="flex min-h-screen">
         {/* Sidebar */}
-        <div className="relative w-10 flex flex-col items-center">
-            <div className="absolute top-8 bottom-16 w-3 bg-white bg-opacity-70 rounded-md" />
+        <div className="relative w-10 flex flex-col items-center mr-8">
+            <div className="absolute top-8 bottom-24 w-3 bg-white bg-opacity-70 rounded-md" />
             {slides.map((_, index) => (
                 <div
                     key={index}
@@ -132,7 +132,7 @@ const Lease1 = () => {
             ))}
             </div>
         {/* Slides */}
-        <form onSubmit={handleNext} className="flex flex-col gap-12 px-10">
+        <form onSubmit={handleNext} className="flex flex-col gap-12 pb-10">
             {slides.map((slide, index) => (
             <section key={index} className="bg-white bg-opacity-70 p-8 pt-6 rounded-lg shadow-md w-[42rem]">
                 <h2 className="text-2xl font-semibold mb-4">{slide.title}</h2>
