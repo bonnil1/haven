@@ -177,7 +177,7 @@ async def search_request(request: Request, db: Session = Depends(get_db)):
             db.rollback()
             print(f"A SQLAlchemy error occurred: {e}")
 
-@router.post("/edit/{id}")
+@router.put("/edit/{id}")
 async def edit_listing(id: int, request: Request, db: Session = Depends(get_db)):
     print("hitting backend edit listing")
     data = await request.json()
@@ -202,6 +202,9 @@ async def edit_listing(id: int, request: Request, db: Session = Depends(get_db))
         fields_to_update = {}
 
         for key, value in flat_data.items():
+            if key == "availability":
+                continue
+
             if hasattr(property, key):
                 current_value = getattr(property, key)
 
@@ -220,12 +223,33 @@ async def edit_listing(id: int, request: Request, db: Session = Depends(get_db))
             setattr(property, field, value)
 
         db.commit()
+
+        if "availability" in data:
+
+            db.query(Availability).filter(Availability.property_id == id).delete()
+
+            new_availability = [
+                Availability(
+                    property_id = id,
+                    start_date=range["startDate"],
+                    end_date=range["endDate"]
+                )
+                for range in data["availability"]
+                if range.get("startDate") and range.get("endDate")
+            ]
+
+            db.add_all(new_availability)
+            db.commit()
         
         return {"message": "Listing updated successfully!", "updated_fields": fields_to_update}
     
     except SQLAlchemyError as e:
-            db.rollback()
-            print(f"A SQLAlchemy error occurred: {e}")
+        db.rollback()
+        print(f"A SQLAlchemy error occurred: {e}")
+        return JSONResponse(
+            status_code=500,
+            content={"message": "A server error occurred while updating the listing."}
+        )
 
 @router.post("/page1")
 async def property_page1(request: Request, db: Session = Depends(get_db)):

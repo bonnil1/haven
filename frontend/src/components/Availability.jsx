@@ -4,34 +4,33 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { v4 as uuidv4 } from 'uuid';
 
-const Availability = () => {
+const Availability = ({availability, setAvailability}) => {
 
-    const [dateRanges, setDateRanges] = useState([{ id: uuidv4(), startDate: null, endDate: null }]);
     const [activeInput, setActiveInput] = useState({ index: null, type: null });
     const datepickerRef = useRef([]);
 
     const handleDateChange = (dates, index) => {
         const [start, end] = dates;
-        const updated = [...dateRanges];
+        const updated = [...availability];
         updated[index] = { ...updated[index], startDate: start, endDate: end };
         console.log(updated)
-        setDateRanges(updated)
+        setAvailability(updated)
     }
 
     const handleAddRange = () => {
-        setDateRanges([...dateRanges, { id: uuidv4(), startDate: null, endDate: null }]);
+        setAvailability([...availability, { id: uuidv4(), startDate: null, endDate: null }]);
     };
 
     const handleDeleteRange = (idToDelete) => {
-        setDateRanges(dateRanges.filter(range => range.id !== idToDelete));
+        setAvailability(availability.filter(range => range.id !== idToDelete));
     };
 
   return (
     <div>
         <form className="bg-white p-6 rounded-lg shadow-md font-nunito">
-            <h2 className="text-2xl font-semibold mb-1">Add availability.</h2>
-            <h4 className="text-lg font-light mb-2">Add one or more date windows for when your place is available.</h4>
-            {dateRanges.map((range, index) => (
+            <h2 className="text-2xl font-semibold mb-1">Current availability.</h2>
+            <h4 className="text-lg font-light mb-2">Edit date windows for when your place is available.</h4>
+            {availability.map((range, index) => (
             <>
             <div key={range.id} className='flex justify-between flex-wrap px-10'>
                 <div className="flex flex-col mt-2">

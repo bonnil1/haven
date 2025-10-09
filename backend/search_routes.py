@@ -86,10 +86,12 @@ async def get_listing(id: int, db: Session = Depends(get_db)):
      
     try:
         property = db.query(Property).filter(Property.property_id == id).first()
+        availability = db.query(Availability).filter(Availability.property_id == id).all()
 
         print(property)
+        print(availability)
 
-        return {"results": property, "message": "Listing returned successfully!"}
+        return {"results": {"property": property, "availability": availability}, "message": "Listing returned successfully!"}
 
     except SQLAlchemyError as e:
         db.rollback()

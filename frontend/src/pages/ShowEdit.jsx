@@ -138,7 +138,8 @@ const ShowEdit = () => {
             S_detector: false,
             CO_detector: false,
             F_extinguisher: false
-        }
+        },
+        availability: []
     })
 
     const { id } = useParams();
@@ -213,7 +214,17 @@ const ShowEdit = () => {
                 console.log(data);
 
                 if (data.message === "Listing returned successfully!") {
-                    const nestedFormData = mapFlatToNestedFormData(data.results);
+                    const propertyData = data.results.property;
+                    const availability = data.results.availability;
+                    const formattedAvailability = availability.map((item) => ({
+                        id: uuidv4(),
+                        startDate: new Date(item.start_date || item.startDate),
+                        endDate: new Date(item.end_date || item.endDate)
+                    }))
+
+                    const nestedFormData = mapFlatToNestedFormData(propertyData);
+                    nestedFormData.availability = formattedAvailability;
+
                     setFormData(nestedFormData);
                 } 
 
@@ -331,20 +342,33 @@ const ShowEdit = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
+        const formattedAvailability = formData.availability.map(item => ({
+            startDate: item.startDate ? item.startDate.toISOString().split('T')[0] : null,
+            endDate: item.endDate ? item.endDate.toISOString().split('T')[0] : null
+        }));
+
+        const payload = {
+            ...formData,
+            availability: formattedAvailability
+        };
+        
+        console.log(payload)
+
         try {
             const response = await fetch(`/api/property/edit/${id}`, {
                 //`/api/property/edit/${id}`
                 //`http://localhost:4000/api/property/edit/${id}`
-                method: "POST",
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(payload)
             });
 
             const data = await response.json();
 
             if (data.message === "Listing updated successfully!") {
+                console.log("Listing editted successfully!!!")
                 navigate('/listing-dashboard')
             } 
         } catch (error) {
@@ -485,14 +509,16 @@ const ShowEdit = () => {
                                 onClick={() => setActiveAvailIndex(true)}
                                 className='px-4 py-1 text-md text-white bg-[rgb(42,98,112)] hover:bg-gray-800 border-[rgb(42,98,112)] rounded-lg mt-3'
                             >
-                                Add Availability
+                                Edit Availability
                             </button>
                             {activeAvailIndex && (
                                 <div
                                     ref={availRef}
                                     className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-1/2 h-1/2"
                                 >
-                                    <Availability id={id}/>
+                                    <Availability id={id} availability={formData.availability} setAvailability={(updatedRanges) =>
+                                        setFormData(prev => ({ ...prev, availability: updatedRanges }))
+                                    }/>
                                 </div>
                             )}
                         </div>
